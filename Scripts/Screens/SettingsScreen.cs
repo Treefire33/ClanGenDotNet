@@ -260,5 +260,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 		_fullscreenToggle = null;
 		_openDataDirectory!.Kill();
 		_openDataDirectory = null;
+		_saveSettingsButton!.Kill();
+		_saveSettingsButton = null;
 	}
 }
