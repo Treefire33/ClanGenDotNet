@@ -6,7 +6,10 @@ using static ClanGenDotNet.Scripts.Resources;
 using static Raylib_cs.Raylib;
 
 namespace ClanGenDotNet.Scripts.UI;
-public class UITextInput(ClanGenRect posScale, string defaultText, int maxCharacters, UIManager manager) : UIElement(posScale, manager), IUIClickable
+public class UITextInput(ClanGenRect posScale, string defaultText, int maxCharacters, UIManager manager) 
+	: UIElement(posScale, manager), 
+	IUIClickable, 
+	IUIElement
 {
 	private string _text = defaultText;
 	private int _maxCharacters = maxCharacters;

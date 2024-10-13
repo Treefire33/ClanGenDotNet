@@ -9,5 +9,8 @@
 		RightMouseDown,
 		RightMouseUp,
 		RightMouseClick,
+		KeyDown,
+		KeyPressed,
+		KeyUp
 	}
 }

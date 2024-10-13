@@ -6,6 +6,7 @@ using Raylib_cs;
 using static Raylib_cs.Raylib;
 using static ClanGenDotNet.Scripts.Game_Structure.Game;
 using ClanGenDotNet.Scripts.HouseKeeping;
+using System.Numerics;
 
 namespace ClanGenDotNet
 {
@@ -47,6 +48,12 @@ namespace ClanGenDotNet
                 game.UpdateGame();
 
                 game.Manager.DrawUI();
+
+				int keyPressed = GetKeyPressed();
+				if (keyPressed != 0)
+				{
+					game.Manager.PushEvent(new Event(keyPressed, EventType.KeyPressed));
+				}
 				foreach (Event evnt in game.Manager.UIEvents)
 				{
                     game.AllScreens[game.CurrentScreen].HandleEvent(evnt);

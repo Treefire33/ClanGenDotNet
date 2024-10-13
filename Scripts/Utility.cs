@@ -299,5 +299,39 @@ namespace ClanGenDotNet.Scripts
 
 			return virtualMouse;
 		}
+		
+		public static bool PointInArea(Vector2 point, Vector2 topLeft, Vector2 bottomRight)
+		{
+			if (
+				point.X >= topLeft.X 
+				&& point.X <= bottomRight.X 
+				&& point.Y >= topLeft.Y 
+				&& point.Y <= bottomRight.Y
+			)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public static bool PointInArea(Vector2 point, ClanGenRect area)
+		{
+			if (
+				point.X >= area.TopLeft.X
+				&& point.X <= area.BottomRight.X
+				&& point.Y >= area.TopLeft.Y
+				&& point.Y <= area.BottomRight.Y
+			)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 }

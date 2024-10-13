@@ -1,19 +1,26 @@
 ﻿using Raylib_cs;
+using System.Xml.Linq;
 using static Raylib_cs.Raylib;
 
 namespace ClanGenDotNet.Scripts.UI
 {
-	public class UIElement
+	public class UIElement : IUIElement
 	{
 		protected readonly UIManager _manager;
 		public ClanGenRect RelativeRect;
 		public bool Hovered;
+		public bool IsContained = false;
+		public int Layer = 0;
+
+		public bool Visible = true;
+		public bool Active = true;
 
 		public UIElement(ClanGenRect posScale, UIManager manager)
 		{
 			_manager = manager;
 			RelativeRect = posScale;
 			_manager.Elements.Add(this);
+			_manager.Elements = [.. _manager.Elements.OrderBy(element => element.Layer)];
 		}
 
 		public virtual void Update()
@@ -31,6 +38,10 @@ namespace ClanGenDotNet.Scripts.UI
 			_manager.Elements.Remove(this);
 		}
 
-		public virtual void SetActive(bool activeState) { }
+		public void Show() => Visible = true;
+
+		public void Hide() => Visible = false;
+
+		public void SetActive(bool activeState) => Active = activeState;
 	}
 }

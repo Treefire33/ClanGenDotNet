@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,8 +25,7 @@ public class DataDirectory
 		Directory.CreateDirectory(GetCacheDirectory());
 		Directory.CreateDirectory(GetSavedImagesDirectory());
 
-		Console.WriteLine(Environment.OSVersion.Platform.ToString());
-		if (Environment.OSVersion.Platform.ToString() != "Win32NT")
+		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 		{
 			if (Directory.Exists("game_data"))
 			{

@@ -4,6 +4,8 @@ using ClanGenDotNet.Scripts.HouseKeeping;
 using ClanGenDotNet.Scripts.UI;
 using Raylib_cs;
 using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using static ClanGenDotNet.Scripts.Game_Structure.Game;
 using static ClanGenDotNet.Scripts.Resources;
 using static ClanGenDotNet.Scripts.Utility;
@@ -16,7 +18,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 {
 	private string _subMenu = "general";
 
-	private Dictionary<string, UICheckbox> checkboxes = [];
+	private Dictionary<string, UIElement> _checkboxes = [];
 
 	private bool _settingsChanged = false;
 	private Dictionary<string, object?> _settingsAtOpen = [];
@@ -30,6 +32,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 	private UIButton? _fullscreenToggle;
 	private UIButton? _openDataDirectory;
 	private UIButton? _mainMenuButton;
+
 	public override void ScreenSwitches()
 	{
 		base.ScreenSwitches();
@@ -95,14 +98,73 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			25,
 			game.Manager
 		);
+
+		OpenGeneralSettings();
 	}
 
+	private UIScrollingContainer? _generalScrollView;
+	private UITextBox? _instructions;
 	private void OpenGeneralSettings()
 	{
 		EnableAllMenuButtons();
 		_generalSettingsButton!.SetActive(false);
 		ClearSubSettingsButtonsAndText();
 		_subMenu = "general";
+		_saveSettingsButton!.Show();
+
+		_generalScrollView = new UIScrollingContainer(
+			UIScale(new ClanGenRect(0, 220, 700, 300)),
+			game.Manager
+		);
+		_instructions = new UITextBox(
+			UIScale(new ClanGenRect(100, 160, 600, 100)),
+			"Change the general settings of your game here.\n" +
+			"More settings are available in the settings page of your Clan.",
+			20,
+			TextAlignment.Center,
+			Color.White,
+			game.Manager,
+			true
+		);
+		RefreshCheckboxes();
+	}
+
+	private void OpenAudioSettings()
+	{
+		EnableAllMenuButtons();
+		_audioSettingsButton!.SetActive(false);
+		ClearSubSettingsButtonsAndText();
+		_subMenu = "audio";
+		_saveSettingsButton!.Show();
+	}
+
+	private UIScrollingContainer? _infoScrollView;
+	private void OpenInfoScreen()
+	{
+		EnableAllMenuButtons();
+		_infoButton!.SetActive(false);
+		ClearSubSettingsButtonsAndText();
+		_subMenu = "info";
+		_saveSettingsButton!.Hide();
+	}
+
+	private UITextBox? _languageInstructions;
+	private void OpenLanguageSettings()
+	{
+		EnableAllMenuButtons();
+		_languageButton!.SetActive(false);
+		ClearSubSettingsButtonsAndText();
+		_subMenu = "language";
+		_saveSettingsButton!.Show();
+
+		_languageInstructions = new UITextBox(
+			UIScale(new ClanGenRect(100, 160, 600, 50)),
+			"Change the language of the game here. This has not been implemented yet.",
+			20,
+			TextAlignment.Center,
+			Color.White,
+			game.Manager
+		);
 
 		RefreshCheckboxes();
 	}
@@ -127,25 +189,20 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			{
 				try
 				{
-					ProcessStartInfo startInfo = new ProcessStartInfo
-					{
-						Arguments = DataDirectory.GetDataDirectory(),
-						FileName = "explorer.exe"
-					};
-
-					if(Environment.OSVersion.Platform.ToString() == "Unix")
+					if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 					{
 						Process.Start("open", $"-R {DataDirectory.GetDataDirectory()}");
 					}
-					else if(Environment.OSVersion.Platform.ToString() == "Win32NT")
+					else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 					{
-						Process.Start(startInfo);
+						Process.Start("explorer.exe", $"{DataDirectory.GetDataDirectory()}");
+					}
+					else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+					{
+						Process.Start("xdg-open", $"{DataDirectory.GetDataDirectory()}");
 					}
 				}
-				catch
-				{
-					Console.WriteLine("Open Data Directory has failed to open the directory, blame Treefire33");
-				}
+				catch { Console.WriteLine("Open Data Directory has failed to open the directory, blame Treefire33"); }
 			}
 			if (evnt.Element == _saveSettingsButton)
 			{
@@ -160,15 +217,15 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			}
 			else if(evnt.Element == _audioSettingsButton)
 			{
-
+				OpenAudioSettings();
 			}
 			else if(evnt.Element == _infoButton)
 			{
-
+				OpenInfoScreen();
 			}
 			else if(evnt.Element == _languageButton)
 			{
-
+				OpenLanguageSettings();
 			}
 			if (new List<string> { "general", "relation", "language" }.Contains(_subMenu))
 			{
@@ -179,9 +236,9 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 
 	private void HandleCheckbox(Event evnt)
 	{
-		if (checkboxes.Values.Contains(evnt.Element))
+		if (_checkboxes.Values.Contains(evnt.Element))
 		{
-			foreach (KeyValuePair<string, UICheckbox> settingValue in checkboxes)
+			foreach (KeyValuePair<string, UIElement> settingValue in _checkboxes)
 			{
 				if (settingValue.Value == evnt.Element)
 				{
@@ -205,33 +262,77 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 
 	private void RefreshCheckboxes()
 	{
-		foreach(UICheckbox checkbox in checkboxes.Values)
+		foreach(UICheckbox checkbox in _checkboxes.Values)
 		{
 			checkbox.Kill();
 		}
-		checkboxes.Clear();
+		_checkboxes.Clear();
 
-		int i = 0;
-		foreach(string setting in game.GameSettings.General.Keys)
+		if (_subMenu == "language")
 		{
-			checkboxes.Add(setting, new UICheckbox(
-				UIScale(new ClanGenRect(170, i < 0 ? 120 : 0, 34, 34))
-					.AnchorTo(AnchorPosition.TopLeft, i > 0 ? checkboxes.Values.ToArray()[i-1].RelativeRect : UIScale(new ClanGenRect(170, i < 0 ? 34 : 0, 34, 34))),
-				(string)game.GameSettings.General[setting][0],
+			_checkboxes.Add("english", new UIButton(
+				UIScale(new ClanGenRect(310, 200, 180, 51)),
+				ButtonID.EnglishLadder,
+				"",
+				0,
 				game.Manager
 			));
-			checkboxes[setting].Checked = (bool)game.Settings[setting];
-			i++;
+			_checkboxes.Add("spanish", new UIButton(
+				UIScale(new ClanGenRect(310, 0, 180, 37)).AnchorTo(
+					AnchorPosition.TopLeft, 
+					_checkboxes.Last().Value.RelativeRect
+				),
+				ButtonStyle.LadderMiddle,
+				"Spanish",
+				20,
+				game.Manager
+			));
+			_checkboxes.Add("german", new UIButton(
+				UIScale(new ClanGenRect(310, 0, 180, 37)).AnchorTo(
+					AnchorPosition.TopLeft,
+					_checkboxes.Last().Value.RelativeRect
+				),
+				ButtonStyle.LadderBottom,
+				"German",
+				20,
+				game.Manager
+			));
+		}
+		else if (_subMenu == "general")
+		{
+			int i = 0;
+			foreach (string setting in game.GameSettings.General.Keys)
+			{
+				_checkboxes.Add(setting, new UICheckbox(
+					UIScale(new ClanGenRect(170, i < 0 ? 120 : 0, 34, 34))
+						.AnchorTo(AnchorPosition.TopLeft, i > 0 
+						? _checkboxes.Values.ToArray()[i - 1].RelativeRect 
+						: UIScale(new ClanGenRect(170, i < 0 ? 34 : 0, 34, 34))),
+					(string)game.GameSettings.General[setting][0],
+					game.Manager
+				));
+				if (_checkboxes[setting] is UICheckbox box) { box.Checked = (bool)game.Settings[setting]!; }
+				_generalScrollView!.AddElement(_checkboxes.Last().Value, i == 0);
+				i++;
+			}
 		}
 	}
 
 	private void ClearSubSettingsButtonsAndText()
 	{
-		foreach (UICheckbox checkbox in checkboxes.Values)
+		foreach (UIElement checkbox in _checkboxes.Values)
 		{
 			checkbox.Kill();
 		}
-		checkboxes.Clear();
+		_checkboxes.Clear();
+
+		_generalScrollView?.Kill();
+		_generalScrollView = null;
+		_instructions?.Kill();
+		_instructions = null;
+
+		_languageInstructions?.Kill();
+		_languageInstructions = null;
 	}
 
 	private void EnableAllMenuButtons()

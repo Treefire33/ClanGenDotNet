@@ -12,6 +12,10 @@ namespace ClanGenDotNet.Scripts.UI
 		{
 			foreach (UIElement element in Elements)
 			{
+				if (element.IsContained 
+					|| !element.Visible
+				) { continue; }
+
 				element.Update();
 				if (element is IUIClickable clickable)
 				{

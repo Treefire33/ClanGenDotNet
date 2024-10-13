@@ -5,7 +5,10 @@ using static ClanGenDotNet.Scripts.Resources;
 
 namespace ClanGenDotNet.Scripts.UI;
 
-public class UICheckbox(ClanGenRect posScale, string label, UIManager manager) : UIElement(posScale, manager), IUIClickable
+public class UICheckbox(ClanGenRect posScale, string label, UIManager manager) 
+	: UIElement(posScale, manager), 
+	IUIClickable, 
+	IUIElement
 {
 	private string _label = label;
 	private int _fontSize = 20;

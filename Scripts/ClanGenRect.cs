@@ -31,6 +31,33 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 	public float Width = scale.X;
 	public float Height = scale.Y;
 
+	public Vector2 Position
+	{
+		get
+		{
+			return new Vector2(X, Y);
+		}
+
+		set
+		{
+			X = value.X;
+			Y = value.Y;
+		}
+	}
+	public Vector2 Size
+	{
+		get
+		{
+			return new Vector2(X, Y);
+		}
+
+		set
+		{
+			Width = value.X;
+			Height = value.Y;
+		}
+	}
+
 	//Points in RelativeRect
 	public Vector2 TopLeft = position;
 	public Vector2 TopCenter = new(position.X + (scale.X / 2), position.Y);
@@ -76,6 +103,36 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 		newRect.Width = Width; 
 		newRect.Height = Height;
 		return newRect;
+	}
+
+	public readonly ClanGenRect Scale(float scaleFactor)
+	{
+		return new(
+			X * scaleFactor,
+			Y * scaleFactor,
+			Width * scaleFactor,
+			Height * scaleFactor
+		);
+	}
+
+	public readonly ClanGenRect Scale(Vector2 scaleFactor)
+	{
+		return new(
+			X * scaleFactor.X,
+			Y * scaleFactor.Y,
+			Width * scaleFactor.X,
+			Height * scaleFactor.Y
+		);
+	}
+
+	public readonly ClanGenRect Scale(ClanGenRect scaleRect)
+	{
+		return new(
+			X * scaleRect.X,
+			Y * scaleRect.Y,
+			Width * scaleRect.Width,
+			Height * scaleRect.Height
+		);
 	}
 }
 

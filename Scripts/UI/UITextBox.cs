@@ -14,9 +14,10 @@ namespace ClanGenDotNet.Scripts.UI
 		Right
 	}
 
-	public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlignment alignment, Color textColour, UIManager manager) : UIElement(posScale, manager)
+	public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlignment alignment, Color textColour, UIManager manager, bool isMultiline = false) : UIElement(posScale, manager)
 	{
 		private readonly bool _fillRect = false;
+		private readonly bool _isMultiline = isMultiline;
 		//private unsafe sbyte* _text;
 		private string _text = text;
 		private Color _textColour = textColour;
@@ -89,12 +90,38 @@ namespace ClanGenDotNet.Scripts.UI
 		public unsafe override void Update()
 		{
 			base.Update();
-			if(RelativeRect.Height > 0)
+			Vector2 textSize = MeasureTextEx(NotoSansMedium, _text, _fontSize, 0);
+			if (_isMultiline)
+			{
+				float positionOffset = 0f;
+				foreach (string line in _text.Split('\n'))
+				{
+					textSize = MeasureTextEx(NotoSansMedium, line, _fontSize, 0);
+					DrawTextPro(
+						NotoSansMedium,
+						line,
+						AddRectangles(
+							AlignTextRec(RelativeRect.RelativeRect, line, alignment),
+							new Rectangle(_padding / 2, -_padding)
+						).Position + new Vector2(0, positionOffset),
+						Vector2.Zero,
+						0,
+						_fontSize,
+						0,
+						Color.White
+					);
+					positionOffset += textSize.Y;
+				}
+			}
+			else if (RelativeRect.Height > 0)
 			{
 				DrawTextBoxed(
 					NotoSansMedium,
 					_text,
-					AddRectangles(AlignTextRec(RelativeRect.RelativeRect, _text, alignment), new Rectangle(_padding / 2, -_padding)),
+					AddRectangles(
+						AlignTextRec(RelativeRect.RelativeRect, _text, alignment),
+						new Rectangle(_padding / 2, -_padding)
+					),
 					_fontSize,
 					0,
 					true,
@@ -106,14 +133,16 @@ namespace ClanGenDotNet.Scripts.UI
 				DrawTextPro(
 					NotoSansMedium,
 					_text,
-					AddRectangles(AlignTextRec(RelativeRect.RelativeRect, _text, alignment), new Rectangle(_padding / 2, -_padding)).Position,
+					AddRectangles(
+						AlignTextRec(RelativeRect.RelativeRect, _text, alignment),
+						new Rectangle(_padding / 2, -_padding)
+					).Position,
 					new(0, 0),
 					0,
 					_fontSize,
 					0,
 					Color.White
 				);
-				Vector2 textSize = MeasureTextEx(NotoSansMedium, _text, _fontSize, 0);
 				RelativeRect.Height = textSize.Y;
 			}
 		}

@@ -53,6 +53,7 @@ public class ScreenSettings
 				? ScreenConfig.FullscreenDisplay 
 				: 0;
 			Vector2 displaySize = displaySizes[ScreenConfig.FullscreenDisplay];
+			Console.WriteLine($"Display Size: {displaySize}");
 
 			DetermineScreenScale((int)displaySize.X, (int)displaySize.Y);
 
@@ -107,8 +108,8 @@ public class ScreenSettings
 
 	private static void DetermineScreenScale(int x, int y)
 	{
-		int scaleX = x / 200;
-		int scaleY = y / 175;
+		int scaleX = (int)MathF.Floor(x / 200);
+		int scaleY = (int)MathF.Floor(y / 175);
 		ScreenScale = Math.Min(scaleX, scaleY) / 4;
 		ScreenX = 800 * ScreenScale;
 		ScreenY = 700 * ScreenScale;
