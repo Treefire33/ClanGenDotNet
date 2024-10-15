@@ -11,7 +11,8 @@ namespace ClanGenDotNet.Scripts.UI
 	{
 		Left,
 		Center,
-		Right
+		Right,
+		VertCenter
 	}
 
 	public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlignment alignment, Color textColour, UIManager manager, bool isMultiline = false) : UIElement(posScale, manager)
@@ -45,6 +46,7 @@ namespace ClanGenDotNet.Scripts.UI
 		private unsafe Rectangle AlignTextRec(Rectangle original, string text, TextAlignment align)
 		{
 			Vector2 textSize = MeasureTextEx(NotoSansMedium, text, _fontSize, 0);
+			Rectangle newRect = new();
 			switch (align)
 			{
 				default:
@@ -52,18 +54,31 @@ namespace ClanGenDotNet.Scripts.UI
 					return original;
 
 				case TextAlignment.Center:
-					Rectangle newRect = original;
+					newRect = original;
 					newRect.Position = new Vector2(
 						RelativeRect.RelativeRect.Position.X 
 						+ (RelativeRect.RelativeRect.Size.X / 2) 
 						- (textSize.X / 2), 
 						RelativeRect.RelativeRect.Position.Y 
-						+ (RelativeRect.RelativeRect.Size.Y / 4));
+						+ (RelativeRect.RelativeRect.Size.Y / 4)
+					);
 					return newRect;
 
 				case TextAlignment.Right:
 					//Not implemented
 					return original;
+
+				case TextAlignment.VertCenter:
+					newRect = original;
+					newRect.Position = new Vector2(
+						RelativeRect.RelativeRect.Position.X
+						+ (RelativeRect.RelativeRect.Size.X / 2)
+						- (textSize.X / 2),
+						RelativeRect.RelativeRect.Position.Y
+						+ (RelativeRect.RelativeRect.Size.Y / 2)
+						- (textSize.Y / 2)
+					);
+					return newRect;
 			}
 		}
 

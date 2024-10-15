@@ -48,6 +48,15 @@ namespace ClanGenDotNet.Scripts.Screens
 		private UIButton _mainMenuButton;
 		private UITextBox _menuWarning;
 
+		private List<Texture2D> _creationBackgrounds = [
+			LoadTexture(".\\Resources\\Images\\PickClanScreen\\clan_name_frame.png"),
+			LoadTexture(".\\Resources\\Images\\PickClanScreen\\name_clan_light.png"),
+			LoadTexture(".\\Resources\\Images\\PickClanScreen\\leader_light.png"),
+			LoadTexture(".\\Resources\\Images\\PickClanScreen\\deputy_light.png"),
+			LoadTexture(".\\Resources\\Images\\PickClanScreen\\med_light.png"),
+			LoadTexture(".\\Resources\\Images\\PickClanScreen\\clan_light.png")
+		];
+
 		public override void ScreenSwitches()
 		{
 			base.ScreenSwitches();
@@ -157,7 +166,7 @@ namespace ClanGenDotNet.Scripts.Screens
 			ClearPage();
 			_subScreen = "name clan";
 
-			_elements.Add("background", new UIImage(
+			_elements.Add("under_background", new UIImage(
 				UIScale(new ClanGenRect(0, 0, game.ScreenX, game.ScreenY)),
 				NameClanImage,
 				game.Manager
@@ -202,10 +211,10 @@ namespace ClanGenDotNet.Scripts.Screens
 				game.Manager
 			));
 			_elements.Add("clan", new UITextBox(
-				UIScale(new ClanGenRect(375, 600, 140, 29)),
+				UIScale(new ClanGenRect(375, 600, 100, 25)),
 				"-Clan",
-				20,
-				TextAlignment.Center,
+				25,
+				TextAlignment.VertCenter,
 				Color.White,
 				game.Manager
 			));
@@ -216,6 +225,53 @@ namespace ClanGenDotNet.Scripts.Screens
 				20,
 				game.Manager
 			));
+		}
+
+		private void ClanNameHeader()
+		{
+			_elements.Add("name_backdrop", new UIImage(
+				UIScale(new ClanGenRect(292, 100, 216, 50)),
+				_creationBackgrounds[0],
+				game.Manager
+			));
+			_elements.Add("clan_name", new UITextBox(
+				UIScale(new ClanGenRect(292, 100, 216, 50)),
+				_clanName + "Clan",
+				20,
+				TextAlignment.VertCenter,
+				Color.White,
+				game.Manager
+			));
+		}
+
+		private void OpenChooseLeader()
+		{
+			ClearPage();
+			_subScreen = "choose leader";
+
+			_elements.Add("background", new UIImage(
+				UIScale(new ClanGenRect(0, 414, 800, 286)),
+				_creationBackgrounds[2],
+				game.Manager
+			));
+
+			ClanNameHeader();
+
+			_elements.Add("previous_step", new UIButton(
+				UIScale(new ClanGenRect(253, 635, 147, 30)),
+				ButtonStyle.Squoval,
+				"previous",
+				20,
+				game.Manager
+			));
+			_elements.Add("next_step", new UIButton(
+				UIScale(new ClanGenRect(400, 635, 147, 30)),
+				ButtonStyle.Squoval,
+				"next",
+				20,
+				game.Manager
+			));
+			_elements["next_step"].SetActive(false);
 		}
 
 		public override void HandleEvent(Event evnt)
@@ -250,17 +306,17 @@ namespace ClanGenDotNet.Scripts.Screens
 			if (evnt.Element == _elements["classic_mode_button"])
 			{
 				_gameMode = "classic";
-				this.RefreshTextAndButtons();
+				RefreshTextAndButtons();
 			}
 			else if (evnt.Element == _elements["expanded_mode_button"])
 			{
 				_gameMode = "expanded";
-				this.RefreshTextAndButtons();
+				RefreshTextAndButtons();
 			}
 			else if (evnt.Element == _elements["cruel_mode_button"])
 			{
 				_gameMode = "cruel";
-				this.RefreshTextAndButtons();
+				RefreshTextAndButtons();
 			}
 		}
 
@@ -286,6 +342,7 @@ namespace ClanGenDotNet.Scripts.Screens
 				//check if in clanlist here
 				_clanName = newName;
 				//open choose leader
+				OpenChooseLeader();
 			}
 			else if (evnt.Element == _elements["previous_step"] && evnt.Element is UIButton prev)
 			{
