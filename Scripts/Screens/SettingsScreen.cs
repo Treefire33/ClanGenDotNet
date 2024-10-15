@@ -2,6 +2,7 @@
 using ClanGenDotNet.Scripts.Game_Structure;
 using ClanGenDotNet.Scripts.HouseKeeping;
 using ClanGenDotNet.Scripts.UI;
+using Newtonsoft.Json;
 using Raylib_cs;
 using System.Diagnostics;
 using System.Numerics;
@@ -23,6 +24,10 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 	private bool _settingsChanged = false;
 	private Dictionary<string, object?> _settingsAtOpen = [];
 
+	private Credits _credits = JsonConvert.DeserializeObject<Credits>(File.ReadAllText(".\\Resources\\credits_text.json"))!;
+	private string _infoText = "";
+	private List<string?> _tooltipTexts = [];
+
 	private UIButton? _generalSettingsButton;
 	private UIButton? _audioSettingsButton;
 	private UIButton? _infoButton;
@@ -36,6 +41,22 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 	public override void ScreenSwitches()
 	{
 		base.ScreenSwitches();
+		foreach (string line in _credits.Text)
+		{
+			if (line == "{contrib}")
+			{
+				foreach (KeyValuePair<string, string> contributer in _credits.Contrib)
+				{
+					_infoText += contributer.Key + '\n';
+					_tooltipTexts.Add(contributer.Value);
+				}
+			}
+			else
+			{
+				_infoText += line + '\n';
+				_tooltipTexts.Add(null);
+			}
+		}
 		_generalSettingsButton = new UIButton(
 			UIScale(new ClanGenRect(100, 100, 150, 30)),
 			ButtonStyle.MenuLeft,
@@ -139,6 +160,8 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 	}
 
 	private UIScrollingContainer? _infoScrollView;
+	private List<UITextBox> _infoTextboxes = [];
+	private List<UITooltip> _infoTooltips = [];
 	private void OpenInfoScreen()
 	{
 		EnableAllMenuButtons();
@@ -146,6 +169,33 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 		ClearSubSettingsButtonsAndText();
 		_subMenu = "info";
 		_saveSettingsButton!.Hide();
+
+		/*_infoScrollView = new UIScrollingContainer(
+			UIScale(new ClanGenRect(0, 150, 600, 500)),
+			game.Manager
+		);*/
+
+		/*int iter = 0;
+		foreach (string infoLine in _infoText.Split('\n'))
+		{
+			_infoTextboxes.Add(new UITextBox(
+				iter == 0 
+				? UIScale(new ClanGenRect(0, 0, 600, -1)) 
+				: UIScale(new ClanGenRect(0, 30, 600, -1)).AnchorTo(AnchorPosition.TopLeft, _infoTextboxes.Last().RelativeRect),
+				infoLine,
+				20,
+				TextAlignment.Center,
+				Color.White,
+				game.Manager
+			));
+			iter++;
+			_infoTooltips.Add(new UITooltip(
+				_tooltipTexts[iter],
+				_infoTextboxes.Last(),
+				game.Manager
+			));
+			_infoScrollView.AddElement(_infoTextboxes.Last());
+		}*/
 	}
 
 	private UITextBox? _languageInstructions;
@@ -309,7 +359,8 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 						? _checkboxes.Values.ToArray()[i - 1].RelativeRect 
 						: UIScale(new ClanGenRect(170, i < 0 ? 34 : 0, 34, 34))),
 					(string)game.GameSettings.General[setting][0],
-					game.Manager
+					game.Manager,
+					(string)game.GameSettings.General[setting][1]
 				));
 				if (_checkboxes[setting] is UICheckbox box) { box.Checked = (bool)game.Settings[setting]!; }
 				_generalScrollView!.AddElement(_checkboxes.Last().Value, i == 0);

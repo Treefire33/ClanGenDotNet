@@ -5,19 +5,31 @@ using static ClanGenDotNet.Scripts.Resources;
 
 namespace ClanGenDotNet.Scripts.UI;
 
-public class UICheckbox(ClanGenRect posScale, string label, UIManager manager) 
-	: UIElement(posScale, manager), 
-	IUIClickable, 
-	IUIElement
+public class UICheckbox: UIElement, IUIClickable, IUIElement
 {
-	private string _label = label;
+	private string _label;
 	private int _fontSize = 20;
 
 	public bool Checked = false;
 
 	private bool _pressed = false;
 	private Texture2D _currentTexture;
-	private bool _activeState = true;
+
+	private UITooltip? _tooltip = null;
+
+	public UICheckbox(ClanGenRect posScale, string label, UIManager manager, string? tooltip = null)
+		: base(posScale, manager)
+	{
+		_label = label;
+		if (tooltip != null)
+		{
+			_tooltip = new UITooltip(
+				tooltip,
+				this,
+				manager
+			);
+		}
+	}
 
 	public override void Update()
 	{
@@ -54,7 +66,7 @@ public class UICheckbox(ClanGenRect posScale, string label, UIManager manager)
 
 	public void ChangeTexture()
 	{
-		if (!_activeState)
+		if (!Active)
 		{
 			_currentTexture = CheckboxImages[Convert.ToInt32(Checked)][3];
 			return;
@@ -76,7 +88,7 @@ public class UICheckbox(ClanGenRect posScale, string label, UIManager manager)
 
 	public void HandleElementInteraction()
 	{
-		if(!_activeState) { return; }
+		if(!Active) { return; }
 		if (Hovered && IsMouseButtonDown(MouseButton.Left))
 		{
 			_manager.PushEvent(new(this, Events.EventType.LeftMouseDown));
@@ -87,6 +99,16 @@ public class UICheckbox(ClanGenRect posScale, string label, UIManager manager)
 			_pressed = false;
 			_manager.PushEvent(new(this, Events.EventType.LeftMouseClick));
 			Checked = !Checked;
+		}
+	}
+
+	new public void Kill()
+	{
+		base.Kill();
+		if (_tooltip != null)
+		{
+			_tooltip.Kill();
+			_tooltip = null;
 		}
 	}
 }

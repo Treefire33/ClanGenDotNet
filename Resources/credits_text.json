@@ -1,6 +1,6 @@
 {
     "text": [
-        "<b>Welcome to Warrior Cats Clan generator!</b>",
+        "<b>Welcome to ClanGen.NET, a port of ClanGen to C# using Raylib!</b>",
         "",
         "This is a fan-made generator for the Warrior Cats -book series by Erin Hunter.",
         "",
@@ -9,6 +9,7 @@
         "<b>Original creator:</b> <i>just-some-cat.tumblr.com (anju)</i>",
         "",
         "<b>Fan edit made by:</b> <i>SableSteel</i>",
+        "<b>.NET port made by:</b> <i>treefire33</i>",
         "<b>With contributions from:</b>",
         "<i>(hover over a name to see their contributions!)",
         "{contrib}",

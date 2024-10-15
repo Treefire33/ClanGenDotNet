@@ -6,6 +6,7 @@ using Raylib_cs;
 using static Raylib_cs.Raylib;
 using static ClanGenDotNet.Scripts.Game_Structure.Game;
 using ClanGenDotNet.Scripts.HouseKeeping;
+using static ClanGenDotNet.Scripts.Utility;
 using System.Numerics;
 
 namespace ClanGenDotNet
@@ -24,7 +25,7 @@ namespace ClanGenDotNet
 			game.LoadSettings();
 			ScreenSettings.ToggleFullscreen(showConfirmDialog: false, ingameSwitch: false);
 
-			Resources.SetFontFilters();
+			Resources.LoadResources();
 
 			AllScreens.InstanceScreens();
             SetTargetFPS((int)game.Switches["fps"]!);
@@ -43,7 +44,7 @@ namespace ClanGenDotNet
 			while (!WindowShouldClose())
 			{
 				BeginTextureMode(ScreenSettings.Screen);
-                ClearBackground(new(game.Config.Theme.LightModeBackground[0], game.Config.Theme.LightModeBackground[1], game.Config.Theme.LightModeBackground[2], 255));
+                ClearBackground(GetThemeColour());
 
                 game.UpdateGame();
 

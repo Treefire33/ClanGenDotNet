@@ -1,12 +1,18 @@
-﻿using ClanGenDotNet.Scripts.UI;
+﻿using ClanGenDotNet.Scripts.Game_Structure;
+using ClanGenDotNet.Scripts.UI;
 using Raylib_cs;
 using System.Numerics;
 using static Raylib_cs.Raylib;
+using static ClanGenDotNet.Scripts.Game_Structure.Game;
 
 namespace ClanGenDotNet.Scripts
 {
 	public static class Resources
 	{
+		//Theme Colours
+		public static Color LightModeColour;
+		public static Color DarkModeColour;
+
 		//Fonts
 		public static readonly Font Clangen = LoadFontEx(".\\Resources\\Font\\clangen.ttf", 100, null, 256);
 		public static readonly Font NotoSansRegular = LoadFontEx(".\\Resources\\Font\\NotoSans-Regular.ttf", 100, null, 256);
@@ -118,14 +124,31 @@ namespace ClanGenDotNet.Scripts
 			];
 		}
 
-		public unsafe static void SetFontFilters()
+		private unsafe static void SetFontFilters()
 		{
 			fixed (Texture2D* clanGenTex = &Clangen.Texture) { GenTextureMipmaps(clanGenTex); }
 			fixed (Texture2D* notoSansReg = &NotoSansRegular.Texture) { GenTextureMipmaps(notoSansReg); }
 			fixed (Texture2D* notoSansMed = &NotoSansMedium.Texture) { GenTextureMipmaps(notoSansMed); }
 			//SetTextureFilter(Clangen.Texture, TextureFilter.Bilinear);
-			//SetTextureFilter(NotoSansRegular.Texture, TextureFilter.Point);
-			//SetTextureFilter(NotoSansMedium.Texture, TextureFilter.Bilinear);
+			SetTextureFilter(NotoSansRegular.Texture, TextureFilter.Bilinear);
+			SetTextureFilter(NotoSansMedium.Texture, TextureFilter.Bilinear);
+		}
+
+		public static void LoadResources()
+		{
+			SetFontFilters();
+			LightModeColour = new(
+				game.Config.Theme.LightModeBackground[0], 
+				game.Config.Theme.LightModeBackground[1], 
+				game.Config.Theme.LightModeBackground[2], 
+				255
+			); 
+			DarkModeColour = new(
+				game.Config.Theme.DarkModeBackground[0],
+				game.Config.Theme.DarkModeBackground[1],
+				game.Config.Theme.DarkModeBackground[2],
+				255
+			);
 		}
 
 		public static void UnloadTextures()

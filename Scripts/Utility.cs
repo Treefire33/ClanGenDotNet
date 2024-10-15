@@ -58,6 +58,13 @@ namespace ClanGenDotNet.Scripts
 			);
 		}
 
+		public static Color GetThemeColour()
+		{
+			return (bool)Game.game.Settings["dark mode"]! == true 
+				? Resources.DarkModeColour
+				: Resources.LightModeColour;
+		}
+
 		public static Rectangle AddRectangles(Rectangle rect1, Rectangle rect2)
 		{
 			return new Rectangle(
