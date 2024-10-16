@@ -175,7 +175,7 @@ namespace ClanGenDotNet.Scripts.Screens
 			_elements.Add("random", new UIButton(
 				UIScale(new ClanGenRect(224, 595, 34, 34)),
 				ButtonStyle.Squoval,
-				"⚄",
+				"\u2684",
 				20,
 				game.Manager
 			));

@@ -8,6 +8,7 @@ using static ClanGenDotNet.Scripts.Game_Structure.Game;
 using ClanGenDotNet.Scripts.HouseKeeping;
 using static ClanGenDotNet.Scripts.Utility;
 using System.Numerics;
+using System.ComponentModel;
 
 namespace ClanGenDotNet
 {
@@ -68,6 +69,9 @@ namespace ClanGenDotNet
 				}
 
                 game.Manager.ResetEvents();
+
+				/*DrawRectangle(0, 0, 800, 800, Color.Black);
+				DrawTextureEx(Resources.Clangen.Texture, new Vector2(0), 0, 1f, Color.White);*/
 
 				EndTextureMode();
 

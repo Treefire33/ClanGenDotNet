@@ -14,7 +14,7 @@ namespace ClanGenDotNet.Scripts
 		public static Color DarkModeColour;
 
 		//Fonts
-		public static readonly Font Clangen = LoadFontEx(".\\Resources\\Font\\clangen.ttf", 100, null, 256);
+		public static readonly Font Clangen = LoadFontEx(".\\Resources\\Font\\clangen.ttf", 100, null, 9865);
 		public static readonly Font NotoSansRegular = LoadFontEx(".\\Resources\\Font\\NotoSans-Regular.ttf", 100, null, 256);
 		public static readonly Font NotoSansMedium = LoadFontEx(".\\Resources\\Font\\NotoSans-Medium.ttf", 100, null, 256);
 
@@ -129,7 +129,7 @@ namespace ClanGenDotNet.Scripts
 			fixed (Texture2D* clanGenTex = &Clangen.Texture) { GenTextureMipmaps(clanGenTex); }
 			fixed (Texture2D* notoSansReg = &NotoSansRegular.Texture) { GenTextureMipmaps(notoSansReg); }
 			fixed (Texture2D* notoSansMed = &NotoSansMedium.Texture) { GenTextureMipmaps(notoSansMed); }
-			//SetTextureFilter(Clangen.Texture, TextureFilter.Bilinear);
+			SetTextureFilter(Clangen.Texture, TextureFilter.Bilinear);
 			SetTextureFilter(NotoSansRegular.Texture, TextureFilter.Bilinear);
 			SetTextureFilter(NotoSansMedium.Texture, TextureFilter.Bilinear);
 		}

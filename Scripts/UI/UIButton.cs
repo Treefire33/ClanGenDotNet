@@ -1,5 +1,6 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using static ClanGenDotNet.Scripts.Resources;
 using static Raylib_cs.Raylib;
@@ -36,7 +37,7 @@ public class UIButton : UIElement, IUIClickable, IUIElement
 
 	//private NPatchInfo patchInfo = new();
 	//private string Text = "";
-	private unsafe sbyte* _text;
+	private string _text;
 	private int _fontSize = 30;
 
 	private Texture2D _currentTexture;
@@ -59,7 +60,7 @@ public class UIButton : UIElement, IUIClickable, IUIElement
 	/// <param name="manager">The UIManager, preferably game.Manager</param>
 	public unsafe UIButton(ClanGenRect posScale, ButtonStyle style, string text, int fontSize, UIManager manager) : base(posScale, manager)
 	{
-		_text = StringToSBytes(text);
+		_text = text;
 		List<Texture2D> images = GetButtonImagesFromStyle(style);
 		_normal = images[0];
 		_hover = images[1];
@@ -87,7 +88,7 @@ public class UIButton : UIElement, IUIClickable, IUIElement
 	/// <param name="manager">The UIManager, preferably game.Manager</param>
 	public unsafe UIButton(ClanGenRect posScale, ButtonID style, string text, int fontSize, UIManager manager) : base(posScale, manager)
 	{
-		_text = StringToSBytes(text);
+		_text = text;
 		List<Texture2D> images = GetButtonImagesFromID(style);
 		_normal = images[0];
 		_hover = images[1];
@@ -130,8 +131,19 @@ public class UIButton : UIElement, IUIClickable, IUIElement
 	/// <param name="text">The text to set the button text to.</param>
 	public unsafe void SetText(string text)
 	{
-		_text = StringToSBytes(text);
+		//_text = StringToSBytes(text);
+		_text = text;
 	}
+
+	[DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+	public static extern void DrawTextEx(
+		Font font,
+		[MarshalAs(UnmanagedType.LPUTF8Str)] string text,
+		Vector2 position,
+		float fontSize,
+		float spacing,
+		Color tint
+	);
 
 	public override unsafe void Update()
 	{
@@ -146,8 +158,8 @@ public class UIButton : UIElement, IUIClickable, IUIElement
 			0, 
 			Color.White
 		);
-		DrawTextPro(
-			Clangen,
+		/*DrawTextPro(
+			NotoSansRegular,
 			_text,
 			new Vector2(
 				RelativeRect.RelativeRect.Position.X 
@@ -159,6 +171,21 @@ public class UIButton : UIElement, IUIClickable, IUIElement
 			),
 			new Vector2(0f, 0f),
 			0,
+			_fontSize,
+			2,
+			Color.White
+		);*/
+		DrawTextEx(
+			Clangen,
+			_text,
+			new Vector2(
+				RelativeRect.RelativeRect.Position.X
+				+ (RelativeRect.RelativeRect.Size.X / 2)
+				- (textSize.X / 2),
+				RelativeRect.RelativeRect.Position.Y
+				+ (RelativeRect.RelativeRect.Size.Y / 2)
+				- (textSize.Y / 2)
+			),
 			_fontSize,
 			2,
 			Color.White
