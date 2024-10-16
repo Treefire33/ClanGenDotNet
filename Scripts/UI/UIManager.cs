@@ -1,38 +1,38 @@
 ﻿using ClanGenDotNet.Scripts.Events;
+using ClanGenDotNet.Scripts.UI.Interfaces;
 
-namespace ClanGenDotNet.Scripts.UI
+namespace ClanGenDotNet.Scripts.UI;
+
+public class UIManager
 {
-	public class UIManager
+	public List<UIElement> Elements = [];
+	public List<Event> UIEvents = [];
+	public bool IsFocused = false;
+
+	public void DrawUI()
 	{
-		public List<UIElement> Elements = [];
-		public List<Event> UIEvents = [];
-		public bool IsFocused = false;
-
-		public void DrawUI()
+		foreach (UIElement element in Elements)
 		{
-			foreach (UIElement element in Elements)
-			{
-				if (element.IsContained 
-					|| !element.Visible
-				) { continue; }
+			if (element.IsContained
+				|| !element.Visible
+			) { continue; }
 
-				element.Update();
-				if (element is IUIClickable clickable)
-				{
-					clickable.ChangeTexture();
-					clickable.HandleElementInteraction();
-				}
+			element.Update();
+			if (element is IUIClickable clickable)
+			{
+				clickable.ChangeTexture();
+				clickable.HandleElementInteraction();
 			}
 		}
+	}
 
-		public void PushEvent(Event newEvent)
-		{
-			UIEvents.Add(newEvent);
-		}
+	public void PushEvent(Event newEvent)
+	{
+		UIEvents.Add(newEvent);
+	}
 
-		public void ResetEvents()
-		{
-			UIEvents.Clear();
-		}
+	public void ResetEvents()
+	{
+		UIEvents.Clear();
 	}
 }

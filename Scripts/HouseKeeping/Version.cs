@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Salaros.Configuration;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Salaros.Configuration;
 
 namespace ClanGenDotNet.Scripts.HouseKeeping;
 
@@ -34,11 +30,11 @@ public class Version
 
 			if (File.Exists(".\\version.ini"))
 			{
-				var settings = new ConfigParserSettings
+				ConfigParserSettings settings = new()
 				{
 					Encoding = Encoding.UTF8
 				};
-				ConfigParser versionIni = new ConfigParser(".\\version.ini", settings);
+				ConfigParser versionIni = new(".\\version.ini", settings);
 				versionNumber = versionIni.GetValue("DEFAULT", "version_number");
 				releaseChannel = versionIni.GetValue("DEFAULT", "release_channel");
 				upstream = versionIni.GetValue("DEFAULT", "upstream");
@@ -112,6 +108,6 @@ public struct VersionInfo(
 
 	public readonly bool IsDev()
 	{
-		return this.ReleaseChannel != "stable";
+		return ReleaseChannel != "stable";
 	}
 }

@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-using System.Globalization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json;
 
 namespace ClanGenDotNet.Scripts.Game_Structure;
 
 public class Credits
 {
 	[JsonProperty("text", Required = Required.Always)]
-	public List<string> Text { get; set; }
+	public required List<string> Text { get; set; }
 
 	[JsonProperty("contrib", Required = Required.Always)]
-	public Dictionary<string, string> Contrib { get; set; }
+	public required Dictionary<string, string> Contrib { get; set; }
 }

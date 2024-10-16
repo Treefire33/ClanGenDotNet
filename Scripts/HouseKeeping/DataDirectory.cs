@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 
 namespace ClanGenDotNet.Scripts.HouseKeeping;
 
@@ -11,19 +6,19 @@ public class DataDirectory
 {
 	public static void SetUpDataDirectory()
 	{
-		Directory.CreateDirectory(GetDataDirectory());
+		_ = Directory.CreateDirectory(GetDataDirectory());
 		try
 		{
-			Directory.CreateDirectory(GetSaveDirectory());
-			Directory.CreateDirectory(GetTempDirectory());
+			_ = Directory.CreateDirectory(GetSaveDirectory());
+			_ = Directory.CreateDirectory(GetTempDirectory());
 		}
 		catch
 		{
 			Console.WriteLine("mac user detected, nuking pc in five seconds");
 		}
-		Directory.CreateDirectory(GetLogDirectory());
-		Directory.CreateDirectory(GetCacheDirectory());
-		Directory.CreateDirectory(GetSavedImagesDirectory());
+		_ = Directory.CreateDirectory(GetLogDirectory());
+		_ = Directory.CreateDirectory(GetCacheDirectory());
+		_ = Directory.CreateDirectory(GetSavedImagesDirectory());
 
 		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 		{
@@ -33,7 +28,7 @@ public class DataDirectory
 			}
 			if (!Version.GetVersionInfo().IsSourceBuild)
 			{
-				File.CreateSymbolicLink(GetDataDirectory(), "game_data");
+				_ = File.CreateSymbolicLink(GetDataDirectory(), "game_data");
 			}
 		}
 	}
@@ -46,16 +41,11 @@ public class DataDirectory
 			return ".";
 		}
 
-		if (Version.GetVersionInfo().IsDev())
-		{
-			return
-				Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+		return Version.GetVersionInfo().IsDev()
+			? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
 				"\\ClanGenNetBeta" +
-				"\\ClanGen";
-		}
-
-		return
-			Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+				"\\ClanGen"
+			: Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
 			"\\ClanGenNet" +
 			"\\ClanGen";
 	}

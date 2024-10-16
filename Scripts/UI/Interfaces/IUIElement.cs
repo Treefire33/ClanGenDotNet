@@ -1,4 +1,4 @@
-﻿namespace ClanGenDotNet.Scripts.UI;
+﻿namespace ClanGenDotNet.Scripts.UI.Interfaces;
 
 public interface IUIElement
 {
