@@ -38,8 +38,17 @@ public class ClanGenMain
 
 		Texture2D menuLogoless = LoadTexture(".\\Resources\\menu_logoless.png");
 
+		DiscordRPC discordRPC = null;
+		try
+		{
+			discordRPC = new();
+			discordRPC.UpdateActivity("start screen");
+		}
+		catch { Console.WriteLine("DiscordRPC unable to start."); }
+
 		while (!WindowShouldClose())
 		{
+			discordRPC?.Discord.RunCallbacks();
 			BeginTextureMode(ScreenSettings.Screen);
 			ClearBackground(GetThemeColour());
 

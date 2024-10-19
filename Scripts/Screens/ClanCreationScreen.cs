@@ -346,6 +346,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		else if (evnt.Element == _elements["previous_step"] && evnt.Element is UIButton)
 		{
 			_clanName = "";
+			_gameMode = "classic";
 			OpenGameMode();
 		}
 	}
@@ -374,7 +375,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 						break;
 					default:
 						displayMode = "ERROR: Not a Valid Mode!";
-						displayText = "Let me guess, tried adding in a new mode, failed to properly account for it,\nso now you're here.";
+						displayText = "";
 						break;
 				}
 				modeDesc.SetText(displayText);

@@ -72,11 +72,14 @@ public class Utility
 		);
 	}
 
-	//returns -1 if less than, 0 if equal, 1 if greater than
-	/*public static bool CompareVector2(Vector2 vec1, Vector2 vec2, float distance)
-	{
+	public readonly static Random Rand = new(10538);
 
-	}*/
+	public static int GetRandBits(int size)
+	{
+		var tempBytes = new byte[size];
+		Rand.NextBytes(tempBytes);
+		return BitConverter.ToInt32(tempBytes, 0);
+	}
 
 	// stolen from: raylib-cs example: rectangle bounds
 	public static void DrawTextBoxed(

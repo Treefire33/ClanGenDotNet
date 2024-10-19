@@ -146,6 +146,16 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		_text = text;
 	}
 
+	[DllImport("raylib", CallingConvention = CallingConvention.Cdecl)]
+	public unsafe static extern void DrawTextEx(
+		Font font,
+		[MarshalAs(UnmanagedType.LPUTF8Str)]string text,
+		Vector2 position,
+		float fontSize,
+		float spacing,
+		Color tint
+	);
+
 	public override unsafe void Update()
 	{
 		Vector2 textSize = MeasureTextEx(Clangen, _text, _fontSize, 2);
@@ -159,7 +169,7 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 			0,
 			WHITE
 		);
-		DrawTextPro(
+		DrawTextEx(
 			Clangen,
 			_text,
 			new Vector2(
@@ -170,27 +180,10 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 				+ (RelativeRect.Size.Y / 2)
 				- (textSize.Y / 2)
 			),
-			new Vector2(0f, 0f),
-			0,
 			_fontSize,
 			2,
 			WHITE
 		);
-		/*DrawTextEx(
-			NotoSansRegular,
-			_text,
-			new Vector2(
-				RelativeRect.Position.X
-				+ (RelativeRect.Size.X / 2)
-				- (textSize.X / 2),
-				RelativeRect.Position.Y
-				+ (RelativeRect.Size.Y / 2)
-				- (textSize.Y / 2)
-			),
-			_fontSize,
-			2,
-			WHITE
-		);*/
 	}
 
 	public void ChangeTexture()

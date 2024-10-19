@@ -121,9 +121,9 @@ public static class Resources
 	private static unsafe void SetFontFilters()
 	{
 		fixed (Texture2D* clanGenTex = &Clangen.texture) { GenTextureMipmaps(clanGenTex); }
-		fixed (Texture2D* notoSansReg = &NotoSansRegular.texture) { GenTextureMipmaps(notoSansReg); }
-		fixed (Texture2D* notoSansMed = &NotoSansMedium.texture) { GenTextureMipmaps(notoSansMed); }
-		//SetTextureFilter(Clangen.Texture, TextureFilter.Bilinear);
+		/*fixed (Texture2D* notoSansReg = &NotoSansRegular.texture) { GenTextureMipmaps(notoSansReg); }
+		fixed (Texture2D* notoSansMed = &NotoSansMedium.texture) { GenTextureMipmaps(notoSansMed); }*/
+		//SetTextureFilter(Clangen.texture, TEXTURE_FILTER_POINT);
 		SetTextureFilter(NotoSansRegular.texture, TEXTURE_FILTER_BILINEAR);
 		SetTextureFilter(NotoSansMedium.texture, TEXTURE_FILTER_BILINEAR);
 	}

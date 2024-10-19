@@ -50,3 +50,6 @@ global using ClanGenDotNet.Scripts.Game_Structure;
 global using ClanGenDotNet.Scripts.HouseKeeping;
 global using ClanGenDotNet.Scripts.UI;
 global using ClanGenDotNet.Scripts.UI.Interfaces;
+global using static ClanGenDotNet.Scripts.Utility;
+global using static ClanGenDotNet.Scripts.Game_Structure.Game;
+global using static ClanGenDotNet.Scripts.EnumerableExtension;
