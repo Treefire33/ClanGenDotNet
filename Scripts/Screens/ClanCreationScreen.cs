@@ -1,4 +1,5 @@
-﻿using ClanGenDotNet.Scripts.Events;
+﻿using ClanGenDotNet.Scripts.Cats;
+using ClanGenDotNet.Scripts.Events;
 using ClanGenDotNet.Scripts.UI;
 using System.Text.RegularExpressions;
 using static ClanGenDotNet.Scripts.Game_Structure.Game;
@@ -76,6 +77,8 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			25,
 			game.Manager
 		);
+
+		Cat.CreateExampleCats();
 		OpenGameMode();
 	}
 

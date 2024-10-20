@@ -1,4 +1,5 @@
-﻿using ClanGenDotNet.Scripts.HouseKeeping;
+﻿using ClanGenDotNet.Scripts.Cats;
+using ClanGenDotNet.Scripts.HouseKeeping;
 using ClanGenDotNet.Scripts.UI;
 using Newtonsoft.Json;
 
@@ -16,6 +17,10 @@ public class Game(string currentScreen = "start screen")
 	public bool Clicked = false;
 	public bool SwitchScreens = false;
 	public bool Fullscreen = false;
+
+	public Clan? Clan = null;
+	public List<Cat> ChooseCats = [];
+
 	public Dictionary<string, Screens.Screens> AllScreens = [];
 	public Dictionary<string, object?> Switches = new()
 	{

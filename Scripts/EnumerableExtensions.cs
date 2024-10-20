@@ -22,11 +22,21 @@ public static class EnumerableExtension
 
 			if (randomWeight < 0)
 			{
+				if (i >= source.Count())
+				{
+					return source.ElementAt(Rand.Next(0, source.Count()));
+				}
 				return source.ElementAt(i);
 			}
 		}
 
 		return source.First();
+	}
+
+	//pulls a random list of n items.
+	public static IEnumerable<T> Sample<T>(this IEnumerable<T> sample, int number)
+	{
+		return sample.Shuffle().Take(number);
 	}
 
 	public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)

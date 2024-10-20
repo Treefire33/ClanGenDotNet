@@ -1,4 +1,5 @@
-﻿using ClanGenDotNet.Scripts.Game_Structure;
+﻿using ClanGenDotNet.Scripts.Cats;
+using ClanGenDotNet.Scripts.Game_Structure;
 using System.Text;
 
 namespace ClanGenDotNet.Scripts;
@@ -57,7 +58,7 @@ public class Utility
 
 	public static Color GetThemeColour()
 	{
-		return (bool)Game.game.Settings["dark mode"]! == true
+		return (bool)game.Settings["dark mode"]! == true
 			? Resources.DarkModeColour
 			: Resources.LightModeColour;
 	}
@@ -76,9 +77,183 @@ public class Utility
 
 	public static int GetRandBits(int size)
 	{
+		if (size < 4) { size = 4; }
 		var tempBytes = new byte[size];
 		Rand.NextBytes(tempBytes);
 		return BitConverter.ToInt32(tempBytes, 0);
+	}
+
+	public static unsafe Image GenerateSprite(
+		Cat cat, 
+		string? lifeState = null, 
+		bool hideScars = false,
+		bool hideAccessories = false,
+		bool alwaysLiving = false,
+		bool noNotWorkingLineart = false
+	)
+	{
+		string age;
+		bool dead;
+		if (lifeState is not null)
+		{
+			age = lifeState;
+		}
+		else
+		{
+			age = cat.Age.ToString().ToLower();
+		}
+
+		if (alwaysLiving)
+		{
+			dead = false;
+		}
+		else
+		{
+			dead = cat.Dead;
+		}
+
+		string catSprite;
+		string[] containedAges = ["kitten", "adolescent"];
+		if (
+			!noNotWorkingLineart
+			&& cat.NotWorking()
+			&& age != "newborn"
+			&& game.Config.CatSprites.SickSprites
+		)
+		{
+			if (containedAges.Contains(age))
+			{
+				catSprite = "19";
+			}
+			else
+			{
+				catSprite = "18";
+			}
+		}
+		else if (cat.Pelt.Paralyzed && age != "newborn")
+		{
+			if (containedAges.Contains(age))
+			{
+				catSprite = "17";
+			}
+			else
+			{
+				if (cat.Pelt.Length == "long")
+				{
+					catSprite = "16";
+				}
+				else
+				{
+					catSprite = "15";
+				}
+			}
+		}
+		else
+		{
+			if (age == "elder" && !game.Config.Fun.AllCatsAreNewborn)
+			{
+				age = "senior";
+			}
+
+			if (game.Config.Fun.AllCatsAreNewborn)
+			{
+				catSprite = cat.Pelt.CatSprites["newborn"].ToString();
+			}
+			else
+			{
+				catSprite = cat.Pelt.CatSprites[age].ToString();
+			}
+		}
+
+		Image newSprite = ImageCopy(Sprites.CatSprites[
+			cat.Pelt.GetSpritesName() + cat.Pelt.Colour + catSprite
+		]);
+
+		for (int i = 0; i < newSprite.width; i++)
+		{
+			for (int j = 0; j < newSprite.height; j++)
+			{
+				ImageDrawPixel(
+					&newSprite,
+					i, j,
+					new Color(0, 0, 0, 0)
+				);
+			}
+		}
+
+		try
+		{
+			if (cat.Pelt.Name != "Tortie" || cat.Pelt.Name != "Calico")
+			{
+				Image sprite = Sprites.CatSprites[
+					cat.Pelt.GetSpritesName() + cat.Pelt.Colour + catSprite
+				];
+				ImageDraw(
+					&newSprite,
+					sprite,
+					new Rectangle(0, 0, sprite.width, sprite.height),
+					new Rectangle(0, 0, sprite.width, sprite.height),
+					WHITE
+				);
+				ExportImage(newSprite, ".\\example.png");
+			}
+			else
+			{
+				//Draw base coat
+				Image baseCoat = Sprites.CatSprites[
+					cat.Pelt.TortieBase + cat.Pelt.Colour + catSprite
+				];
+				ImageDraw(
+					&newSprite,
+					baseCoat,
+					new Rectangle(0, 0, baseCoat.width, baseCoat.height),
+					new Rectangle(0, 0, newSprite.width, newSprite.height),
+					WHITE
+				);
+
+				string tortiePattern = "SingleColour";
+				if (cat.Pelt.TortiePattern == "Single"){ tortiePattern = "SingleColour"; }
+				else { tortiePattern = cat.Pelt.TortiePattern!; }
+
+				Image patches = ImageCopy(Sprites.CatSprites[
+					tortiePattern + cat.Pelt.TortieColour + catSprite
+				]);
+				Image mask = Sprites.CatSprites[
+					"tortiemask" + cat.Pelt.Pattern + catSprite
+				];
+				ImageAlphaMask(
+					&patches,
+					mask
+				);
+				ImageAlphaPremultiply(&patches);
+
+				ImageDraw(
+					&newSprite,
+					patches,
+					new Rectangle(0, 0, baseCoat.width, baseCoat.height),
+					new Rectangle(0, 0, newSprite.width, newSprite.height),
+					WHITE
+				);
+				ExportImage(newSprite, ".\\example.png");
+			}
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine($"Error updating sprite.\n{e}\n{e.Message}");
+		}
+
+		return newSprite;
+	}
+
+	public static void UpdateSprite(Cat cat)
+	{
+		if (cat.Faded)
+		{
+			return;
+		}
+
+		cat.Sprite = GenerateSprite(cat);
+		Cat.AllCats[cat.ID] = cat;
 	}
 
 	// stolen from: raylib-cs example: rectangle bounds

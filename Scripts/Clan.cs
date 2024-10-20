@@ -79,6 +79,8 @@ public class Clan
 	public Cat? Instructor = null;
 	public string GameMode = "classic";
 
+	public List<string> FadedIds;
+
 	public Clan(
 		string name = "",
 		Cat? leader = null,

@@ -98,10 +98,33 @@ public partial class Pelt
         "FROSTMITT", "FROSTSOCK", "TOE", "SNAKETWO"
 	];
 
-	public static readonly string[] PlantAccessories = [];
-	public static readonly string[] WildAccessories = [];
-	public static readonly string[] TailAccessories = [];
-	public static readonly string[] Collars = [];
+	public static readonly string[] PlantAccessories = [
+		"MAPLE LEAF", "HOLLY", "BLUE BERRIES", "FORGET ME NOTS", "RYE STALK", "CATTAIL", "POPPY", "ORANGE POPPY", "CYAN POPPY", "WHITE POPPY", "PINK POPPY",
+        "BLUEBELLS", "LILY OF THE VALLEY", "SNAPDRAGON", "HERBS", "PETALS", "NETTLE", "HEATHER", "GORSE", "JUNIPER", "LAVENDER",
+        "OAK LEAVES", "CATMINT", "MAPLE SEED", "LAUREL", "BULB WHITE", "BULB YELLOW", "BULB ORANGE", "BULB PINK", "BULB BLUE", "CLOVER", "DAISY",
+        "CLOVER", "DAISY", "LILY OF THE VALLEY", "HEATHER", "SNAPDRAGON", "GORSE", "BULB WHITE", "BULB YELLOW",
+        "DRY HERBS", "DRY CATMINT", "DRY NETTLES", "DRY LAURELS"
+	];
+	public static readonly string[] WildAccessories = [
+		"RED FEATHERS", "BLUE FEATHERS", "JAY FEATHERS", 
+		"GULL FEATHERS", "SPARROW FEATHERS", "MOTH WINGS", "ROSY MOTH WINGS", 
+		"MORPHO BUTTERFLY", "MONARCH BUTTERFLY", "CICADA WINGS", "BLACK CICADA"
+	];
+	public static readonly string[] TailAccessories = [
+		"RED FEATHERS", "BLUE FEATHERS", "JAY FEATHERS", 
+		"GULL FEATHERS", "SPARROW FEATHERS", "CLOVER", "DAISY"
+	];
+	public static readonly string[] Collars = [
+		"CRIMSON", "BLUE", "YELLOW", "CYAN", "RED", "LIME", "GREEN", "RAINBOW",
+        "BLACK", "SPIKES", "WHITE", "PINK", "PURPLE", "MULTI", "INDIGO", "CRIMSONBELL", "BLUEBELL",
+        "YELLOWBELL", "CYANBELL", "REDBELL", "LIMEBELL", "GREENBELL",
+        "RAINBOWBELL", "BLACKBELL", "SPIKESBELL", "WHITEBELL", "PINKBELL", "PURPLEBELL",
+        "MULTIBELL", "INDIGOBELL", "CRIMSONBOW", "BLUEBOW", "YELLOWBOW", "CYANBOW", "REDBOW",
+        "LIMEBOW", "GREENBOW", "RAINBOWBOW", "BLACKBOW", "SPIKESBOW", "WHITEBOW", "PINKBOW",
+        "PURPLEBOW", "MULTIBOW", "INDIGOBOW", "CRIMSONNYLON", "BLUENYLON", "YELLOWNYLON", "CYANNYLON",
+        "REDNYLON", "LIMENYLON", "GREENNYLON", "RAINBOWNYLON",
+        "BLACKNYLON", "SPIKESNYLON", "WHITENYLON", "PINKNYLON", "PURPLENYLON", "MULTINYLON", "INDIGONYLON"
+	];
 
 	public static readonly string[] Tabbies = [ "Tabby", "Ticked", "Mackerel", "Classic", "Sokoke", "Agouti" ];
 	public static readonly string[] Spotted = [ "Speckled", "Rosette" ];
@@ -750,7 +773,8 @@ public partial class Pelt
 			weights = [10, 10, 10, 10, 1];
 		}
 
-		var chosenWhitePatches = WhitePatchSprites.PickRandom().PickRandomWeighted(weights);
+		List<string[]> whiteList = [LittleWhite, MidWhite, HighWhite, MostlyWhite, ["FULLWHITE"]];
+		var chosenWhitePatches = whiteList.PickRandom().PickRandomWeighted(weights);
 
 		WhitePatches = chosenWhitePatches;
 		if (
@@ -812,7 +836,7 @@ public partial class Pelt
 			{ "sick_adult", 18 },
 		};
 
-		Reverse = GetRandBits(1) == 1;
+		Reverse = Rand.Next(0, 2) == 1;
 
 		Skin = SkinSprites.PickRandom();
 
@@ -850,10 +874,11 @@ public partial class Pelt
 
 		if (scarChoice == 1)
 		{
+			Scars ??= [];
 			Scars.Add(new string[] { Scars1.PickRandom(), Scars3.PickRandom() }.PickRandom());
 		}
 
-		if (Scars.Contains("NOTAIL") && Scars.Contains("HALFTAIL"))
+		if (Scars != null && Scars.Contains("NOTAIL") && Scars.Contains("HALFTAIL"))
 		{
 			Scars.Remove("HALFTAIL");
 		}
@@ -879,7 +904,7 @@ public partial class Pelt
 
 		if (accDisplayChoice == 1)
 		{
-			Accessory = new string[] { PlantAccessories.PickRandom(), WildAccessories.PickRandom() }.PickRandom();
+			Accessory = PlantAccessories.Concat(WildAccessories).PickRandom();
 		}
 		else
 		{
@@ -1024,6 +1049,29 @@ public partial class Pelt
 		/*To be implemented
 		 Reason: Requires Sprite class.
 		 */
+	}
+
+	public string GetSpritesName()
+	{
+		return SpriteNames[Name]!;
+	}
+
+	public override string ToString()
+	{
+		return $"Name: {Name}" +
+			$"\n\tLength: {Length}" +
+			$"\n\tColour: {Colour}" +
+			$"\n\tWhitePatches: {WhitePatches}" +
+			$"\n\tEyeColour: {EyeColour}" +
+			$"\n\tEyeColour2: {EyeColour2}" +
+			$"\n\tTortieBase: {TortieBase}" +
+			$"\n\tTortieColour: {TortieColour}" +
+			$"\n\tPattern: {Pattern}" +
+			$"\n\tTortiePattern: {TortiePattern}" +
+			$"\n\tVitiligo: {Vitiligo}" +
+			$"\n\tPoints: {Points}" +
+			$"\n\tAccessory: {Accessory}" +
+			$"\n\tParalyzed: {Paralyzed}";
 	}
 
 	[GeneratedRegex(@"\b([a-z])")]

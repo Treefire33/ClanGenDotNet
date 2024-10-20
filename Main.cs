@@ -1,4 +1,5 @@
 ﻿using ClanGenDotNet.Scripts;
+using ClanGenDotNet.Scripts.Cats;
 using ClanGenDotNet.Scripts.Events;
 using ClanGenDotNet.Scripts.Game_Structure;
 using ClanGenDotNet.Scripts.HouseKeeping;
@@ -23,6 +24,7 @@ public class ClanGenMain
 		ScreenSettings.ToggleFullscreen(showConfirmDialog: false, ingameSwitch: false);
 
 		Resources.LoadResources();
+		Sprites.LoadAll();
 
 		AllScreens.InstanceScreens();
 		SetTargetFPS((int)game.Switches["fps"]!);
@@ -46,6 +48,13 @@ public class ClanGenMain
 		}
 		catch { Console.WriteLine("DiscordRPC unable to start."); }
 
+		Pelt newPelt = Pelt.GenerateNewPelt(new string[] { "male", "female" }.PickRandom(), []);
+		Cat nCat = Cat.CreateCat("warrior");
+		nCat.Pelt = newPelt;
+		Texture2D catSprite = LoadTextureFromImage(nCat.Sprite);
+
+		Console.WriteLine(nCat.Pelt);
+
 		while (!WindowShouldClose())
 		{
 			discordRPC?.Discord.RunCallbacks();
@@ -55,6 +64,12 @@ public class ClanGenMain
 			game.UpdateGame();
 
 			game.Manager.DrawUI();
+
+			DrawTexture(
+				catSprite,
+				100, 100,
+				WHITE
+			);
 
 			int keyPressed = GetKeyPressed();
 			if (keyPressed != 0)
