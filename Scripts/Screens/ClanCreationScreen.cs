@@ -27,6 +27,12 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 	private string _gameMode = "classic";
 	private string _clanName = "";
+	private Cat _leader;
+	private Cat _deputy;
+	private Cat _medicineCat;
+	private List<Cat> _members;
+
+	private Cat _selectedCat;
 
 	private object? _symbolSelected = null;
 	private int _tagListDen = 0;
@@ -257,101 +263,183 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		ClanNameHeader();
 
+		int xPos = 155;
+		int yPos = 235;
+
+		_elements.Add("roll1", new UIButton(
+			UIScale(new ClanGenRect(xPos, yPos, new(34))),
+			ButtonStyle.Squoval,
+			"\u2684",
+			20,
+			game.Manager
+		));
+		yPos += 40;
+		_elements.Add("roll2", new UIButton(
+			UIScale(new ClanGenRect(xPos, yPos, new(34))),
+			ButtonStyle.Squoval,
+			"\u2684",
+			20,
+			game.Manager
+		));
+		yPos += 40;
+		_elements.Add("roll3", new UIButton(
+			UIScale(new ClanGenRect(xPos, yPos, new(34))),
+			ButtonStyle.Squoval,
+			"\u2684",
+			20,
+			game.Manager
+		));
+
+		CreateCatInfo();
+
 		_elements.Add("previous_step", new UIButton(
-			UIScale(new ClanGenRect(253, 635, 147, 30)),
+			UIScale(new ClanGenRect(253, 400, 147, 30)),
 			ButtonStyle.Squoval,
 			"previous",
 			20,
 			game.Manager
 		));
 		_elements.Add("next_step", new UIButton(
-			UIScale(new ClanGenRect(400, 635, 147, 30)),
+			UIScale(new ClanGenRect(0, 400, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.Squoval,
 			"next",
 			20,
 			game.Manager
 		));
 		_elements["next_step"].SetActive(false);
+
+		RefreshCatImagesAndInfo();
+	}
+
+	public void CreateCatInfo()
+	{
+		_elements.Add("cat_name", new UITextBox(
+			UIScale(new ClanGenRect(0, 10, 250, 60)).AnchorTo(
+				AnchorPosition.TopLeft,
+				_elements["name_backdrop"].RelativeRect
+			),
+			"",
+			20,
+			TextAlignment.Center,
+			WHITE,
+			game.Manager
+		));
+
+		_elements.Add("cat_info", new UITextBox(
+			UIScale(new ClanGenRect(440, 220, 175, 125)),
+			"",
+			20,
+			TextAlignment.Center,
+			WHITE,
+			game.Manager
+		));
 	}
 
 	public override void HandleEvent(Event evnt)
 	{
 		base.HandleEvent(evnt);
 
-		if (evnt.EventType == EventType.LeftMouseClick)
+		if (evnt.Element == _mainMenuButton && evnt.EventType == EventType.LeftMouseClick)
 		{
-			if (evnt.Element == _mainMenuButton)
-			{
-				ChangeScreen("start screen");
-			}
-			switch (_subScreen)
-			{
-				case "gamemode":
-					HandleGameModeEvent(evnt);
-					if (evnt.Element == _elements["next_step"])
-					{
-						game.Settings["gamemode"] = _gameMode;
-						OpenNameClan();
-					}
-					break;
-				case "name clan":
-					HandleNameClanEvent(evnt);
-					break;
-			}
+			ChangeScreen("start screen");
+		}
+		switch (_subScreen)
+		{
+			case "gamemode":
+				HandleGameModeEvent(evnt);
+				break;
+			case "name clan":
+				HandleNameClanEvent(evnt);
+				break;
+			case "choose leader":
+				HandleChooseLeaderEvent(evnt);
+				break;
 		}
 	}
 
 	private void HandleGameModeEvent(Event evnt)
 	{
-		if (evnt.Element == _elements["classic_mode_button"])
+		if (evnt.EventType == EventType.LeftMouseClick)
 		{
-			_gameMode = "classic";
-			RefreshTextAndButtons();
-		}
-		else if (evnt.Element == _elements["expanded_mode_button"])
-		{
-			_gameMode = "expanded";
-			RefreshTextAndButtons();
-		}
-		else if (evnt.Element == _elements["cruel_mode_button"])
-		{
-			_gameMode = "cruel";
-			RefreshTextAndButtons();
+			if (evnt.Element == _elements["classic_mode_button"])
+			{
+				_gameMode = "classic";
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["expanded_mode_button"])
+			{
+				_gameMode = "expanded";
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["cruel_mode_button"])
+			{
+				_gameMode = "cruel";
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["next_step"])
+			{
+				game.Settings["game_mode"] = _gameMode;
+				OpenNameClan();
+			}
 		}
 	}
 
 	private void HandleNameClanEvent(Event evnt)
 	{
-		if (evnt.Element == _elements["reset_name"] && evnt.Element is UITextInput input)
+		var nameEntry = (UITextInput)_elements["name_entry"];
+		_elements["next_step"].SetActive(nameEntry.GetText().Length > 0);
+		if (evnt.EventType == EventType.LeftMouseClick)
 		{
-			input.SetText("");
-		}
-
-		if (evnt.Element == _elements["random"] && evnt.Element is UITextInput)
-		{
-			//input2.SetText(RandomClanName());
-		}
-
-		if (evnt.Element == _elements["next_step"] && evnt.Element is UIButton)
-		{
-			input = (UITextInput)_elements["name_entry"];
-			string newName = ClanNamePattern().Replace(input.GetText(), "").Trim();
-			if (newName == null && _elements["error"] is UITextBox textBox)
+			if (evnt.Element == _elements["reset_name"] && evnt.Element is UITextInput input)
 			{
-				textBox.SetText("Your Clan's name cannot be empty");
-				return;
+				input.SetText("");
 			}
-			//check if in clanlist here
-			_clanName = newName;
-			//open choose leader
-			OpenChooseLeader();
+
+			if (evnt.Element == _elements["random"] && evnt.Element is UITextInput)
+			{
+				//input2.SetText(RandomClanName());
+			}
+
+			if (evnt.Element == _elements["next_step"] && evnt.Element is UIButton)
+			{
+				input = (UITextInput)_elements["name_entry"];
+				string newName = ClanNamePattern().Replace(input.GetText(), "").Trim();
+				if (newName == null && _elements["error"] is UITextBox textBox)
+				{
+					textBox.SetText("Your Clan's name cannot be empty");
+					return;
+				}
+				//check if in clanlist here
+				_clanName = newName;
+				//open choose leader
+				OpenChooseLeader();
+			}
+			else if (evnt.Element == _elements["previous_step"] && evnt.Element is UIButton)
+			{
+				_clanName = "";
+				_gameMode = "classic";
+				OpenGameMode();
+			}
 		}
-		else if (evnt.Element == _elements["previous_step"] && evnt.Element is UIButton)
+	}
+
+	private void HandleChooseLeaderEvent(Event evnt)
+	{
+		List<UIElement> catButtons = [];
+		int iter = 0;
+		foreach (var element in _elements)
 		{
-			_clanName = "";
-			_gameMode = "classic";
-			OpenGameMode();
+			if (element.Key == "cat" + iter)
+			{
+				catButtons.Add(element.Value);
+				iter++;
+			}
 		}
+
+		/*if (catButtons.Contains(evnt.Element!))
+		{
+			_selectedCat = evnt.Element
+		}*/
 	}
 
 	private void RefreshTextAndButtons()
@@ -430,6 +518,108 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			element.Kill();
 		}
 		_symbolButtons.Clear();
+	}
+
+	public void RefreshSelectedCatInfo(Cat? selected = null)
+	{
+		if (selected != null)
+		{
+			UITextBox name = (UITextBox)_elements["cat_name"];
+			if (_subScreen == "choose leader")
+			{
+				name.SetText(selected.Name.ToString()! + " --> " + selected.Name.Prefix + "star");
+			}
+			else
+			{
+				name.SetText(selected.Name.ToString()!);
+			}
+
+			name.Show();
+			UITextBox info = (UITextBox)_elements["cat_info"];
+			info.SetText(
+				selected.Gender+"\n"+selected.Age+"\nnot implemented\nnot implemented"
+			);
+			info.Show();
+		}
+		else
+		{
+			_elements["next_step"].SetActive(false);
+			_elements["cat_name"].Hide();
+			_elements["cat_info"].Hide();
+		}	
+	}
+
+	public void RefreshCatImagesAndInfo(Cat? selected = null)
+	{
+		Vector2 columnPos = new(50, 100);
+
+		RefreshSelectedCatInfo(selected);
+
+		for (int i = 0; i < 6; i++)
+		{
+			if (_elements.ContainsKey("cat" + i))
+			{
+				_elements["cat" + i].Kill();
+			}
+			if (game.ChooseCats[i] == selected)
+			{
+				_elements.Add("cat" + i, new UIButton(
+					UIScale(new ClanGenRect(270, 200, 150, 150)),
+					game.ChooseCats[i].Sprite,
+					game.Manager
+				));
+			}
+			else if (game.ChooseCats[i] == _leader || game.ChooseCats[i] == _deputy || game.ChooseCats[i] == _medicineCat)
+			{
+				_elements.Add("cat" + i, new UIButton(
+					UIScale(new ClanGenRect(650, 130 + 50 * i, 50, 50)),
+					game.ChooseCats[i].Sprite,
+					game.Manager
+				));
+				_elements.Last().Value.SetActive(false);
+			}
+			else
+			{
+				_elements.Add("cat" + i, new UIButton(
+					UIScale(new ClanGenRect(columnPos.X, 130 + 50 * i, 50, 50)),
+					game.ChooseCats[i].Sprite,
+					game.Manager
+				));
+			}
+		}
+
+		for (int i = 6; i < 12; i++)
+		{
+			if (_elements.ContainsKey("cat" + i))
+			{
+				_elements["cat" + i].Kill();
+			}
+			if (game.ChooseCats[i] == selected)
+			{
+				_elements.Add("cat" + i, new UIButton(
+					UIScale(new ClanGenRect(270, 200, 150, 150)),
+					game.ChooseCats[i].Sprite,
+					game.Manager
+				));
+			}
+			else if (game.ChooseCats[i] == _leader || game.ChooseCats[i] == _deputy || game.ChooseCats[i] == _medicineCat)
+			{
+				_elements.Add("cat" + i, new UIButton(
+					UIScale(new ClanGenRect(700, 130 + 50 * (i - 6), 50, 50)),
+					game.ChooseCats[i].Sprite,
+					game.Manager
+				));
+				_elements.Last().Value.SetActive(false);
+			}
+			else
+			{
+				_elements.Add("cat" + i, new UIButton(
+					UIScale(new ClanGenRect(columnPos.Y, 130 + 50 * (i - 6), 50, 50)),
+					game.ChooseCats[i].Sprite,
+					game.Manager
+				));
+			}
+		}
 	}
 
 	public override void ExitScreen()

@@ -11,7 +11,7 @@ namespace ClanGenDotNet;
 
 public class ClanGenMain
 {
-	public static void Main(string[] args)
+	public unsafe static void Main(string[] args)
 	{
 		SetTraceLogLevel((int)LOG_ERROR);
 		SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
@@ -48,13 +48,6 @@ public class ClanGenMain
 		}
 		catch { Console.WriteLine("DiscordRPC unable to start."); }
 
-		Pelt newPelt = Pelt.GenerateNewPelt(new string[] { "male", "female" }.PickRandom(), []);
-		Cat nCat = Cat.CreateCat("warrior");
-		nCat.Pelt = newPelt;
-		Texture2D catSprite = LoadTextureFromImage(nCat.Sprite);
-
-		Console.WriteLine(nCat.Pelt);
-
 		while (!WindowShouldClose())
 		{
 			discordRPC?.Discord.RunCallbacks();
@@ -64,12 +57,6 @@ public class ClanGenMain
 			game.UpdateGame();
 
 			game.Manager.DrawUI();
-
-			DrawTexture(
-				catSprite,
-				100, 100,
-				WHITE
-			);
 
 			int keyPressed = GetKeyPressed();
 			if (keyPressed != 0)

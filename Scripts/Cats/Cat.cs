@@ -11,6 +11,25 @@ public enum Age
 	Senior
 }
 
+public static class AgeEnumExtensions
+{
+	public static string ToCorrectString(this Age age)
+	{
+		if (age == Age.YoungAdult)
+		{
+			return "young adult";
+		}
+		else if (age == Age.SeniorAdult)
+		{
+			return "senior adult";
+		}
+		else
+		{
+			return age.ToString();
+		}
+	}
+}
+
 public class Cat
 {
 	public static List<Cat> DeadCats = [];
@@ -115,6 +134,8 @@ public class Cat
 	public Pelt Pelt;
 	public bool LoadingCat;
 
+	public Name Name;
+
 	public bool NoKits;
 	public bool NoMates;
 	public bool NoRetirement;
@@ -128,17 +149,34 @@ public class Cat
 	private int _experience;
 	private int _moons;
 
-	private Image _sprite;
-	public Image Sprite
+	private Image _image;
+	public Image Image
 	{
 		get
 		{
 			UpdateSprite(cat: this);
+			return _image;
+		}
+
+		set
+		{
+			_image = value;
+		}
+	}
+
+	private Texture2D _sprite;
+	public Texture2D Sprite
+	{
+		get
+		{
+			UnloadTexture(_sprite);
+			_sprite = LoadTextureFromImage(Image);
 			return _sprite;
 		}
 
 		set
 		{
+			UnloadTexture(_sprite);
 			_sprite = value;
 		}
 	}
@@ -242,6 +280,146 @@ public class Cat
 		{
 			ID = id;
 		}
+
+		if (status == null && moons == null)
+		{
+			Age = Enum.GetValues<Age>().PickRandom();
+		}
+		else if (moons != null)
+		{
+			Moons = (int)moons;
+			if (moons > 300)
+			{
+				Age = Age.Senior;
+			}
+			else if (moons == 0)
+			{
+				Age = Age.Newborn;
+			}	
+			else
+			{
+				foreach (var keyAge in AgeMoons.Keys)
+				{
+					if (Enumerable.Range(AgeMoons[keyAge][0], AgeMoons[keyAge][1] + 1).Contains((int)moons))
+					{
+						Age = keyAge;
+					}
+				}
+			}
+		}
+		else
+		{
+			switch (status)
+			{
+				case "newborn":
+					Age = Age.Newborn;
+					break;
+				case "kitten":
+					Age = Age.Kitten;
+					break;
+				case "elder":
+					Age = Age.Senior;
+					break;
+				case "apprentice":
+				case "mediator apprentice":
+				case "medicine cat apprentice":
+					Age = Age.Adolescent;
+					break;
+				default:
+					Age[] pickableAges = [
+						Age.YoungAdult,
+						Age.Adult,
+						Age.Adult,
+						Age.SeniorAdult
+					];
+					Age = pickableAges.PickRandom();
+					break;
+			}
+			Moons = Rand.Next(AgeMoons[Age][0], AgeMoons[Age][1]);
+		}
+
+		if (Backstory == null)
+		{
+			Backstory = "clanborn";
+		}
+		else
+		{
+			Backstory = backstory;
+		}
+
+		if (Gender == null)
+		{
+			string[] tempPicks = ["female", "male"];
+			Gender = tempPicks.PickRandom();
+		}
+		//something about tagging gender
+
+		if (!loadingCat)
+		{
+			InitGenerateCat();
+		}
+
+		//if (!loadingCat) {do the thing}
+
+		//in camp status
+
+		string? biome = null;
+		if (keywordArgs != null && keywordArgs.TryGetValue("biome", out object? value))
+		{
+			biome = (string)value!;
+		}
+		else if (game.Clan != null)
+		{
+			biome = game.Clan.Biome.ToString();
+		}
+
+		if (Pelt != null)
+		{
+			Name = new Name(
+				status!,
+				prefix,
+				suffix,
+				Pelt.Colour,
+				Pelt.EyeColour,
+				Pelt.Name,
+				Pelt.TortiePattern,
+				biome,
+				specialSuffixHidden,
+				loadingCat
+			);
+		}
+		else
+		{
+			Name = new Name(
+				status: status!,
+				prefix: prefix,
+				suffix: suffix,
+				specialSuffixHidden: specialSuffixHidden,
+				loadExistingName: loadingCat
+			);
+		}
+
+		UpdateSprite(this);
+		Sprite = LoadTextureFromImage(Image);
+	}
+
+	public void InitGenerateCat()
+	{
+		//currently just makes the pelt.
+		List<Cat> parentList = [];
+		if (Parent1 != null && AllCats.TryGetValue(Parent1, out Cat? value))
+		{
+			parentList.Add(value);
+		}
+		if (Parent2 != null && AllCats.TryGetValue(Parent2, out Cat? value2))
+		{
+			parentList.Add(value2);
+		}
+		Pelt = Pelt.GenerateNewPelt(
+			Gender!,
+			parentList,
+			Age
+		);
 	}
 
 	public bool NotWorking()
@@ -304,12 +482,12 @@ public class Cat
 		{
 			if (warriorIndices.Contains(i))
 			{
-				game.ChooseCats[i] = CreateCat(status: "warrior");
+				game.ChooseCats.Insert(i, CreateCat(status: "warrior"));
 			}
 			else
 			{
 				List<string> statuses = ["kitten", "apprentice", "warrior", "warrior", "elder"];
-				game.ChooseCats[i] = CreateCat(status: statuses.PickRandom());
+				game.ChooseCats.Insert(i, CreateCat(status: statuses.PickRandom()));
 			}
 		}
 	}

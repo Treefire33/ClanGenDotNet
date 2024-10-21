@@ -247,7 +247,7 @@ public partial class Pelt
 		string? accessory = null,
 		bool paralyzed = false,
 		int opacity = 100,
-		List<string> scars = null,
+		List<string>? scars = null,
 		string? tint = null,
 		string skin = "BLACK",
 		string whitePatchesTint = "none",
@@ -273,7 +273,7 @@ public partial class Pelt
 		Accessory = accessory;
 		Paralyzed = paralyzed;
 		Opacity = opacity;
-		Scars = scars;
+		Scars = scars ?? ([]);
 		Tint = tint;
 		Skin = skin;
 		WhitePatchesTint = whitePatchesTint;
@@ -294,13 +294,10 @@ public partial class Pelt
 		Reverse = reverse;
 	}
 
-	
-
 	public static Pelt GenerateNewPelt(string gender, List<Cat> parents, Age age = Age.Adult)
 	{
 		Pelt newPelt = new();
 
-		// Milestones:
 		bool peltWhite = newPelt.InitPatternColour(gender, parents);
 		newPelt.InitWhitePatches(peltWhite, parents);
 		newPelt.InitSprite();
@@ -963,8 +960,8 @@ public partial class Pelt
 	{
 		if (Torties.Contains(Name))
 		{
-			TortieBase ??= TortieBases.PickRandom();
-			Pattern ??= TortiePatterns.PickRandom();
+			TortieBase = TortieBases.PickRandom();
+			Pattern = TortiePatterns.PickRandom();
 
 
 			int wildcardChance = game.Config.CatGeneration.WildcardTortie;
@@ -1006,7 +1003,8 @@ public partial class Pelt
 					{
 						List<string> possibleColours = [.. PeltColours];
 						possibleColours.Remove(Colour);
-						Colour = possibleColours.PickRandom();
+						Console.WriteLine(possibleColours);
+						TortieColour = possibleColours.PickRandom();
 					}
 
 					if (BlackColours.Contains(Colour) || WhiteColours.Contains(Colour))
@@ -1022,7 +1020,7 @@ public partial class Pelt
 						List<string> possibleColours = [.. BrownColours];
 						possibleColours.Remove(Colour);
 						possibleColours = [.. possibleColours, .. BlackColours, .. GingerColours, .. GingerColours];
-						Colour = possibleColours.PickRandom();
+						TortieColour = possibleColours.PickRandom();
 					}
 					else
 					{
@@ -1046,9 +1044,46 @@ public partial class Pelt
 
 	public void InitTint()
 	{
-		/*To be implemented
-		 Reason: Requires Sprite class.
-		 */
+		List<string> baseTints = Sprites.CatTints.PossibleTints["basic"];
+
+		string colourGroup;
+		List<string> colourTints;
+		if (Sprites.CatTints.ColourGroups.ContainsKey(Colour))
+		{
+			colourGroup = Sprites.CatTints.ColourGroups[Colour];
+			colourTints = Sprites.CatTints.PossibleTints[colourGroup];
+		}
+		else { colourTints = []; }
+
+		if (baseTints != null || !(colourTints.Count <= 0))
+		{
+			string[] possibleTints = [.. baseTints, .. colourTints];
+			Tint = possibleTints.PickRandom();
+		}
+		else { Tint = "none"; }
+
+		if (WhitePatches != null || Points != null)
+		{
+			baseTints = Sprites.WhitePatchesTints.PossibleTints["basic"];
+
+			if (Sprites.WhitePatchesTints.ColourGroups.ContainsKey(Colour))
+			{
+				colourGroup = Sprites.WhitePatchesTints.ColourGroups[Colour];
+				colourTints = Sprites.WhitePatchesTints.PossibleTints[colourGroup];
+			}
+			else { colourTints = []; }
+
+			if (baseTints != null || !(colourTints.Count <= 0))
+			{
+				string[] possibleTints = [.. baseTints, .. colourTints];
+				WhitePatchesTint = possibleTints.PickRandom();
+			}
+			else { WhitePatchesTint = "none"; }
+		}
+		else
+		{
+			WhitePatchesTint = "none";
+		}
 	}
 
 	public string GetSpritesName()
@@ -1071,7 +1106,9 @@ public partial class Pelt
 			$"\n\tVitiligo: {Vitiligo}" +
 			$"\n\tPoints: {Points}" +
 			$"\n\tAccessory: {Accessory}" +
-			$"\n\tParalyzed: {Paralyzed}";
+			$"\n\tParalyzed: {Paralyzed}" +
+			$"\n\tTint: {Tint}" +
+			$"\n\tWhite Patches Tint: {WhitePatchesTint}";
 	}
 
 	[GeneratedRegex(@"\b([a-z])")]

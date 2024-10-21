@@ -98,6 +98,25 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		_fontSize = fontSize;
 	}
 
+	/// <summary>
+	/// Creates a UIButton with only an image.
+	/// </summary>
+	/// <param name="posScale">A Rectangle of position and size.</param>
+	/// <param name="sprite">A Texture2D, the only sprite of the button.</param>
+	/// <param name="text">The text the button will display.</param>
+	/// <param name="manager">The UIManager, preferably game.Manager</param>
+	public unsafe UIButton(ClanGenRect posScale, Texture2D sprite, UIManager manager) : base(posScale, manager)
+	{
+		_text = "";
+		_normal = sprite;
+		_hover = sprite;
+		_selected = sprite;
+		_disabled = sprite;
+		_currentTexture = _normal;
+		_imageRect = new(0, 0, _currentTexture.width, _currentTexture.height);
+		_fontSize = 0;
+	}
+
 	private unsafe int CalculateFontSize()
 	{
 		int[] sizes = [-1, -1];

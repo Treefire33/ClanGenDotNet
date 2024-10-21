@@ -16,14 +16,14 @@ public static class Sprites
 	{
 		try
 		{
-
 			CatTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\tint.json"))!;
+		}
+		catch { Console.WriteLine("ERROR: Failed to load tints."); }
+		try
+		{
 			WhitePatchesTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\white_patches_tint.json"))!;
 		}
-		catch
-		{
-			Console.WriteLine("ERROR: Failed to load tints.");
-		}
+		catch { Console.WriteLine("ERROR: Failed to load white patches tints."); }
 	}
 
 	public static void MakeSpritesheet(string imageFile, string name)
@@ -75,6 +75,8 @@ public static class Sprites
 
 	public static void LoadAll()
 	{
+		LoadTints();
+
 		Image lineart = LoadImage(".\\Sprites\\lineart.png");
 		int width = lineart.width; int height = lineart.height;
 
