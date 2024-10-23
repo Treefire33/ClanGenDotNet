@@ -1003,7 +1003,6 @@ public partial class Pelt
 					{
 						List<string> possibleColours = [.. PeltColours];
 						possibleColours.Remove(Colour);
-						Console.WriteLine("it's this motherfucker");
 						TortieColour = possibleColours.PickRandom();
 					}
 
@@ -1019,8 +1018,7 @@ public partial class Pelt
 					{
 						List<string> possibleColours = [.. BrownColours];
 						possibleColours.Remove(Colour);
-						possibleColours = [.. possibleColours, .. BlackColours, .. GingerColours, .. GingerColours];
-						TortieColour = possibleColours.PickRandom();
+						TortieColour = possibleColours.Concat([.. BlackColours, .. GingerColours, .. GingerColours]).PickRandom();
 					}
 					else
 					{

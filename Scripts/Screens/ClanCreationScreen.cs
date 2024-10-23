@@ -32,7 +32,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 	private Cat _medicineCat;
 	private List<Cat> _members;
 
-	private Cat _selectedCat;
+	private Cat? _selectedCat;
 
 	private object? _symbolSelected = null;
 	private int _tagListDen = 0;
@@ -132,7 +132,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 620, 147, 30)),
-			ButtonStyle.Squoval,
+			ButtonStyle.MenuLeft,
 			"previous",
 			20,
 			game.Manager
@@ -140,7 +140,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements["previous_step"].SetActive(false);
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(400, 620, 147, 30)),
-			ButtonStyle.Squoval,
+			ButtonStyle.MenuRight,
 			"next",
 			20,
 			game.Manager
@@ -196,14 +196,14 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 635, 147, 30)),
-			ButtonStyle.Squoval,
+			ButtonStyle.MenuLeft,
 			"previous",
 			20,
 			game.Manager
 		));
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(400, 635, 147, 30)),
-			ButtonStyle.Squoval,
+			ButtonStyle.MenuRight,
 			"next",
 			20,
 			game.Manager
@@ -290,18 +290,88 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			game.Manager
 		));
 
+		int temp = 80;
+		if (_rerollsLeft == -1)
+		{
+			temp += 5;
+		}
+		_elements.Add("dice", new UIButton(
+			UIScale(new ClanGenRect(temp, 435, 34, 34)),
+			ButtonStyle.Squoval,
+			"\u2684",
+			20,
+			game.Manager
+		));
+		_elements.Add("reroll_count", new UITextBox(
+			UIScale(new ClanGenRect(100, 440, 50, 25)),
+			_rerollsLeft.ToString(),
+			15,
+			TextAlignment.Center,
+			WHITE,
+			game.Manager
+		));
+
+		if (game.Config.ClanCreation.Rerolls == 3)
+		{
+			if (_rerollsLeft <= 2)
+			{
+				_elements["roll1"].SetActive(false);
+			}
+			if (_rerollsLeft <= 1)
+			{
+				_elements["roll2"].SetActive(false);
+			}
+			if (_rerollsLeft == 0)
+			{
+				_elements["roll3"].SetActive(false);
+			}
+			_elements["dice"].Hide();
+			_elements["reroll_count"].Hide();
+		}
+		else
+		{
+			if (_rerollsLeft == 0)
+			{
+				_elements["dice"].SetActive(false);
+			}
+			else if (_rerollsLeft == -1)
+			{
+				_elements["reroll_count"].Hide();
+			}
+			_elements["roll1"].Hide();
+			_elements["roll2"].Hide();
+			_elements["roll3"].Hide();
+		}
+
 		CreateCatInfo();
+
+		_elements.Add("select_cat", new UIButton(
+			UIScale(new ClanGenRect(234, 348, 332, 52)),
+			ButtonID.NineLivesButton,
+			"",
+			20,
+			game.Manager
+		));
+
+		_elements.Add("error_message", new UITextBox(
+			UIScale(new ClanGenRect(150, 353, 500, 55)),
+			"Too young to become leader",
+			20,
+			TextAlignment.Center,
+			WHITE,
+			game.Manager
+		));
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 400, 147, 30)),
-			ButtonStyle.Squoval,
+			ButtonStyle.MenuLeft,
 			"previous",
 			20,
 			game.Manager
 		));
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(0, 400, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
-			ButtonStyle.Squoval,
+			ButtonStyle.MenuRight,
 			"next",
 			20,
 			game.Manager
@@ -410,7 +480,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 					return;
 				}
 				//check if in clanlist here
-				_clanName = newName;
+				_clanName = newName!;
 				//open choose leader
 				OpenChooseLeader();
 			}
@@ -429,10 +499,65 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		{
 			if (evnt.Element == _elements["cat" + i])
 			{
-				_selectedCat = ((UICatButton)evnt.Element!).GetCat();
-				RefreshCatImagesAndInfo(_selectedCat);
-				RefreshTextAndButtons();
+				if (IsKeyDown(KEY_LEFT_SHIFT | KEY_RIGHT_SHIFT))
+				{
+					var clickedCat = ((UICatButton)evnt.Element!).GetCat();
+					if (clickedCat.Age == (Age.Newborn | Age.Kitten | Age.Adolescent))
+					{
+						_leader = clickedCat;
+						_selectedCat = null;
+						//OpenChooseDeputy();
+					}
+				}
+				else
+				{
+					_selectedCat = ((UICatButton)evnt.Element!).GetCat();
+					RefreshCatImagesAndInfo(_selectedCat);
+					RefreshTextAndButtons();
+					return; // prevent handler from comparing to other buttons.
+				}
 			}
+		}
+		if (
+			evnt.Element == _elements["roll1"] 
+			|| evnt.Element == _elements["roll2"]
+			|| evnt.Element == _elements["roll3"]
+			|| evnt.Element == _elements["dice"]
+		)
+		{
+			_elements["select_cat"].Hide();
+			Cat.CreateExampleCats();
+			_selectedCat = null;
+			if (_elements.TryGetValue("error_message", out UIElement? errorMessage))
+			{
+				errorMessage.Hide();
+			}	
+			RefreshCatImagesAndInfo();
+			_rerollsLeft -= 1;
+			if (game.Config.ClanCreation.Rerolls == 3)
+			{
+				evnt.Element.SetActive(false);
+			}
+			else
+			{
+				((UITextBox)_elements["reroll_count"]).SetText(_rerollsLeft.ToString());
+				if (_rerollsLeft == 0)
+				{
+					evnt.Element.SetActive(false);
+				}
+			}
+			return;
+		}
+		else if (evnt.Element == _elements["select_cat"])
+		{
+			_leader = _selectedCat!;
+			_selectedCat = null;
+
+		}
+		else if (evnt.Element == _elements["previous_step"])
+		{
+			_clanName = "";
+			OpenNameClan();
 		}
 	}
 
@@ -493,6 +618,25 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 			_elements["next_step"].SetActive(_gameMode != "cruel");
 		}
+		else if (_subScreen == "choose leader" || _subScreen == "choose deputy" || _subScreen == "choose med cat")
+		{
+			if (
+				_selectedCat != null 
+				&& (
+					_selectedCat.Age == Age.Newborn 
+					|| _selectedCat.Age == Age.Kitten 
+					|| _selectedCat.Age == Age.Adolescent)
+				)
+			{
+				_elements["select_cat"].Hide();
+				_elements["error_message"].Show();
+			}
+			else
+			{
+				_elements["select_cat"].Show();
+				_elements["error_message"].Hide();
+			}
+		}
 	}
 
 	private void ClearPage()
@@ -531,7 +675,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			name.Show();
 			UITextBox info = (UITextBox)_elements["cat_info"];
 			info.SetText(
-				selected.Gender+"\n"+selected.Age+"\nnot implemented\nnot implemented"
+				selected.Gender+"\n"+selected.Age.ToCorrectString()+"\nnot implemented\nnot implemented"
 			);
 			info.Show();
 		}

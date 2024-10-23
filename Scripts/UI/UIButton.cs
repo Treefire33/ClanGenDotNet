@@ -22,7 +22,8 @@ public enum ButtonID
 	TwitterButton,
 	TumblrButton,
 	DiscordButton,
-	EnglishLadder //don't know, don't care to know
+	EnglishLadder,
+	NineLivesButton
 }
 public partial class UIButton : UIElement, IUIClickable, IUIElement
 {

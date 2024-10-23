@@ -149,30 +149,11 @@ public class Cat
 	private int _experience;
 	private int _moons;
 
-	private Image _image;
-	public Image Image
-	{
-		get
-		{
-			UpdateSprite(cat: this);
-			return _image;
-		}
-
-		set
-		{
-			_image = value;
-		}
-	}
-
 	private Texture2D _sprite;
 	public Texture2D Sprite
 	{
 		get
 		{
-			if (_sprite.Equals(default))
-			{
-				_sprite = LoadTextureFromImage(Image);
-			}
 			return _sprite;
 		}
 
@@ -402,7 +383,6 @@ public class Cat
 		}
 
 		UpdateSprite(this);
-		Sprite = LoadTextureFromImage(Image);
 	}
 
 	public void InitGenerateCat()
@@ -478,6 +458,10 @@ public class Cat
 
 	public static void CreateExampleCats()
 	{
+		foreach(var kitty in game.ChooseCats)
+		{
+			UnloadTexture(kitty._sprite);
+		}
 		game.ChooseCats.Clear();
 		List<int> warriorIndices = Enumerable.Range(1, 12).Sample(3).ToList();
 

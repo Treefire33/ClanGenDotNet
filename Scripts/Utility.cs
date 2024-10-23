@@ -165,7 +165,8 @@ public class Utility
 			}
 		}
 
-		catSprite = Rand.Next(1, 20).ToString();
+		//catSprite = Rand.Next(1, 20).ToString();
+		//Console.WriteLine(catSprite);
 
 		Image newSprite;
 		FillImage(&newSprite, BLANK);
@@ -674,7 +675,17 @@ public class Utility
 			return;
 		}
 
-		cat.Image = GenerateSprite(cat);
+		Image newImage = GenerateSprite(cat);
+		if (cat.Sprite.Equals(default))
+		{
+			cat.Sprite = LoadTextureFromImage(ImageCopy(newImage));
+		}
+		else
+		{
+			UnloadTexture(cat.Sprite);
+			cat.Sprite = LoadTextureFromImage(ImageCopy(newImage));
+		}
+		UnloadImage(newImage);
 		Cat.AllCats[cat.ID] = cat;
 	}
 
