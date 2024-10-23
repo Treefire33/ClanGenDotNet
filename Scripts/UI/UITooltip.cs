@@ -1,9 +1,7 @@
-﻿using Raylib_cs;
-using System.Numerics;
+﻿using ClanGenDotNet.Scripts.UI.Interfaces;
 using System.Text;
 using static ClanGenDotNet.Scripts.Resources;
 using static ClanGenDotNet.Scripts.Utility;
-using static Raylib_cs.Raylib;
 
 namespace ClanGenDotNet.Scripts.UI;
 public class UITooltip : UIElement, IUIElement
@@ -11,7 +9,7 @@ public class UITooltip : UIElement, IUIElement
 	private string _tooltipText;
 	private Vector2 _padding = new(5, 5);
 
-	private UIElement _parentElement;
+	private readonly UIElement _parentElement;
 
 	public UITooltip(string text, UIElement parentElement, UIManager manager) : base(new ClanGenRect(), manager)
 	{
@@ -31,7 +29,7 @@ public class UITooltip : UIElement, IUIElement
 		RelativeRect = new ClanGenRect(
 			RelativeRect.Position,
 			250,
-			textSize.Y * 4
+			textSize.Y * 2
 		);
 	}
 
@@ -43,11 +41,11 @@ public class UITooltip : UIElement, IUIElement
 		int line = 0;
 		for (int i = 0; i < text.Length; i++)
 		{
-			currentString.Append(text[i]);
+			_ = currentString.Append(text[i]);
 			string currentLine = currentString.ToString().Split('\n')[line];
-			if (MeasureTextEx(NotoSansMedium, currentLine, 20, 0).X >= 225)
+			if (MeasureTextEx(NotoSansMedium, currentLine, 20, 0).X >= 250)
 			{
-				currentString.Append('\n');
+				_ = currentString.Append('\n');
 				line++;
 			}
 		}
@@ -82,12 +80,17 @@ public class UITooltip : UIElement, IUIElement
 				_tooltipText,
 				AddRectangles(
 					RelativeRect.AsRaylibRect(),
-					new Rectangle(_padding / 2, -_padding)
+					new Rectangle(
+						_padding.X / 2, 
+						_padding.Y / 2,
+						-_padding.X,
+						-_padding.Y
+					)
 				),
 				18,
 				0,
 				true,
-				Color.Black
+				BLACK
 			);
 		}
 	}

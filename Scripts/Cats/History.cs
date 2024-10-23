@@ -1,6 +1,5 @@
-﻿namespace ClanGenDotNet.Scripts.Cats
+﻿namespace ClanGenDotNet.Scripts.Cats;
+
+public class History
 {
-	public class History
-	{
-	}
 }

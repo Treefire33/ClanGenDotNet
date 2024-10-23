@@ -1,49 +1,46 @@
-﻿using Raylib_cs;
-using System.Numerics;
-using System.Text;
+﻿using ClanGenDotNet.Scripts.UI.Interfaces;
 using System.Text.RegularExpressions;
 using static ClanGenDotNet.Scripts.Resources;
-using static Raylib_cs.Raylib;
 
 namespace ClanGenDotNet.Scripts.UI;
-public class UITextInput(ClanGenRect posScale, string defaultText, int maxCharacters, UIManager manager) 
-	: UIElement(posScale, manager), 
-	IUIClickable, 
+public partial class UITextInput(ClanGenRect posScale, string defaultText, int maxCharacters, UIManager manager)
+	: UIElement(posScale, manager),
+	IUIClickable,
 	IUIElement
 {
 	private string _text = defaultText;
-	private int _maxCharacters = maxCharacters;
+	private readonly int _maxCharacters = maxCharacters;
 	private int _currentCharacters = 0;
 
 	public bool Focused = false;
 
-	private Regex _inputRegex = new(@"[^A-Za-z0-9 ]+", RegexOptions.Multiline);
+	private readonly Regex _inputRegex = DefaultInputRegex();
 
 	public override void Update()
 	{
 		base.Update();
-		DrawRectangleRec(RelativeRect.RelativeRect, Color.White);
+		DrawRectangleRec(RelativeRect.RelativeRect, WHITE);
 		DrawTextPro(
 			NotoSansMedium,
 			_text,
-			RelativeRect.RelativeRect.Position,
-			new(0),
+			RelativeRect.Position,
+			new Vector2(0),
 			0,
 			25,
 			0,
-			Color.Black
+			BLACK
 		);
-		if (Hovered && IsMouseButtonPressed(MouseButton.Left))
+		if (Hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
 			Focused = true;
 		}
-		else if (IsMouseButtonPressed(MouseButton.Left))
+		else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
 			Focused = false;
 		}
 		if (Focused)
 		{
-			SetMouseCursor(MouseCursor.IBeam);
+			SetMouseCursor(MOUSE_CURSOR_IBEAM);
 
 			int key = GetCharPressed();
 
@@ -58,18 +55,18 @@ public class UITextInput(ClanGenRect posScale, string defaultText, int maxCharac
 				key = GetCharPressed();
 			}
 
-			if (IsKeyPressed(KeyboardKey.Backspace))
+			if (IsKeyPressed(KEY_BACKSPACE))
 			{
 				_currentCharacters--;
 				if (_currentCharacters < 0) { _currentCharacters = 0; }
-				this._text = this._text.Remove(_currentCharacters);
+				_text = _text.Remove(_currentCharacters);
 			}
 
 			//_text = _inputRegex.Replace(_text, "");
 		}
 		else
 		{
-			SetMouseCursor(MouseCursor.Default);
+			SetMouseCursor(MOUSE_CURSOR_DEFAULT);
 		}
 	}
 
@@ -86,7 +83,7 @@ public class UITextInput(ClanGenRect posScale, string defaultText, int maxCharac
 
 	public void ChangeTexture() { } //UITextInput shouldn't change texture.
 
-	int framesCount = 0;
+	private int framesCount = 0;
 	public void HandleElementInteraction()
 	{
 		if (Focused)
@@ -94,20 +91,23 @@ public class UITextInput(ClanGenRect posScale, string defaultText, int maxCharac
 			framesCount++;
 			if (_currentCharacters < _maxCharacters)
 			{
-				if ((framesCount / 20) % 2 == 0)
+				if (framesCount / 20 % 2 == 0)
 				{
 					DrawTextPro(
 						NotoSansMedium,
 						"|",
-						new((int)RelativeRect.X + (MeasureTextEx(NotoSansMedium, _text, 25, 0).X), (int)RelativeRect.Y),
-						new(0),
+						new Vector2(RelativeRect.X + MeasureTextEx(NotoSansMedium, _text, 25, 0).X, RelativeRect.Y),
+						new Vector2(0),
 						0,
 						25,
 						0,
-						Color.Black
+						BLACK
 					);
 				}
 			}
 		}
 	}
+
+	[GeneratedRegex(@"[^A-Za-z0-9 ]+", RegexOptions.Multiline)]
+	private static partial Regex DefaultInputRegex();
 }

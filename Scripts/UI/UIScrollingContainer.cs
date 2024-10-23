@@ -1,9 +1,4 @@
-﻿using Raylib_cs;
-using System.Numerics;
-using static Raylib_cs.Raylib;
-using static ClanGenDotNet.Scripts.Resources;
-using static ClanGenDotNet.Scripts.Utility;
-using ClanGenDotNet.Scripts.Game_Structure;
+﻿using ClanGenDotNet.Scripts.UI.Interfaces;
 
 namespace ClanGenDotNet.Scripts.UI;
 public class UIScrollingContainer(ClanGenRect posScale, UIManager manager) : UIContainer(posScale, manager), IUIElement, IUIContainer

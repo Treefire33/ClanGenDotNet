@@ -1,11 +1,5 @@
 ﻿using ClanGenDotNet.Scripts.Game_Structure;
-using Raylib_cs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ClanGenDotNet.Scripts;
 
@@ -22,9 +16,10 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 	public ClanGenRect(float x, float y, Vector2 scale) : this(new(x, y), scale) { }
 
 	//RelativeRect
-	public Rectangle RelativeRect { 
-		get { return new Rectangle(X, Y, Width, Height); }
-		set { this = new(X, Y, Width, Height); } 
+	public Rectangle RelativeRect
+	{
+		get => new(X, Y, Width, Height);
+		set => this = new(X, Y, Width, Height);
 	}
 	public float X = position.X;
 	public float Y = position.Y;
@@ -33,10 +28,7 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 
 	public Vector2 Position
 	{
-		get
-		{
-			return new Vector2(X, Y);
-		}
+		get => new(X, Y);
 
 		set
 		{
@@ -46,10 +38,7 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 	}
 	public Vector2 Size
 	{
-		get
-		{
-			return new Vector2(X, Y);
-		}
+		get => new(Width, Height);
 
 		set
 		{
@@ -59,27 +48,54 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 	}
 
 	//Points in RelativeRect
-	public Vector2 TopLeft = position;
-	public Vector2 TopCenter = new(position.X + (scale.X / 2), position.Y);
-	public Vector2 TopRight = new(position.X + scale.X, position.Y);
+	public Vector2 TopLeft
+	{
+		get {  return new(X, Y); }
+	}
+	public Vector2 TopCenter
+	{
+		get { return new(X / 2 + Width / 2, Y); }
+	}
+	public Vector2 TopRight
+	{
+		get { return new(X + Width, Y); }
+	}
 
-	public Vector2 CenterLeft = new(position.X, position.Y + (scale.Y / 2));
-	public Vector2 Center = position + (scale / 2);
-	public Vector2 CenterRight = new(position.X + scale.X, position.Y + (scale.Y / 2));
+	public Vector2 CenterLeft
+	{
+		get { return new(X, Y / 2 + Height / 2); }
+	}
+	public Vector2 Center
+	{
+		get { return (Position / 2) + (Size / 2); }
+	}
+	public Vector2 CenterRight
+	{
+		get { return new(X + Width, Y / 2 + Height / 2); }
+	}
 
-	public Vector2 BottomLeft = new(position.X, position.Y + scale.Y);
-	public Vector2 BottomCenter = new(position.X + (scale.X / 2), position.Y + scale.Y);
-	public Vector2 BottomRight = position + scale;
+	public Vector2 BottomLeft
+	{
+		get { return new(X, Y + Height); }
+	}
+	public Vector2 BottomCenter
+	{
+		get { return new(X / 2 + Width / 2, Y + Height); }
+	}
+	public Vector2 BottomRight
+	{
+		get { return Position + Size; }
+	}
 
 	//Conversion Function
 	public Rectangle AsRaylibRect()
 	{
 		return RelativeRect;
 	}
-	
+
 	public override string ToString()
 	{
-		return $"ClanGenRect: <{RelativeRect.X}, {RelativeRect.Y}>, <{RelativeRect.Width}, {RelativeRect.Height}>";
+		return $"ClanGenRect: <{Position}>, <{Size}>";
 	}
 
 	public ClanGenRect AnchorTo(AnchorPosition anchor, ClanGenRect anchorRect = new())
@@ -96,11 +112,11 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 				newRect.Y = Y;
 				break;
 			case AnchorPosition.CenterX:
-				newRect.X = (ScreenSettings.GameScreenSize.X/2)-(RelativeRect.Width/2);
+				newRect.X = (ScreenSettings.GameScreenSize.X / 2) - (RelativeRect.width / 2);
 				newRect.Y = Y;
 				break;
 		}
-		newRect.Width = Width; 
+		newRect.Width = Width;
 		newRect.Height = Height;
 		return newRect;
 	}
@@ -134,10 +150,15 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 			Height * scaleRect.Height
 		);
 	}
+
+	public static implicit operator Rectangle(ClanGenRect rect)
+	{
+		return rect.RelativeRect;
+	}
 }
 
 public enum AnchorPosition
-{ 
+{
 	TopLeft,
 	LeftTarget,
 	CenterX

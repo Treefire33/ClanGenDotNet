@@ -1,16 +1,15 @@
-﻿namespace ClanGenDotNet.Scripts.Events
+﻿namespace ClanGenDotNet.Scripts.Events;
+
+public enum EventType
 {
-	public enum EventType
-	{
-		None,
-		LeftMouseDown,
-		LeftMouseUp,
-		LeftMouseClick,
-		RightMouseDown,
-		RightMouseUp,
-		RightMouseClick,
-		KeyDown,
-		KeyPressed,
-		KeyUp
-	}
+	None,
+	LeftMouseDown,
+	LeftMouseUp,
+	LeftMouseClick,
+	RightMouseDown,
+	RightMouseUp,
+	RightMouseClick,
+	KeyDown,
+	KeyPressed,
+	KeyUp
 }

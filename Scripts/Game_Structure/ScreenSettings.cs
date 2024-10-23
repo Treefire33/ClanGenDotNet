@@ -1,8 +1,4 @@
-﻿using ClanGenDotNet.Scripts.UI;
-using Newtonsoft.Json;
-using Raylib_cs;
-using System.Numerics;
-using static Raylib_cs.Raylib;
+﻿using Newtonsoft.Json;
 
 namespace ClanGenDotNet.Scripts.Game_Structure;
 
@@ -23,7 +19,7 @@ public class ScreenSettings
 	private static bool _displayChangeInProgress = false;
 
 	public static void SetDisplayMode(
-		Screens.Screens? sourceScreen = null, 
+		Screens.Screens? sourceScreen = null,
 		bool showConfirmDialog = true,
 		bool ingameSwitch = true
 	)
@@ -49,8 +45,8 @@ public class ScreenSettings
 			{
 				displaySizes.Add(new Vector2(GetMonitorWidth(i), GetMonitorHeight(i)));
 			} //honestly thought it would be harder
-			ScreenConfig.FullscreenDisplay = ScreenConfig.FullscreenDisplay < displaySizes.Count 
-				? ScreenConfig.FullscreenDisplay 
+			ScreenConfig.FullscreenDisplay = ScreenConfig.FullscreenDisplay < displaySizes.Count
+				? ScreenConfig.FullscreenDisplay
 				: 0;
 			Vector2 displaySize = displaySizes[ScreenConfig.FullscreenDisplay];
 			Console.WriteLine($"Display Size: {displaySize}");
@@ -58,10 +54,10 @@ public class ScreenSettings
 			DetermineScreenScale((int)displaySize.X, (int)displaySize.Y);
 
 			Screen = LoadRenderTexture(ScreenX, ScreenY);
-			SetTextureFilter(Screen.Texture, TextureFilter.Bilinear);
+			SetTextureFilter(Screen.texture, TEXTURE_FILTER_BILINEAR);
 			SetWindowMonitor(ScreenConfig.FullscreenDisplay);
 
-			ToggleBorderlessWindowed();
+			//ToggleBorderlessWindowed();
 
 			Offset = new Vector2(
 				MathF.Floor((displaySize.X - ScreenX) / 2),
@@ -75,7 +71,7 @@ public class ScreenSettings
 			ScreenY = 700;
 			ScreenScale = 1;
 			Screen = LoadRenderTexture(ScreenX, ScreenY);
-			SetTextureFilter(Screen.Texture, TextureFilter.Bilinear);
+			SetTextureFilter(Screen.texture, TEXTURE_FILTER_BILINEAR);
 		}
 		GameScreenSize = new Vector2(ScreenX, ScreenY);
 
@@ -115,7 +111,7 @@ public class ScreenSettings
 		ScreenY = 700 * ScreenScale;
 
 		Offset = new Vector2(
-			MathF.Floor((x - ScreenX) / 2), 
+			MathF.Floor((x - ScreenX) / 2),
 			MathF.Floor((y - ScreenY) / 2)
 		);
 		GameScreenSize = new Vector2(ScreenX, ScreenY);

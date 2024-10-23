@@ -1,15 +1,11 @@
-﻿using Raylib_cs;
-using System.Numerics;
-using static Raylib_cs.Raylib;
-using static ClanGenDotNet.Scripts.Resources;
+﻿using ClanGenDotNet.Scripts.UI.Interfaces;
 using static ClanGenDotNet.Scripts.Utility;
-using ClanGenDotNet.Scripts.Game_Structure;
 
 namespace ClanGenDotNet.Scripts.UI;
 
-public class UIContainer(ClanGenRect posScale, UIManager manager) 
-	: UIElement(posScale, manager), 
-	IUIContainer, 
+public class UIContainer(ClanGenRect posScale, UIManager manager)
+	: UIElement(posScale, manager),
+	IUIContainer,
 	IUIElement
 {
 	public List<UIElement> ContainedElements = [];
@@ -47,14 +43,14 @@ public class UIContainer(ClanGenRect posScale, UIManager manager)
 
 	public void RemoveElement(UIElement element)
 	{
-		ContainedElements.Remove(element);
+		_ = ContainedElements.Remove(element);
 		element.IsContained = false;
 	}
 
 	public override void Update()
 	{
 		base.Update();
-		foreach (var element in ContainedElements)
+		foreach (UIElement element in ContainedElements)
 		{
 			if (!element.Visible) { continue; }
 
@@ -72,7 +68,7 @@ public class UIContainer(ClanGenRect posScale, UIManager manager)
 	public void SetLayer(int newLayer)
 	{
 		Layer = newLayer;
-		foreach(var element in ContainedElements)
+		foreach (UIElement element in ContainedElements)
 		{
 			element.Layer = newLayer;
 		}
