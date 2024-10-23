@@ -317,7 +317,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			UIScale(new ClanGenRect(0, 10, 250, 60)).AnchorTo(
 				AnchorPosition.TopLeft,
 				_elements["name_backdrop"].RelativeRect
-			),
+			).AnchorTo(AnchorPosition.CenterX),
 			"",
 			20,
 			TextAlignment.Center,
@@ -425,21 +425,15 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 	private void HandleChooseLeaderEvent(Event evnt)
 	{
-		List<UIElement> catButtons = [];
-		int iter = 0;
-		foreach (var element in _elements)
+		for (int i = 0; i < 12; i++)
 		{
-			if (element.Key == "cat" + iter)
+			if (evnt.Element == _elements["cat" + i])
 			{
-				catButtons.Add(element.Value);
-				iter++;
+				_selectedCat = ((UICatButton)evnt.Element!).GetCat();
+				RefreshCatImagesAndInfo(_selectedCat);
+				RefreshTextAndButtons();
 			}
 		}
-
-		/*if (catButtons.Contains(evnt.Element!))
-		{
-			_selectedCat = evnt.Element
-		}*/
 	}
 
 	private void RefreshTextAndButtons()
@@ -507,16 +501,16 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		{
 			element.Kill();
 		}
-		_elements.Clear();
 		foreach (UIElement element in _tabs.Values)
 		{
 			element.Kill();
 		}
-		_tabs.Clear();
 		foreach (UIElement element in _symbolButtons.Values)
 		{
 			element.Kill();
 		}
+		_elements.Clear();
+		_tabs.Clear();
 		_symbolButtons.Clear();
 	}
 
@@ -561,30 +555,37 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			{
 				_elements["cat" + i].Kill();
 			}
+			else
+			{
+				_elements.Add("cat" + i, null);
+			}
 			if (game.ChooseCats[i] == selected)
 			{
-				_elements.Add("cat" + i, new UIButton(
+				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(270, 200, 150, 150)),
 					game.ChooseCats[i].Sprite,
+					game.ChooseCats[i],
 					game.Manager
-				));
+				);
 			}
 			else if (game.ChooseCats[i] == _leader || game.ChooseCats[i] == _deputy || game.ChooseCats[i] == _medicineCat)
 			{
-				_elements.Add("cat" + i, new UIButton(
+				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(650, 130 + 50 * i, 50, 50)),
 					game.ChooseCats[i].Sprite,
+					game.ChooseCats[i],
 					game.Manager
-				));
-				_elements.Last().Value.SetActive(false);
+				);
+				_elements["cat" + i].SetActive(false);
 			}
 			else
 			{
-				_elements.Add("cat" + i, new UIButton(
+				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(columnPos.X, 130 + 50 * i, 50, 50)),
 					game.ChooseCats[i].Sprite,
+					game.ChooseCats[i],
 					game.Manager
-				));
+				);
 			}
 		}
 
@@ -594,42 +595,50 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			{
 				_elements["cat" + i].Kill();
 			}
+			else
+			{
+				_elements.Add("cat" + i, null);
+			}
 			if (game.ChooseCats[i] == selected)
 			{
-				_elements.Add("cat" + i, new UIButton(
+				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(270, 200, 150, 150)),
 					game.ChooseCats[i].Sprite,
+					game.ChooseCats[i],
 					game.Manager
-				));
+				);
 			}
 			else if (game.ChooseCats[i] == _leader || game.ChooseCats[i] == _deputy || game.ChooseCats[i] == _medicineCat)
 			{
-				_elements.Add("cat" + i, new UIButton(
+				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(700, 130 + 50 * (i - 6), 50, 50)),
 					game.ChooseCats[i].Sprite,
+					game.ChooseCats[i],
 					game.Manager
-				));
+				);
 				_elements.Last().Value.SetActive(false);
 			}
 			else
 			{
-				_elements.Add("cat" + i, new UIButton(
+				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(columnPos.Y, 130 + 50 * (i - 6), 50, 50)),
 					game.ChooseCats[i].Sprite,
+					game.ChooseCats[i],
 					game.Manager
-				));
+				);
 			}
 		}
 	}
 
 	public override void ExitScreen()
 	{
-		base.ExitScreen();
-		ClearPage();
 		_mainMenuButton?.Kill();
 		_mainMenuButton = null;
+		ClearPage();
 		_menuWarning?.Kill();
 		_menuWarning = null;
+		_rerollsLeft = game.Config.ClanCreation.Rerolls;
+		base.ExitScreen();
 	}
 
 	[GeneratedRegex(@"[^A-Za-z0-9 ]+")]

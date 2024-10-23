@@ -1003,7 +1003,7 @@ public partial class Pelt
 					{
 						List<string> possibleColours = [.. PeltColours];
 						possibleColours.Remove(Colour);
-						Console.WriteLine(possibleColours);
+						Console.WriteLine("it's this motherfucker");
 						TortieColour = possibleColours.PickRandom();
 					}
 
@@ -1048,9 +1048,9 @@ public partial class Pelt
 
 		string colourGroup;
 		List<string> colourTints;
-		if (Sprites.CatTints.ColourGroups.ContainsKey(Colour))
+		if (Sprites.CatTints.ColourGroups.TryGetValue(Colour, out string? value))
 		{
-			colourGroup = Sprites.CatTints.ColourGroups[Colour];
+			colourGroup = value;
 			colourTints = Sprites.CatTints.PossibleTints[colourGroup];
 		}
 		else { colourTints = []; }

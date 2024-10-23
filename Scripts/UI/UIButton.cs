@@ -26,17 +26,7 @@ public enum ButtonID
 }
 public partial class UIButton : UIElement, IUIClickable, IUIElement
 {
-	/*Why does UIButton inherit from UIImage?
-		My reasoning is that all buttons in clangen are images.*/
-
-	//Why raylib, why? Why must you make me use unsafe?
-	//man, I just can't anymore, everything is making want to quit, but alas I must perservere.
-	//to the above message, it was mostly just fonts and text, everything else worked first try
-
-	//private NPatchInfo patchInfo = new();
-	//private string Text = "";
-	[MarshalAs(UnmanagedType.LPUTF8Str)]
-	private string _text;
+	[MarshalAs(UnmanagedType.LPUTF8Str)] private string _text;
 	private readonly int _fontSize = 30;
 
 	private Texture2D _currentTexture;

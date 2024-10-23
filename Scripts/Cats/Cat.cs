@@ -169,8 +169,10 @@ public class Cat
 	{
 		get
 		{
-			UnloadTexture(_sprite);
-			_sprite = LoadTextureFromImage(Image);
+			if (_sprite.Equals(default))
+			{
+				_sprite = LoadTextureFromImage(Image);
+			}
 			return _sprite;
 		}
 
@@ -476,6 +478,7 @@ public class Cat
 
 	public static void CreateExampleCats()
 	{
+		game.ChooseCats.Clear();
 		List<int> warriorIndices = Enumerable.Range(1, 12).Sample(3).ToList();
 
 		for (int i = 0; i < 12; i++)
