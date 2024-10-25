@@ -27,10 +27,10 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 	private string _gameMode = "classic";
 	private string _clanName = "";
-	private Cat _leader;
-	private Cat _deputy;
-	private Cat _medicineCat;
-	private List<Cat> _members;
+	private Cat? _leader;
+	private Cat? _deputy;
+	private Cat? _medicineCat;
+	private List<Cat> _members = [];
 
 	private Cat? _selectedCat;
 
@@ -64,16 +64,20 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 	public override void ScreenSwitches()
 	{
 		base.ScreenSwitches();
+
 		_currentPage = 1;
 		_subScreen = "gamemode";
 		_gameMode = "classic";
 		_clanName = "";
+		_leader = null;
+		_deputy = null;
+		_medicineCat = null;
+		_members.Clear();
+
 		_menuWarning = new(
 			UIScale(new ClanGenRect(25, 25, 600, -1)),
 			"Note: going back to main menu resets the generated cats.",
-			22,
-			TextAlignment.Left,
-			WHITE,
+			"#text_box_22_horizleft",
 			game.Manager
 		);
 		_mainMenuButton = new(
@@ -101,9 +105,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("permi_warning", new UITextBox(
 			UIScale(new ClanGenRect(100, 581, 600, 40)),
 			"Your Clan's game mode is permanent and cannot be changed after Clan creation.",
-			20,
-			TextAlignment.Center,
-			BLACK,
+			"#text_box_30_horizcenter",
 			game.Manager
 		));
 
@@ -152,17 +154,17 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			game.Manager
 		));
 
-		_elements.Add("mode_details", UITextBox.UITextBoxFromStyle(
+		_elements.Add("mode_details", new UITextBox(
 			UIScale(new ClanGenRect(325, 160, 405, 461)),
 			"",
-			TextBoxStyle.HorizLeft20White,
+			"#text_box_30_horizleft_pad_40_40",
 			game.Manager
 		));
 		if (_elements["mode_details"] is UITextBox textBox) { textBox.SetPadding(new(40, 40)); }
-		_elements.Add("mode_name", UITextBox.UITextBoxFromStyle(
+		_elements.Add("mode_name", new UITextBox(
 			UIScale(new ClanGenRect(425, 135, 200, 27)),
 			"classic",
-			TextBoxStyle.HorizCenter20White,
+			"#text_box_30_horizcenter_light",
 			game.Manager
 		));
 	}
@@ -188,9 +190,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("error", new UITextBox(
 			UIScale(new ClanGenRect(506, 1310, 596, -1)),
 			"",
-			20,
-			TextAlignment.Left,
-			BLACK,
+			"",
 			game.Manager
 		));
 
@@ -219,9 +219,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("clan", new UITextBox(
 			UIScale(new ClanGenRect(375, 600, 100, 25)),
 			"-Clan",
-			25,
-			TextAlignment.VertCenter,
-			WHITE,
+			"#text_box_30_horizcenter",
 			game.Manager
 		));
 		_elements.Add("reset_name", new UIButton(
@@ -243,9 +241,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("clan_name", new UITextBox(
 			UIScale(new ClanGenRect(292, 100, 216, 50)),
 			_clanName + "Clan",
-			20,
-			TextAlignment.VertCenter,
-			WHITE,
+			"#text_box_30_horizcenter_vertcenter",
 			game.Manager
 		));
 	}
@@ -305,9 +301,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("reroll_count", new UITextBox(
 			UIScale(new ClanGenRect(100, 440, 50, 25)),
 			_rerollsLeft.ToString(),
-			15,
-			TextAlignment.Center,
-			WHITE,
+			"",
 			game.Manager
 		));
 
@@ -356,9 +350,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("error_message", new UITextBox(
 			UIScale(new ClanGenRect(150, 353, 500, 55)),
 			"Too young to become leader",
-			20,
-			TextAlignment.Center,
-			WHITE,
+			"#text_box_30_horizcenter_red",
 			game.Manager
 		));
 
@@ -389,18 +381,14 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["name_backdrop"].RelativeRect
 			).AnchorTo(AnchorPosition.CenterX),
 			"",
-			20,
-			TextAlignment.Center,
-			WHITE,
+			"#text_box_30_horizcenter",
 			game.Manager
 		));
 
 		_elements.Add("cat_info", new UITextBox(
 			UIScale(new ClanGenRect(440, 220, 175, 125)),
 			"",
-			20,
-			TextAlignment.Center,
-			WHITE,
+			"#text_box_26_horizcenter",
 			game.Manager
 		));
 	}

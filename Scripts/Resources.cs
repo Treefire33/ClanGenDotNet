@@ -149,6 +149,16 @@ public static class Resources
 		);
 	}
 
+	public static Font ConvertFontNameToFont(string fontName)
+	{
+		return fontName switch
+		{
+			"clangen" => Clangen,
+			"notosans" => NotoSansRegular,
+			_ => NotoSansRegular
+		};
+	}
+
 	public static void UnloadTextures()
 	{
 		UnloadTexture(MenuImage);

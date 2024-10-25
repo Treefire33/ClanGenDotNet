@@ -1,10 +1,12 @@
 ﻿using ClanGenDotNet.Scripts.UI.Interfaces;
+using ClanGenDotNet.Scripts.UI.Themes;
 
 namespace ClanGenDotNet.Scripts.UI;
 
 public class UIElement : IUIElement
 {
-	protected readonly UIManager _manager;
+	protected readonly UIManager Manager;
+	protected readonly ThemeBlock ElementTheme;
 	public ClanGenRect RelativeRect;
 	public bool Hovered;
 	public bool IsContained = false;
@@ -13,27 +15,37 @@ public class UIElement : IUIElement
 	public bool Visible = true;
 	public bool Active = true;
 
-	public UIElement(ClanGenRect posScale, UIManager manager)
+	public UIElement(ClanGenRect posScale, UIManager manager, string objectID = "defaults")
 	{
-		_manager = manager;
+		Manager = manager;
 		RelativeRect = posScale;
-		_manager.Elements.Add(this);
-		_manager.Elements = [.. _manager.Elements.OrderBy(element => element.Layer)];
+		Manager.Elements.Add(this);
+		Manager.Elements = [.. Manager.Elements.OrderBy(element => element.Layer)];
+		if (objectID == null || objectID == "")
+		{
+			objectID = "defaults";
+		}
+		ElementTheme = manager.LightTheme[objectID];
 	}
 
 	public virtual void Update()
 	{
-		Hovered = CheckCollisionPointRec(Utility.GetVirutalMousePosition(), RelativeRect.RelativeRect);
+		Hovered = CheckCollisionPointRec(GetVirutalMousePosition(), RelativeRect.RelativeRect);
+	}
+
+	public virtual void ThemeElement()
+	{
+		
 	}
 
 	public void Revive()
 	{
-		_manager.Elements.Add(this);
+		Manager.Elements.Add(this);
 	}
 
 	public void Kill()
 	{
-		_ = _manager.Elements.Remove(this);
+		_ = Manager.Elements.Remove(this);
 	}
 
 	public void Show()
