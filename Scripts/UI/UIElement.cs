@@ -25,7 +25,6 @@ public class UIElement : IUIElement
 		{
 			objectID = "defaults";
 		}
-		ElementTheme = manager.LightTheme[objectID];
 	}
 
 	public virtual void Update()

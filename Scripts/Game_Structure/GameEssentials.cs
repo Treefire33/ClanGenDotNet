@@ -10,7 +10,7 @@ public class Game(string currentScreen = "start screen")
 	public int MaxNameLength = 10;
 
 	public int ScreenX = 800, ScreenY = 700;
-	public UIManager Manager = new();
+	public UIManager Manager = new(".\\Resources\\Theme\\master_screen_scale.json");
 	public string CurrentScreen = currentScreen;
 	public string LastScreenForUpdate = "start screen";
 	public string? LastScreenForProfile = "list screen";

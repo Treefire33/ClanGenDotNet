@@ -71,7 +71,7 @@ public class UITextBox : UIElement, IUIElement
 	public override void ThemeElement()
 	{
 		base.ThemeElement();
-		_font = ConvertFontNameToFont(ElementTheme.Font["name"]);
+		/*_font = ConvertFontNameToFont(ElementTheme.Font["name"]);
 		_fontSize = int.Parse(ElementTheme.Font["size"]) + 5;
 		_textColour = ThemeBlock.GetColourFromHex(ElementTheme.Colours["normal_text"]);
 		if (ElementTheme.Miscellaneous.TryGetValue("text_horiz_alignment", out dynamic? horizAlignment))
@@ -84,7 +84,12 @@ public class UITextBox : UIElement, IUIElement
 			_verticalAlignment = GetVerticalAlignmentFromString(
 				(string)vertAlignment
 			);
-		}
+		}*/
+		_font = Clangen;
+		_fontSize = 15;
+		_textColour = WHITE;
+		_horizontalAlignment = HorizontalTextAlignment.Left;
+		_verticalAlignment = VerticalTextAlignment.Top;
 	}
 
 	public void SetPadding(Vector2 padding)
