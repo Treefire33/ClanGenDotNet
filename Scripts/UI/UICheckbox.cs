@@ -80,13 +80,13 @@ public class UICheckbox : UIElement, IUIClickable, IUIElement
 		if (!Active) { return; }
 		if (Hovered && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
-			_manager.PushEvent(new(this, Events.EventType.LeftMouseDown));
+			Manager.PushEvent(new(this, Events.EventType.LeftMouseDown));
 			_pressed = true;
 		}
 		else if (Hovered && _pressed && IsMouseButtonUp(MOUSE_BUTTON_LEFT))
 		{
 			_pressed = false;
-			_manager.PushEvent(new(this, Events.EventType.LeftMouseClick));
+			Manager.PushEvent(new(this, Events.EventType.LeftMouseClick));
 			Checked = !Checked;
 		}
 	}

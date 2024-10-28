@@ -1,37 +1,86 @@
-﻿using System.Text;
+﻿using ClanGenDotNet.Scripts.UI.Theming;
+using System.Text;
 using static ClanGenDotNet.Scripts.Resources;
 using static ClanGenDotNet.Scripts.Utility;
 
 namespace ClanGenDotNet.Scripts.UI;
 
-public enum TextAlignment
+public enum HorizontalTextAlignment
 {
 	Left,
 	Center,
-	Right,
-	VertCenter
+	Right
 }
 
-public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlignment alignment, Color textColour, UIManager manager, bool isMultiline = false) : UIElement(posScale, manager)
+public enum VerticalTextAlignment
 {
-	private readonly bool _fillRect = false;
-	private readonly bool _isMultiline = isMultiline;
-	//private unsafe sbyte* _text;
-	private string _text = text;
-	private Color _textColour = textColour;
+	Top,
+	Center,
+	Bottom,
+}
+
+public class UITextBox : UIElement, IUIElement
+{
+	private string _text;
+	private readonly bool _isMultiline;
+
+	//Theme Attributes
+	private Color _textColour;
+	private Font _font;
+	private float _fontSize;
+	private HorizontalTextAlignment _horizontalAlignment;
+	private VerticalTextAlignment _verticalAlignment;
 
 	private Vector2 _padding = new(0, 0);
 
-	/// <summary>
-	/// Converts a string into a signed bytes pointer.
-	/// </summary>
-	/// <param name="Text">The text to convert</param>
-	/// <returns>sbyte*</returns>
-	private unsafe sbyte* StringToSBytes(string Text)
+	public UITextBox(
+		ClanGenRect posScale,
+		string text,
+		string object_id,
+		UIManager manager,
+		bool isMultiline = false
+	) : base(posScale, manager, object_id)
 	{
-		fixed (byte* p = Encoding.ASCII.GetBytes(Text))
+		_text = text;
+		_isMultiline = isMultiline;
+		ThemeElement();
+	}
+
+	public HorizontalTextAlignment GetHorizontalAlignmentFromString(string alignment)
+	{
+		return alignment switch
 		{
-			return (sbyte*)p;
+			"left" => HorizontalTextAlignment.Left,
+			"center" => HorizontalTextAlignment.Center,
+			"right" => HorizontalTextAlignment.Right,
+			_ => HorizontalTextAlignment.Left
+		};
+	}
+
+	public VerticalTextAlignment GetVerticalAlignmentFromString(string alignment)
+	{
+		return alignment switch
+		{
+			"top" => VerticalTextAlignment.Top,
+			"center" => VerticalTextAlignment.Center,
+			"bottom" => VerticalTextAlignment.Bottom,
+			_ => VerticalTextAlignment.Top
+		};
+	}
+
+	public override void ThemeElement()
+	{
+		base.ThemeElement();
+		_font = Theme.Font.Item1; //Font resource
+		_fontSize = Theme.Font.Item2 + 5; //Font size
+		_textColour = Theme.Colours["text"];
+		if (Theme.Miscellaneous.TryGetValue("text_horiz_alignment", out string? horizAlignment))
+		{
+			_horizontalAlignment = GetHorizontalAlignmentFromString(horizAlignment!);
+		}
+		if (Theme.Miscellaneous.TryGetValue("text_vert_alignment", out string? vertAlignment))
+		{
+			_verticalAlignment = GetVerticalAlignmentFromString(vertAlignment!);
 		}
 	}
 
@@ -40,54 +89,60 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 		_padding = padding;
 	}
 
-	private unsafe Rectangle AlignTextRec(ClanGenRect original, string text, TextAlignment align)
+	private Rectangle AlignTextRec(
+		ClanGenRect original,
+		HorizontalTextAlignment horizontalAlignment = HorizontalTextAlignment.Left,
+		VerticalTextAlignment verticalAlignment = VerticalTextAlignment.Top
+	)
 	{
-		Vector2 textSize = MeasureTextEx(NotoSansMedium, text, _fontSize, 0);
-		_ = new Rectangle();
-		ClanGenRect newRect;
-		switch (align)
-		{
-			default:
-			case TextAlignment.Left:
-				return original;
-
-			case TextAlignment.Center:
-				newRect = original;
-				newRect.Position = new Vector2(
-					RelativeRect.Position.X
-					+ (RelativeRect.Size.X / 2)
-					- (textSize.X / 2),
-					RelativeRect.Position.Y
-					+ (RelativeRect.Size.Y / 4)
-				);
-				return newRect;
-
-			case TextAlignment.Right:
-				//Not implemented
-				return original;
-
-			case TextAlignment.VertCenter:
-				newRect = original;
-				newRect.Position = new Vector2(
-					RelativeRect.Position.X
-					+ (RelativeRect.Size.X / 2)
-					- (textSize.X / 2),
-					RelativeRect.Position.Y
-					+ (RelativeRect.Size.Y / 2)
-					- (textSize.Y / 2)
-				);
-				return newRect;
-		}
+		return AlignTextRec(original, _text, horizontalAlignment, verticalAlignment);
 	}
 
-	/*/// <summary>
-	/// Sets the text of the button.
-	/// </summary>
-	/// <param name="text">The text to set the button text to.</param>
-	public unsafe void SetText(string text)
+	private Rectangle AlignTextRec(
+		ClanGenRect original,
+		string text,
+		HorizontalTextAlignment horizontalAlignment = HorizontalTextAlignment.Left,
+		VerticalTextAlignment verticalAlignment = VerticalTextAlignment.Top
+	)
 	{
-		_text = StringToSBytes(text);
-	}*/
+		Vector2 textSize = MeasureTextEx(NotoSansMedium, text, _fontSize, 0);
+		ClanGenRect newRect = original;
+		switch (horizontalAlignment)
+		{
+			default:
+			case HorizontalTextAlignment.Left:
+				break;
+
+			case HorizontalTextAlignment.Center:
+				newRect.X = RelativeRect.Position.X
+					+ (RelativeRect.Size.X / 2)
+					- (textSize.X / 2);
+				break;
+
+			case HorizontalTextAlignment.Right:
+				//Not implemented
+				break;
+		}
+
+		switch (verticalAlignment)
+		{
+			default:
+			case VerticalTextAlignment.Top:
+				break;
+
+			case VerticalTextAlignment.Center:
+				newRect.Y = RelativeRect.Position.Y
+					+ (RelativeRect.Size.Y / 2)
+					- (textSize.Y / 2);
+				break;
+
+			case VerticalTextAlignment.Bottom:
+				//Not implemented
+				break;
+		}
+
+		return newRect;
+	}
 
 	/// <summary>
 	/// Sets the text of the button.
@@ -97,8 +152,6 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 	{
 		_text = text;
 	}
-
-	private readonly int _fontSize = fontSize;
 
 	public override unsafe void Update()
 	{
@@ -111,7 +164,7 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 			{
 				textSize = MeasureTextEx(NotoSansMedium, line, _fontSize, 0);
 				var addedRectangles = AddRectangles(
-					AlignTextRec(RelativeRect, line, alignment),
+					AlignTextRec(RelativeRect, line, _horizontalAlignment, _verticalAlignment),
 					new Rectangle(
 						_padding.X / 2,
 						_padding.Y / 2,
@@ -127,7 +180,7 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 					0,
 					_fontSize,
 					0,
-					WHITE
+					_textColour
 				);
 				positionOffset += textSize.Y;
 			}
@@ -138,7 +191,7 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 				NotoSansMedium,
 				_text,
 				AddRectangles(
-					AlignTextRec(RelativeRect, _text, alignment),
+					AlignTextRec(RelativeRect, _horizontalAlignment, _verticalAlignment),
 					new Rectangle(
 						_padding.X / 2,
 						_padding.Y / 2,
@@ -155,7 +208,7 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 		else
 		{
 			var addedRectangles = AddRectangles(
-				AlignTextRec(RelativeRect, _text, alignment),
+				AlignTextRec(RelativeRect, _horizontalAlignment, _verticalAlignment),
 				new Rectangle(
 					_padding.X / 2,
 					_padding.Y / 2,
@@ -175,10 +228,5 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 			);
 			RelativeRect.Height = textSize.Y;
 		}
-	}
-
-	public static UITextBox UITextBoxFromStyle(ClanGenRect posScale, string text, TextBoxStyle style, UIManager manager)
-	{
-		return new UITextBox(posScale, text, style.FontSize, style.TextAlignment, style.Colour, manager);
 	}
 }

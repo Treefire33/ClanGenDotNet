@@ -1,5 +1,6 @@
 ﻿using ClanGenDotNet.Scripts.Events;
 using ClanGenDotNet.Scripts.UI.Interfaces;
+using ClanGenDotNet.Scripts.UI.Theming;
 
 namespace ClanGenDotNet.Scripts.UI;
 
@@ -7,6 +8,7 @@ public class UIManager
 {
 	public List<UIElement> Elements = [];
 	public List<Event> UIEvents = [];
+	public UITheme Theme;
 	public bool IsFocused = false;
 
 	public void DrawUI()
@@ -24,6 +26,11 @@ public class UIManager
 				clickable.HandleElementInteraction();
 			}
 		}
+	}
+
+	public void LoadTheme(string themePath)
+	{
+		Theme = UITheme.LoadThemeFromFile(themePath);
 	}
 
 	public void PushEvent(Event newEvent)

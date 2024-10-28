@@ -18,17 +18,20 @@ public class ClanGenMain
 		InitWindow(game.ScreenX, game.ScreenY, "ClanGen.Net");
 		SetWindowMinSize(800, 700);
 
+		Resources.LoadResources();
+		Sprites.LoadAll();
 		DataDirectory.SetUpDataDirectory();
+		game.Manager.LoadTheme(
+			".\\Resources\\Theme\\default_theme.json"
+		);
+
 		game.SetSettingsFromLoaded();
 		game.LoadSettings();
 		ScreenSettings.ToggleFullscreen(showConfirmDialog: false, ingameSwitch: false);
-
-		Resources.LoadResources();
-		Sprites.LoadAll();
-
 		AllScreens.InstanceScreens();
-		SetTargetFPS((int)game.Switches["fps"]!);
 		game.AllScreens[game.CurrentScreen].ScreenSwitches();
+
+		SetTargetFPS((int)game.Switches["fps"]!);
 
 		NPatchInfo frameNPatch = new();
 		Texture2D frame = LoadTexture(".\\Resources\\frame.png");
@@ -47,6 +50,8 @@ public class ClanGenMain
 			discordRPC.UpdateActivity("start screen");
 		}
 		catch { Console.WriteLine("DiscordRPC unable to start."); }
+
+		//Console.WriteLine(game.Manager.Theme.ToString());
 
 		while (!WindowShouldClose())
 		{

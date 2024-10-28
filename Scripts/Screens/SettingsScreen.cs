@@ -137,9 +137,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			UIScale(new ClanGenRect(100, 160, 600, 100)),
 			"Change the general settings of your game here.\n" +
 			"More settings are available in the settings page of your Clan.",
-			20,
-			TextAlignment.Center,
-			WHITE,
+			"text_box_30_horizcenter",
 			game.Manager,
 			true
 		);
@@ -206,9 +204,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 		_languageInstructions = new UITextBox(
 			UIScale(new ClanGenRect(100, 160, 600, 50)),
 			"Change the language of the game here. This has not been implemented yet.",
-			20,
-			TextAlignment.Center,
-			WHITE,
+			"text_box_30_horizcenter",
 			game.Manager
 		);
 

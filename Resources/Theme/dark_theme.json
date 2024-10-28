@@ -1,0 +1,34 @@
+{
+	"#dark": {
+		"colour": {
+			"normal_background": "#655934",
+			"hovered_background": "#1E1809",
+			"disabled_background": "#5C5850",
+			"selected_background": "#655934",
+			"active_background": "#655934",
+			"text": "#EFE5CE",
+			"hovered_text": "#EFE5CE",
+			"selected_text": "#EFE5CE",
+			"disabled_text": "#EFE5CE",
+			"link_text": "#2E8B57",
+			"link_hover": "#556B2F",
+			"link_selected": "#556B2F",
+			"text_shadow": "#777777",
+			"normal_border": "#776045",
+			"hovered_border": "#291B0F",
+			"disabled_border": "#706B64",
+			"selected_border": "#776045",
+			"active_border": "#776045",
+			"dark_background": "#00000000"
+		}
+	},
+	"#page_entry_box.#dark": {
+		"colour": {
+			"dark_background": "#00000000",
+			"selected_background": "#796045",
+			"normal_border": "#EFE5CE",
+			"text": "#EFE5CE",
+			"selected_text": "#EFE5CE"
+		}
+	}
+}
