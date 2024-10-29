@@ -23,7 +23,9 @@ public enum ButtonID
 	TumblrButton,
 	DiscordButton,
 	EnglishLadder,
-	NineLivesButton
+	NineLivesButton,
+	SupportLeaderButton,
+	AidClanButton
 }
 public partial class UIButton : UIElement, IUIClickable, IUIElement
 {
@@ -204,8 +206,9 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 
 	public void HandleElementInteraction()
 	{
+		_pressed = false;
 		if (!Active) { return; }
-		if (Hovered && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+		/*if (Hovered && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
 		{
 			_manager.PushEvent(new(this, Events.EventType.LeftMouseDown));
 			_pressed = true;
@@ -214,6 +217,10 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		{
 			_manager.PushEvent(new(this, Events.EventType.LeftMouseClick));
 			_pressed = false;
+		}*/
+		if (Hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		{
+			_manager.PushEvent(new(this, Events.EventType.LeftMouseClick));
 		}
 	}
 }

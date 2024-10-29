@@ -31,6 +31,8 @@ public static class Resources
 	public static readonly List<Texture2D> EnglishLadderImages = GenImageButtonsFromName("english");
 
 	public static readonly List<Texture2D> GrantLivesButton = GenImageButtonsFromName("grant_lives");
+	public static readonly List<Texture2D> SupportLeaderButton = GenImageButtonsFromName("support_leader");
+	public static readonly List<Texture2D> AidClanButton = GenImageButtonsFromName("aid_clan");
 
 	public static readonly List<List<Texture2D>> CheckboxImages = [
 		GenImageButtonsFromName("checkmark_off"),
@@ -98,6 +100,8 @@ public static class Resources
 			ButtonID.DiscordButton => DiscordButtonImages,
 			ButtonID.EnglishLadder => EnglishLadderImages,
 			ButtonID.NineLivesButton => GrantLivesButton,
+			ButtonID.SupportLeaderButton => SupportLeaderButton,
+			ButtonID.AidClanButton => AidClanButton,
 			_ => SquircleButtonImages,
 		};
 	}

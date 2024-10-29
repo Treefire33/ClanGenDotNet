@@ -28,10 +28,10 @@ public class Clan
 {
 	public int LeaderLives = 0;
 
-	public List<Cat> ClanCats = [];
-	public List<Cat> StarClanCats = [];
-	public List<Cat> DarkForestCats = [];
-	public List<Cat> UnknownCats = [];
+	public List<string> ClanCats = [];
+	public List<string> StarClanCats = [];
+	public List<string> DarkForestCats = [];
+	public List<string> UnknownCats = [];
 
 	public readonly List<string> Seasons = [
 		"Newleaf",
@@ -80,6 +80,17 @@ public class Clan
 	public string GameMode = "classic";
 
 	public List<string> FadedIds;
+	private static readonly string[] _instructorChoices = [
+		"apprentice",
+		"mediator apprentice",
+		"medicine cat apprentice",
+		"warrior",
+		"medicine cat",
+		"leader",
+		"mediator",
+		"deputy",
+		"elder"
+	];
 
 	public Clan(
 		string name = "",
@@ -112,5 +123,27 @@ public class Clan
 		ChosenSymbol = symbol;
 		GameMode = gameMode;
 
+	}
+
+	public void CreateClan()
+	{
+		Instructor = new Cat(
+			status: _instructorChoices.PickRandom()	
+		);
+		Instructor.Dead = true;
+		Instructor.DeadFor = Rand.Next(20, 200);
+		AddCat(Instructor);
+		//AddToStarClan(Instructor);
+		AllClans = [];
+
+
+	}
+
+	public void AddCat(Cat meowmeow)
+	{
+		if (Cat.AllCats.ContainsKey(meowmeow.ID) && !ClanCats.Contains(meowmeow.ID))
+		{
+			ClanCats.Add(meowmeow.ID);
+		}
 	}
 }
