@@ -1,10 +1,5 @@
 ﻿using ClanGenDotNet.Scripts.Events;
-using ClanGenDotNet.Scripts.UI;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using static ClanGenDotNet.Scripts.Game_Structure.Game;
 using static ClanGenDotNet.Scripts.Resources;
-using static ClanGenDotNet.Scripts.Utility;
 
 namespace ClanGenDotNet.Scripts.Screens;
 
@@ -151,6 +146,7 @@ public class StartScreen(string name = "start screen") : Screens(name)
 			{
 				ChangeScreen("camp screen");
 			}
+
 			if (evnt.KeyCode >= KEY_TWO && evnt.KeyCode <= KEY_FIVE)
 			{
 				switch (evnt.KeyCode)
@@ -165,6 +161,11 @@ public class StartScreen(string name = "start screen") : Screens(name)
 						Environment.Exit(0);
 						break;
 				}
+			}
+
+			if (evnt.KeyCode >= KEY_ESCAPE)
+			{
+				Environment.Exit(0);
 			}
 		}
 	}

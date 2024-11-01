@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClanGenDotNet.Scripts.Cats;
 
@@ -8,9 +7,9 @@ public static class Sprites
 	public static Tint CatTints = new();
 	public static Tint WhitePatchesTints = new();
 
-	public static int Size = 50;
-	public static Dictionary<string, Image> Spritesheets = [];
-	public static Dictionary<string, Image> CatSprites = [];
+	private static int _size = 50;
+	public static readonly Dictionary<string, Image> Spritesheets = [];
+	public static readonly Dictionary<string, Image> CatSprites = [];
 
 	public static void LoadTints()
 	{
@@ -40,8 +39,8 @@ public static class Sprites
 		bool noIndex = false
 	)
 	{
-		int groupXOffsets = (int)position.X * spritesX * Size;
-		int groupYOffsets = (int)position.Y * spritesY * Size;
+		int groupXOffsets = (int)position.X * spritesX * _size;
+		int groupYOffsets = (int)position.Y * spritesY * _size;
 
 		string fullName;
 		int i = 0;
@@ -61,9 +60,9 @@ public static class Sprites
 				Image newSprite = ImageFromImage(
 					Spritesheets[spritesheet],
 					new Rectangle(
-						groupXOffsets + x * Size,
-						groupYOffsets + y * Size,
-						Size, Size
+						groupXOffsets + x * _size,
+						groupYOffsets + y * _size,
+						_size, _size
 					)
 				);
 
@@ -82,11 +81,11 @@ public static class Sprites
 
 		if (width / 3 == height / 7)
 		{
-			Size = width / 3;
+			_size = width / 3;
 		}
 		else
 		{
-			Size = 50;
+			_size = 50;
 		}
 
 		string[] spritesheets = [

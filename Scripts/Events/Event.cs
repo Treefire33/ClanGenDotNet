@@ -16,6 +16,15 @@ public class Event
 		EventType = type;
 	}
 
+	public override string ToString()
+	{
+		if (Element == null)
+		{
+			return $"UIEvent of key: {KeyCode}";
+		}
+		return $"UIEvent of type: {EventType}";
+	}
+
 	public UIElement? Element = null;
 	public KeyboardKey KeyCode = 0;
 	public EventType EventType;

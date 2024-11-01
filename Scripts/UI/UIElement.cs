@@ -4,50 +4,54 @@ namespace ClanGenDotNet.Scripts.UI;
 
 public class UIElement : IUIElement
 {
-	protected readonly UIManager _manager;
+	protected readonly UIManager Manager;
 	public ClanGenRect RelativeRect;
-	public bool Hovered;
-	public bool IsContained = false;
 	public int Layer = 0;
+	public bool IsContained = false;
 
 	public bool Visible = true;
 	public bool Active = true;
+	public bool Hovered = false;
 
 	public UIElement(ClanGenRect posScale, UIManager manager)
 	{
-		_manager = manager;
+		Manager = manager;
 		RelativeRect = posScale;
-		_manager.Elements.Add(this);
-		_manager.Elements = [.. _manager.Elements.OrderBy(element => element.Layer)];
+		Manager.Elements.Add(this);
+		Manager.Elements = [.. Manager.Elements.OrderBy((element) => element.Layer)];
 	}
 
 	public virtual void Update()
 	{
-		Hovered = CheckCollisionPointRec(Utility.GetVirutalMousePosition(), RelativeRect.RelativeRect);
+		Hovered = CheckCollisionPointRec(GetVirutalMousePosition(), RelativeRect);
 	}
 
 	public void Revive()
 	{
-		_manager.Elements.Add(this);
+		Manager.Elements.Add(this);
 	}
 
 	public void Kill()
 	{
-		_ = _manager.Elements.Remove(this);
+		if (!Manager.Elements.Remove(this))
+		{
+			Console.WriteLine("Element has already been killed, set to null and reinstance element.");
+		}
 	}
 
-	public void Show()
+	public void SetVisibility(bool visibilityState)
 	{
-		Visible = true;
+		Visible = visibilityState;
 	}
 
-	public void Hide()
-	{
-		Visible = false;
-	}
+	public void Show() => SetVisibility(true);
+	public void Hide() => SetVisibility(false);
 
 	public void SetActive(bool activeState)
 	{
 		Active = activeState;
 	}
+
+	public void Enable() => SetActive(true);
+	public void Disable() => SetActive(false);
 }

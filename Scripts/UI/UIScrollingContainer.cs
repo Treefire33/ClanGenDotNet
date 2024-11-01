@@ -1,7 +1,10 @@
 ﻿using ClanGenDotNet.Scripts.UI.Interfaces;
 
 namespace ClanGenDotNet.Scripts.UI;
-public class UIScrollingContainer(ClanGenRect posScale, UIManager manager) : UIContainer(posScale, manager), IUIElement, IUIContainer
+public class UIScrollingContainer(ClanGenRect posScale, UIManager manager) 
+	: UIContainer(posScale, manager), 
+	IUIElement, 
+	IUIContainer
 {
 	/*
 	 Fair Warning:

@@ -1,22 +1,20 @@
 ﻿using ClanGenDotNet.Scripts;
 using ClanGenDotNet.Scripts.Cats;
 using ClanGenDotNet.Scripts.Events;
-using ClanGenDotNet.Scripts.Game_Structure;
-using ClanGenDotNet.Scripts.HouseKeeping;
 using ClanGenDotNet.Scripts.Screens;
-using static ClanGenDotNet.Scripts.Game_Structure.Game;
-using static ClanGenDotNet.Scripts.Utility;
 
 namespace ClanGenDotNet;
 
 public class ClanGenMain
 {
-	public unsafe static void Main(string[] args)
+	public static void Main(string[] args)
 	{
 		SetTraceLogLevel((int)LOG_ERROR);
 		SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 		InitWindow(game.ScreenX, game.ScreenY, "ClanGen.Net");
 		SetWindowMinSize(800, 700);
+
+		SetExitKey(KEY_NULL); //So that way we can use KEY_ESCAPE
 
 		DataDirectory.SetUpDataDirectory();
 		game.SetSettingsFromLoaded();
@@ -40,11 +38,14 @@ public class ClanGenMain
 
 		Texture2D menuLogoless = LoadTexture(".\\Resources\\menu_logoless.png");
 
-		DiscordRPC discordRPC = null;
+		DiscordRPC? discordRPC = null;
 		try
 		{
-			discordRPC = new();
-			discordRPC.UpdateActivity("start screen");
+			if ((bool)game.Settings["discord"]!)
+			{
+				discordRPC = new();
+				discordRPC.UpdateActivity("start screen");
+			}
 		}
 		catch { Console.WriteLine("DiscordRPC unable to start."); }
 
@@ -55,7 +56,7 @@ public class ClanGenMain
 			ClearBackground(GetThemeColour());
 
 			game.UpdateGame();
-
+			
 			game.Manager.DrawUI();
 
 			int keyPressed = GetKeyPressed();
@@ -88,7 +89,7 @@ public class ClanGenMain
 					0, 0,
 					GetScreenWidth(), GetScreenHeight()
 				),
-				new Vector2(0),
+				Vector2.Zero,
 				0,
 				WHITE
 			);
@@ -97,11 +98,11 @@ public class ClanGenMain
 				frameNPatch,
 				new Rectangle(
 					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (frame.width / 2),
-					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (frame.width / 2),
+					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (frame.height / 2),
 					(ScreenSettings.GameScreenSize.X + frame.width) * ScreenSettings.ScreenScale,
 					(ScreenSettings.GameScreenSize.Y + frame.height) * ScreenSettings.ScreenScale
 				),
-				new Vector2(0),
+				Vector2.Zero,
 				0,
 				WHITE
 			);
@@ -114,7 +115,7 @@ public class ClanGenMain
 					ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale,
 					ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale
 				),
-				new Vector2(0),
+				Vector2.Zero,
 				0,
 				WHITE
 			);

@@ -7,15 +7,13 @@ public class UIManager
 {
 	public List<UIElement> Elements = [];
 	public List<Event> UIEvents = [];
-	public bool IsFocused = false;
+	private UIElement? _focusedElement = null;
 
 	public void DrawUI()
 	{
 		foreach (UIElement element in Elements)
 		{
-			if (element.IsContained
-				|| !element.Visible
-			) { continue; }
+			if (element.IsContained || !element.Visible) { continue; }
 
 			element.Update();
 			if (element is IUIClickable clickable)

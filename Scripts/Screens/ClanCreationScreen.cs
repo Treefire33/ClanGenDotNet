@@ -1,10 +1,7 @@
 ﻿using ClanGenDotNet.Scripts.Cats;
 using ClanGenDotNet.Scripts.Events;
-using ClanGenDotNet.Scripts.UI;
 using System.Text.RegularExpressions;
-using static ClanGenDotNet.Scripts.Game_Structure.Game;
 using static ClanGenDotNet.Scripts.Resources;
-using static ClanGenDotNet.Scripts.Utility;
 
 namespace ClanGenDotNet.Scripts.Screens;
 
@@ -95,6 +92,13 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		Cat.CreateExampleCats();
 		OpenGameMode();
+	}
+
+	private IEnumerable<string> _clanNames = 
+		Cats.Name.NamesDict.NormalPrefixes.Concat(Cats.Name.NamesDict.ClanPrefixes);
+	private string RandomClanName()
+	{
+		return _clanNames.PickRandom();
 	}
 
 	private void OpenGameMode()
@@ -194,12 +198,13 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			20,
 			game.Manager
 		));
+
 		_elements.Add("error", new UITextBox(
-			UIScale(new ClanGenRect(506, 1310, 596, -1)),
+			UIScale(new ClanGenRect(0, 570, 800, -1)),
 			"",
 			20,
-			TextAlignment.Left,
-			BLACK,
+			TextAlignment.Center,
+			RED,
 			game.Manager
 		));
 
@@ -508,7 +513,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		CreateCatInfo();
 
 		_elements.Add("select_cat", new UIButton(
-			UIScale(new ClanGenRect(260, 342, 306, 58)),
+			UIScale(new ClanGenRect(353, 360, 95, 30)),
 			ButtonStyle.Squoval,
 			"Recruit",
 			20,
@@ -637,7 +642,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			}
 			else if (evnt.Element == _elements["cruel_mode_button"])
 			{
-				_gameMode = "cruel";
+				_gameMode = "cruel season";
 				RefreshTextAndButtons();
 			}
 			else if (evnt.Element == _elements["next_step"])
@@ -646,238 +651,333 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				OpenNameClan();
 			}
 		}
+		else if (evnt.EventType == EventType.KeyPressed)
+		{
+			switch (evnt.KeyCode)
+			{
+				case KEY_ESCAPE:
+					ChangeScreen("start screen");
+					break;
+				case KEY_DOWN:
+					if (_gameMode == "classic")
+					{
+						_gameMode = "expanded";
+					}
+					else if (_gameMode == "expanded")
+					{
+						_gameMode = "cruel season";
+					}
+					RefreshTextAndButtons();
+					break;
+				case KEY_UP:
+					if (_gameMode == "cruel season")
+					{
+						_gameMode = "expanded";
+					}
+					else if (_gameMode == "expanded")
+					{
+						_gameMode = "classic";
+					}
+					RefreshTextAndButtons();
+					break;
+				case KEY_ENTER:
+				case KEY_RIGHT:
+					if (_elements["next_step"].Active)
+					{
+						game.Settings["gamemode"] = _gameMode;
+					}
+					OpenNameClan();
+					break;
+			}
+		}
 	}
 
 	private void HandleNameClanEvent(Event evnt)
 	{
 		var nameEntry = (UITextInput)_elements["name_entry"];
-		_elements["next_step"].SetActive(nameEntry.GetText().Length > 0);
+		var errorText = (UITextBox)_elements["error"];
+		if (nameEntry.GetText() == "")
+		{
+			_elements["next_step"].Disable();
+		}
+		else if (nameEntry.GetText()[0] == ' ')
+		{
+			errorText.SetText("Clan names cannot start with a space.");
+			errorText.Show();
+			_elements["next_step"].Disable();
+		}
+		else
+		{
+			errorText.Hide();
+			_elements["next_step"].Enable();
+		}
 		if (evnt.EventType == EventType.LeftMouseClick)
 		{
-			if (evnt.Element == _elements["reset_name"] && evnt.Element is UITextInput input)
+			if (evnt.Element == _elements["reset_name"])
 			{
-				input.SetText("");
+				nameEntry.SetText("");
 			}
 
-			if (evnt.Element == _elements["random"] && evnt.Element is UITextInput)
+			if (evnt.Element == _elements["random"])
 			{
-				//input2.SetText(RandomClanName());
+				nameEntry.SetText(RandomClanName());
 			}
 
-			if (evnt.Element == _elements["next_step"] && evnt.Element is UIButton)
+			if (evnt.Element == _elements["next_step"])
 			{
-				input = (UITextInput)_elements["name_entry"];
-				string newName = ClanNamePattern().Replace(input.GetText(), "").Trim();
-				if (newName == null && _elements["error"] is UITextBox textBox)
+				string newName = ClanNamePattern().Replace(nameEntry.GetText(), "").Trim();
+				if (newName == null || newName == "")
 				{
-					textBox.SetText("Your Clan's name cannot be empty");
+					errorText.SetText("Your Clan's name cannot be empty");
 					return;
 				}
 				//check if in clanlist here
 				_clanName = newName!;
-				//open choose leader
 				OpenChooseLeader();
 			}
-			else if (evnt.Element == _elements["previous_step"] && evnt.Element is UIButton)
+			else if (evnt.Element == _elements["previous_step"])
 			{
 				_clanName = "";
 				_gameMode = "classic";
 				OpenGameMode();
 			}
 		}
+		else if (evnt.EventType == EventType.KeyPressed)
+		{
+			switch (evnt.KeyCode)
+			{
+				case KEY_ESCAPE:
+					ChangeScreen("start screen");
+					break;
+				case KEY_LEFT:
+					if (!nameEntry.Focused)
+					{
+						_clanName = "";
+						OpenGameMode();
+					}
+					break;
+				case KEY_ENTER:
+				case KEY_RIGHT:
+					if (!nameEntry.Focused)
+					{
+						string newName = ClanNamePattern().Replace(nameEntry.GetText(), "").Trim();
+						if (newName == null || newName == "")
+						{
+							errorText.SetText("Your Clan's name cannot be empty");
+							return;
+						}
+						//check if in clanlist here
+						_clanName = newName!;
+						OpenChooseLeader();
+					}
+					break;
+			}
+		}
 	}
 
 	private void HandleChooseLeaderEvent(Event evnt)
 	{
-		for (int i = 0; i < 12; i++)
+		if (evnt.EventType == EventType.LeftMouseClick)
 		{
-			if (evnt.Element == _elements["cat" + i])
+			for (int i = 0; i < 12; i++)
 			{
-				if (IsKeyDown(KEY_LEFT_SHIFT))
+				if (evnt.Element == _elements["cat" + i])
 				{
-					var clickedCat = ((UICatButton)evnt.Element!).GetCat();
-					if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+					if (IsKeyDown(KEY_LEFT_SHIFT))
 					{
-						_leader = clickedCat;
-						_selectedCat = null;
-						OpenChooseDeputy();
+						var clickedCat = ((UICatButton)evnt.Element!).GetCat();
+						if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+						{
+							_leader = clickedCat;
+							_selectedCat = null;
+							OpenChooseDeputy();
+						}
+					}
+					else
+					{
+						_selectedCat = ((UICatButton)evnt.Element!).GetCat();
+						RefreshCatImagesAndInfo(_selectedCat);
+						RefreshTextAndButtons();
+						return; // prevent handler from comparing to other buttons.
 					}
 				}
-				else
+			}
+			if (
+				evnt.Element == _elements["roll1"]
+				|| evnt.Element == _elements["roll2"]
+				|| evnt.Element == _elements["roll3"]
+				|| evnt.Element == _elements["dice"]
+			)
+			{
+				_elements["select_cat"].Hide();
+				Cat.CreateExampleCats();
+				_selectedCat = null;
+				if (_elements.TryGetValue("error_message", out UIElement? errorMessage))
 				{
-					_selectedCat = ((UICatButton)evnt.Element!).GetCat();
-					RefreshCatImagesAndInfo(_selectedCat);
-					RefreshTextAndButtons();
-					return; // prevent handler from comparing to other buttons.
+					errorMessage.Hide();
 				}
-			}
-		}
-		if (
-			evnt.Element == _elements["roll1"] 
-			|| evnt.Element == _elements["roll2"]
-			|| evnt.Element == _elements["roll3"]
-			|| evnt.Element == _elements["dice"]
-		)
-		{
-			_elements["select_cat"].Hide();
-			Cat.CreateExampleCats();
-			_selectedCat = null;
-			if (_elements.TryGetValue("error_message", out UIElement? errorMessage))
-			{
-				errorMessage.Hide();
-			}	
-			RefreshCatImagesAndInfo();
-			_rerollsLeft -= 1;
-			if (game.Config.ClanCreation.Rerolls == 3)
-			{
-				evnt.Element.SetActive(false);
-			}
-			else
-			{
-				((UITextBox)_elements["reroll_count"]).SetText(_rerollsLeft.ToString());
-				if (_rerollsLeft == 0)
+				RefreshCatImagesAndInfo();
+				_rerollsLeft -= 1;
+				if (game.Config.ClanCreation.Rerolls == 3)
 				{
 					evnt.Element.SetActive(false);
 				}
+				else
+				{
+					((UITextBox)_elements["reroll_count"]).SetText(_rerollsLeft.ToString());
+					if (_rerollsLeft == 0)
+					{
+						evnt.Element.SetActive(false);
+					}
+				}
+				return;
 			}
-			return;
-		}
-		else if (evnt.Element == _elements["select_cat"])
-		{
-			_leader = _selectedCat!;
-			_selectedCat = null;
-			OpenChooseDeputy();
-		}
-		else if (evnt.Element == _elements["previous_step"])
-		{
-			_clanName = "";
-			OpenNameClan();
+			else if (evnt.Element == _elements["select_cat"])
+			{
+				_leader = _selectedCat!;
+				_selectedCat = null;
+				OpenChooseDeputy();
+			}
+			else if (evnt.Element == _elements["previous_step"])
+			{
+				_clanName = "";
+				OpenNameClan();
+			}
 		}
 	}
 
 	private void HandleChooseDeputyEvent(Event evnt)
 	{
-		for (int i = 0; i < 12; i++)
+		if (evnt.EventType == EventType.LeftMouseClick)
 		{
-			if (evnt.Element == _elements["cat" + i])
+			for (int i = 0; i < 12; i++)
 			{
-				if (IsKeyDown(KEY_LEFT_SHIFT))
+				if (evnt.Element == _elements["cat" + i])
 				{
-					var clickedCat = ((UICatButton)evnt.Element!).GetCat();
-					if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+					if (IsKeyDown(KEY_LEFT_SHIFT))
 					{
-						_deputy = clickedCat;
-						_selectedCat = null;
-						OpenChooseMedCat();
+						var clickedCat = ((UICatButton)evnt.Element!).GetCat();
+						if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+						{
+							_deputy = clickedCat;
+							_selectedCat = null;
+							OpenChooseMedCat();
+						}
+					}
+					else
+					{
+						_selectedCat = ((UICatButton)evnt.Element!).GetCat();
+						RefreshCatImagesAndInfo(_selectedCat);
+						RefreshTextAndButtons();
+						return; // prevent handler from comparing to other buttons.
 					}
 				}
-				else
-				{
-					_selectedCat = ((UICatButton)evnt.Element!).GetCat();
-					RefreshCatImagesAndInfo(_selectedCat);
-					RefreshTextAndButtons();
-					return; // prevent handler from comparing to other buttons.
-				}
 			}
-		}
-		if (evnt.Element == _elements["select_cat"])
-		{
-			_deputy = _selectedCat!;
-			_selectedCat = null;
-			OpenChooseMedCat();
-		}
-		else if (evnt.Element == _elements["previous_step"])
-		{
-			_leader = null;
-			_selectedCat = null;
-			OpenChooseLeader();
+			if (evnt.Element == _elements["select_cat"])
+			{
+				_deputy = _selectedCat!;
+				_selectedCat = null;
+				OpenChooseMedCat();
+			}
+			else if (evnt.Element == _elements["previous_step"])
+			{
+				_leader = null;
+				_selectedCat = null;
+				OpenChooseLeader();
+			}
 		}
 	}
 
 	private void HandleChooseMedCatEvent(Event evnt)
 	{
-		for (int i = 0; i < 12; i++)
+		if (evnt.EventType == EventType.LeftMouseClick)
 		{
-			if (evnt.Element == _elements["cat" + i])
+			for (int i = 0; i < 12; i++)
 			{
-				if (IsKeyDown(KEY_LEFT_SHIFT))
+				if (evnt.Element == _elements["cat" + i])
 				{
-					var clickedCat = ((UICatButton)evnt.Element!).GetCat();
-					if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+					if (IsKeyDown(KEY_LEFT_SHIFT))
 					{
-						_medicineCat = clickedCat;
-						_selectedCat = null;
-						OpenChooseMembers();
+						var clickedCat = ((UICatButton)evnt.Element!).GetCat();
+						if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+						{
+							_medicineCat = clickedCat;
+							_selectedCat = null;
+							OpenChooseMembers();
+						}
+					}
+					else if (((UICatButton)evnt.Element!).GetCat() != _leader)
+					{
+						_selectedCat = ((UICatButton)evnt.Element!).GetCat();
+						RefreshCatImagesAndInfo(_selectedCat);
+						RefreshTextAndButtons();
+						return; // prevent handler from comparing to other buttons.
 					}
 				}
-				else if (((UICatButton)evnt.Element!).GetCat() != _leader)
-				{
-					_selectedCat = ((UICatButton)evnt.Element!).GetCat();
-					RefreshCatImagesAndInfo(_selectedCat);
-					RefreshTextAndButtons();
-					return; // prevent handler from comparing to other buttons.
-				}
 			}
-		}
-		if (evnt.Element == _elements["select_cat"])
-		{
-			_medicineCat = _selectedCat!;
-			_selectedCat = null;
-			OpenChooseMembers();
-		}
-		else if (evnt.Element == _elements["previous_step"])
-		{
-			_deputy = null;
-			_selectedCat = null;
-			OpenChooseDeputy();
+			if (evnt.Element == _elements["select_cat"])
+			{
+				_medicineCat = _selectedCat!;
+				_selectedCat = null;
+				OpenChooseMembers();
+			}
+			else if (evnt.Element == _elements["previous_step"])
+			{
+				_deputy = null;
+				_selectedCat = null;
+				OpenChooseDeputy();
+			}
 		}
 	}
 
 	private void HandleChooseMembersEvent(Event evnt)
 	{
-		for (int i = 0; i < 12; i++)
+		if (evnt.EventType == EventType.LeftMouseClick)
 		{
-			if (evnt.Element == _elements["cat" + i])
+			for (int i = 0; i < 12; i++)
 			{
-				if (IsKeyDown(KEY_LEFT_SHIFT) && _members.Count < 7)
+				if (evnt.Element == _elements["cat" + i])
 				{
-					var clickedCat = ((UICatButton)evnt.Element!).GetCat();
-					_members.Add(clickedCat!);
+					if (IsKeyDown(KEY_LEFT_SHIFT) && _members.Count < 7)
+					{
+						var clickedCat = ((UICatButton)evnt.Element!).GetCat();
+						_members.Add(clickedCat!);
+						_selectedCat = null;
+						RefreshCatImagesAndInfo(null);
+						RefreshTextAndButtons();
+					}
+					else
+					{
+						_selectedCat = ((UICatButton)evnt.Element!).GetCat();
+						RefreshCatImagesAndInfo(_selectedCat);
+						RefreshTextAndButtons();
+						return; // prevent handler from comparing to other buttons.
+					}
+				}
+			}
+			if (evnt.Element == _elements["select_cat"])
+			{
+				_members.Add(_selectedCat!);
+				_selectedCat = null;
+				RefreshCatImagesAndInfo(null);
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["previous_step"])
+			{
+				if (_members.Count <= 0)
+				{
+					_medicineCat = null;
 					_selectedCat = null;
-					RefreshCatImagesAndInfo(null);
-					RefreshTextAndButtons();
+					OpenChooseMedCat();
 				}
 				else
 				{
-					_selectedCat = ((UICatButton)evnt.Element!).GetCat();
-					RefreshCatImagesAndInfo(_selectedCat);
+					_members.Remove(_members.Last());
+					_selectedCat = null;
+					RefreshSelectedCatInfo(null);
 					RefreshTextAndButtons();
-					return; // prevent handler from comparing to other buttons.
+					return;
 				}
-			}
-		}
-		if (evnt.Element == _elements["select_cat"])
-		{
-			_members.Add(_selectedCat!);
-			_selectedCat = null;
-			RefreshCatImagesAndInfo(null);
-			RefreshTextAndButtons();
-		}
-		else if (evnt.Element == _elements["previous_step"])
-		{
-			if (_members.Count <= 0)
-			{
-				_medicineCat = null;
-				_selectedCat = null;
-				OpenChooseMedCat();
-			}
-			else
-			{
-				_members.Remove(_members.Last());
-				_selectedCat = null;
-				RefreshSelectedCatInfo(null);
-				RefreshTextAndButtons();
-				return;
 			}
 		}
 	}
@@ -900,7 +1000,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 						displayMode = "Expanded Mode";
 						displayText = _expandedDetails;
 						break;
-					case "cruel":
+					case "cruel season":
 						displayMode = "Cruel Mode";
 						displayText = _cruelDetails;
 						break;
@@ -937,7 +1037,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 					break;
 			}
 
-			_elements["next_step"].SetActive(_gameMode != "cruel");
+			_elements["next_step"].SetActive(_gameMode != "cruel season");
 		}
 		else if (_subScreen == "choose leader" || _subScreen == "choose deputy" || _subScreen == "choose med cat")
 		{

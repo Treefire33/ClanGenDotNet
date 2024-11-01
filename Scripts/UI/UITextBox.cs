@@ -12,28 +12,22 @@ public enum TextAlignment
 	VertCenter
 }
 
-public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlignment alignment, Color textColour, UIManager manager, bool isMultiline = false) : UIElement(posScale, manager)
+public class UITextBox(
+	ClanGenRect posScale, 
+	string text, 
+	int fontSize, 
+	TextAlignment alignment, 
+	Color textColour, 
+	UIManager manager, 
+	bool isMultiline = false
+) : UIElement(posScale, manager)
 {
 	private readonly bool _fillRect = false;
 	private readonly bool _isMultiline = isMultiline;
-	//private unsafe sbyte* _text;
 	private string _text = text;
 	private Color _textColour = textColour;
 
 	private Vector2 _padding = new(0, 0);
-
-	/// <summary>
-	/// Converts a string into a signed bytes pointer.
-	/// </summary>
-	/// <param name="Text">The text to convert</param>
-	/// <returns>sbyte*</returns>
-	private unsafe sbyte* StringToSBytes(string Text)
-	{
-		fixed (byte* p = Encoding.ASCII.GetBytes(Text))
-		{
-			return (sbyte*)p;
-		}
-	}
 
 	public void SetPadding(Vector2 padding)
 	{
@@ -79,15 +73,6 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 				return newRect;
 		}
 	}
-
-	/*/// <summary>
-	/// Sets the text of the button.
-	/// </summary>
-	/// <param name="text">The text to set the button text to.</param>
-	public unsafe void SetText(string text)
-	{
-		_text = StringToSBytes(text);
-	}*/
 
 	/// <summary>
 	/// Sets the text of the button.
@@ -167,7 +152,7 @@ public class UITextBox(ClanGenRect posScale, string text, int fontSize, TextAlig
 				NotoSansMedium,
 				_text,
 				new Vector2(addedRectangles.x, addedRectangles.y),
-				new Vector2(0),
+				Vector2.Zero,
 				0,
 				_fontSize,
 				0,

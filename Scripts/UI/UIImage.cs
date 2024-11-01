@@ -11,8 +11,8 @@ public class UIImage(ClanGenRect posScale, Texture2D image, UIManager manager)
 
 	public override void Update()
 	{
-		//DrawTexture(Image, _imageRect, RelativeRect.Position, Color.White);
-		DrawTexturePro(Image, _imageRect.RelativeRect, RelativeRect.RelativeRect, new Vector2(0, 0), 0, WHITE);
 		base.Update();
+
+		DrawTexturePro(Image, _imageRect.RelativeRect, RelativeRect.RelativeRect, Vector2.Zero, 0, WHITE);
 	}
 }

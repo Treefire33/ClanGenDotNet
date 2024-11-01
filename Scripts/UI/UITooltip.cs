@@ -35,7 +35,7 @@ public class UITooltip : UIElement, IUIElement
 
 	//Returns a string that doesn't make the tooltip bigger than the screen.
 	//Max tooltip width is 200, no cap on height
-	private string FormatTooltip(string text)
+	private static string FormatTooltip(string text)
 	{
 		StringBuilder currentString = new();
 		int line = 0;
