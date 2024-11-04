@@ -7,12 +7,16 @@ namespace ClanGenDotNet;
 
 public class ClanGenMain
 {
+	private static Image _windowIcon = LoadImage(".\\Resources\\Images\\icon.png");
 	public static void Main(string[] args)
 	{
 		SetTraceLogLevel((int)LOG_ERROR);
 		SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 		InitWindow(game.ScreenX, game.ScreenY, "ClanGen.Net");
 		SetWindowMinSize(800, 700);
+		SetWindowIcon(_windowIcon);
+
+		UnloadImage(_windowIcon);
 
 		SetExitKey(KEY_NULL); //So that way we can use KEY_ESCAPE
 
@@ -29,25 +33,25 @@ public class ClanGenMain
 		game.AllScreens[game.CurrentScreen].ScreenSwitches();
 
 		NPatchInfo frameNPatch = new();
-		Texture2D frame = LoadTexture(".\\Resources\\frame.png");
+		Texture2D frame = LoadTexture(".\\Resources\\Images\\frame.png");
 		frameNPatch.source = new Rectangle(0, 0, frame.width, frame.height);
 		frameNPatch.top = 10;
 		frameNPatch.bottom = 10;
 		frameNPatch.left = 10;
 		frameNPatch.right = 10;
 
-		Texture2D menuLogoless = LoadTexture(".\\Resources\\menu_logoless.png");
+		Texture2D menuLogoless = LoadTexture(".\\Resources\\Images\\menu_logoless.png");
 
 		DiscordRPC? discordRPC = null;
-		try
-		{
-			if ((bool)game.Settings["discord"]!)
+		if ((bool)game.Settings["discord"]!)
+		{ 
+			try
 			{
 				discordRPC = new();
 				discordRPC.UpdateActivity("start screen");
 			}
+			catch { Console.WriteLine("DiscordRPC unable to start."); }
 		}
-		catch { Console.WriteLine("DiscordRPC unable to start."); }
 
 		while (!WindowShouldClose())
 		{
@@ -56,7 +60,7 @@ public class ClanGenMain
 			ClearBackground(GetThemeColour());
 
 			game.UpdateGame();
-			
+
 			game.Manager.DrawUI();
 
 			int keyPressed = GetKeyPressed();
@@ -77,11 +81,10 @@ public class ClanGenMain
 			}
 
 			game.Manager.ResetEvents();
-
 			EndTextureMode();
 
 			BeginDrawing();
-			ClearBackground(new(0, 0, 0, 255));
+			ClearBackground(WHITE);
 			DrawTexturePro(
 				menuLogoless,
 				new Rectangle(0, 0, GetScreenWidth(), GetScreenHeight()),

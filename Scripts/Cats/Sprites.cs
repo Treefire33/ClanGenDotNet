@@ -4,30 +4,16 @@ namespace ClanGenDotNet.Scripts.Cats;
 
 public static class Sprites
 {
-	public static Tint CatTints = new();
-	public static Tint WhitePatchesTints = new();
+	public static Tint CatTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\tint.json"))!;
+	public static Tint WhitePatchesTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\white_patches_tint.json"))!;
 
 	private static int _size = 50;
-	public static readonly Dictionary<string, Image> Spritesheets = [];
+	private static readonly Dictionary<string, Image> _spritesheets = [];
 	public static readonly Dictionary<string, Image> CatSprites = [];
-
-	public static void LoadTints()
-	{
-		try
-		{
-			CatTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\tint.json"))!;
-		}
-		catch { Console.WriteLine("ERROR: Failed to load tints."); }
-		try
-		{
-			WhitePatchesTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\white_patches_tint.json"))!;
-		}
-		catch { Console.WriteLine("ERROR: Failed to load white patches tints."); }
-	}
 
 	public static void MakeSpritesheet(string imageFile, string name)
 	{
-		Spritesheets.Add(name, LoadImage(imageFile));
+		_spritesheets.Add(name, LoadImage(imageFile));
 	}
 
 	public static void MakeGroup(
@@ -58,7 +44,7 @@ public static class Sprites
 				}
 
 				Image newSprite = ImageFromImage(
-					Spritesheets[spritesheet],
+					_spritesheets[spritesheet],
 					new Rectangle(
 						groupXOffsets + x * _size,
 						groupYOffsets + y * _size,
@@ -74,8 +60,6 @@ public static class Sprites
 
 	public static void LoadAll()
 	{
-		LoadTints();
-
 		Image lineart = LoadImage(".\\Sprites\\lineart.png");
 		int width = lineart.width; int height = lineart.height;
 
@@ -102,7 +86,7 @@ public static class Sprites
 			"fademask", "fadestarclan", "fadedarkforest",
 			"symbols"
 		];
-		foreach (string spritesheet in spritesheets )
+		foreach (string spritesheet in spritesheets)
 		{
 			if (spritesheet == "lineart" && game.Config.Fun.AprilFools)
 			{
@@ -239,6 +223,15 @@ public static class Sprites
 		}
 
 		LoadScars();
+
+		//Prevent spritesheet from taking up like 200 MB of memory holy god
+		//I'm not even kidding, before this 5 line statement, it took roughly 500 MB, now it's at
+		//326 MB.
+		foreach (var image in _spritesheets)
+		{
+			UnloadImage(image.Value);
+		}
+		_spritesheets.Clear(); 
 	}
 
 	private static void LoadScars()

@@ -252,8 +252,6 @@ public class Utility
 						newSprite,
 						tint
 					);
-					ExportImage(tint, ".\\tint.png");
-					ExportImage(newSprite, ".\\whiteP.png");
 					UnloadImage(tint);
 				}
 			}
