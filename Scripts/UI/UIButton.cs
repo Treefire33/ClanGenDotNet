@@ -51,18 +51,18 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 	/// <param name="style">A ButtonID, which corresponds to a series of four images.</param>
 	/// <param name="text">The text the button will display.</param>
 	/// <param name="manager">The UIManager, preferably game.Manager</param>
-	public unsafe UIButton(ClanGenRect posScale, ButtonID style, string text, int fontSize, UIManager manager) 
+	public unsafe UIButton(ClanGenRect posScale, ButtonID style, UIManager manager) 
 		: base(posScale, manager)
 	{
-		_text = text;
+		_text = "";
 		List<Texture2D> images = GetButtonImagesFromID(style);
 		_normal = images[0];
 		_hover = images[1];
 		_selected = images[2];
 		_disabled = images[3];
 		_currentTexture = _normal;
-		_fontSize = fontSize;
-		SetText(text);
+		_fontSize = 0;
+		SetText(_text);
 	}
 
 	/// <summary>

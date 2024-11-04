@@ -187,7 +187,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("under_background", new UIImage(
 			UIScale(new ClanGenRect(0, 0, game.ScreenX, game.ScreenY)),
-			NameClanImage,
+			_creationBackgrounds[1],
 			game.Manager
 		));
 
@@ -362,8 +362,6 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("select_cat", new UIButton(
 			UIScale(new ClanGenRect(234, 348, 332, 52)),
 			ButtonID.NineLivesButton,
-			"",
-			20,
 			game.Manager
 		));
 
@@ -413,8 +411,6 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("select_cat", new UIButton(
 			UIScale(new ClanGenRect(209, 348, 384, 52)),
 			ButtonID.SupportLeaderButton,
-			"",
-			20,
 			game.Manager
 		));
 
@@ -464,8 +460,6 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("select_cat", new UIButton(
 			UIScale(new ClanGenRect(260, 342, 306, 58)),
 			ButtonID.AidClanButton,
-			"",
-			20,
 			game.Manager
 		));
 
@@ -563,6 +557,112 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			TextAlignment.Center,
 			WHITE,
 			game.Manager
+		));
+	}
+
+	private void OpenChooseBackground()
+	{
+		ClearPage();
+		_subScreen = "choose camp";
+
+		_elements.Add("previous_step", new UIButton(
+			UIScale(new ClanGenRect(253, 645, 147, 30)),
+			ButtonStyle.MenuLeft,
+			"previous",
+			20,
+			game.Manager
+		));
+		_elements.Add("next_step", new UIButton(
+			UIScale(new ClanGenRect(0, 645, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
+			ButtonStyle.MenuRight,
+			"next",
+			20,
+			game.Manager
+		));
+		_elements["next_step"].SetActive(false);
+
+		_elements.Add("forest_biome", new UIButton(
+			UIScale(new ClanGenRect(196, 100, 100, 46)),
+			ButtonID.ForestBiomeButton,
+			game.Manager
+		));
+		_elements.Add("mountain_biome", new UIButton(
+			UIScale(new ClanGenRect(304, 100, 106, 46)),
+			ButtonID.MountainBiomeButton,
+			game.Manager
+		));
+		_elements.Add("plains_biome", new UIButton(
+			UIScale(new ClanGenRect(424, 100, 88, 46)),
+			ButtonID.PlainsBiomeButton,
+			game.Manager
+		));
+		_elements.Add("beach_biome", new UIButton(
+			UIScale(new ClanGenRect(520, 100, 82, 46)),
+			ButtonID.BeachBiomeButton,
+			game.Manager
+		));
+
+		_tabs.Add("tab1", null);
+		_tabs.Add("tab2", null);
+		_tabs.Add("tab3", null);
+		_tabs.Add("tab4", null);
+
+		_elements.Add("newleaf_tab", new UIButton(
+			UIScale(new ClanGenRect(625, 275, 39, 34)),
+			ButtonStyle.IconTabLeft,
+			"nl",
+			0,
+			game.Manager
+		));
+
+		_elements.Add("greenleaf_tab", new UIButton(
+			UIScale(new ClanGenRect(625, 25, 39, 34))
+				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
+			ButtonStyle.IconTabLeft,
+			"gl",
+			0,
+			game.Manager
+		));
+
+		_elements.Add("leaffall_tab", new UIButton(
+			UIScale(new ClanGenRect(625, 25, 39, 34))
+				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
+			ButtonStyle.IconTabLeft,
+			"lf",
+			0,
+			game.Manager
+		));
+		_elements.Add("leafbare_tab", new UIButton(
+			UIScale(new ClanGenRect(625, 25, 39, 34))
+				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
+			ButtonStyle.IconTabLeft,
+			"lb",
+			0,
+			game.Manager
+		));
+
+		_elements.Add("random_background", new UIButton(
+			UIScale(new ClanGenRect(255, 595, 290, 30)),
+			ButtonStyle.Squoval,
+			"choose a random background",
+			20,
+			game.Manager
+		));
+
+		DrawArtFrame();
+	}
+
+	private void DrawArtFrame()
+	{
+		if (_elements.TryGetValue("art_frame", out UIElement? frame))
+		{
+			frame.Kill();
+		}
+		_elements.Add("art_frame", new UIImage(
+			UIScale(new ClanGenRect(0, 20, 466, 416)).AnchorTo(AnchorPosition.Center),
+			Frame,
+			game.Manager,
+			true
 		));
 	}
 
@@ -978,6 +1078,11 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 					RefreshTextAndButtons();
 					return;
 				}
+			}
+			else if (evnt.Element == _elements["next_step"])
+			{
+				_selectedCat = null;
+				OpenChooseBackground();
 			}
 		}
 	}

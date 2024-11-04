@@ -66,24 +66,18 @@ public class StartScreen(string name = "start screen") : Screens(name)
 		_socialButtons.Add("twitter_button", new UIButton(
 			UIScale(new ClanGenRect(12, 647, 40, 40)),
 			ButtonID.TwitterButton,
-			"",
-			0,
 			game.Manager
 		));
 		_socialButtons.Add("tumblr_button", new UIButton(
 			UIScale(new ClanGenRect(5, 647, 40, 40))
 				.AnchorTo(AnchorPosition.LeftTarget, _socialButtons.Last().Value.RelativeRect),
 			ButtonID.TumblrButton,
-			"",
-			0,
 			game.Manager
 		));
 		_socialButtons.Add("discord_button", new UIButton(
 			UIScale(new ClanGenRect(7, 647, 40, 40))
 				.AnchorTo(AnchorPosition.LeftTarget, _socialButtons.Last().Value.RelativeRect),
 			ButtonID.DiscordButton,
-			"",
-			0,
 			game.Manager
 		));
 

@@ -112,8 +112,12 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 				newRect.Y = Y;
 				break;
 			case AnchorPosition.CenterX:
-				newRect.X = (ScreenSettings.GameScreenSize.X / 2) - (RelativeRect.width / 2);
+				newRect.X = (ScreenSettings.GameScreenSize.X / 2) - (Width / 2);
 				newRect.Y = Y;
+				break;
+			case AnchorPosition.Center:
+				newRect.X = (ScreenSettings.GameScreenSize.X / 2) - (Width / 2) + newRect.X;
+				newRect.Y = (ScreenSettings.GameScreenSize.Y / 2) - (Height / 2) + newRect.Y;
 				break;
 		}
 		newRect.Width = Width;
@@ -161,5 +165,6 @@ public enum AnchorPosition
 {
 	TopLeft,
 	LeftTarget,
-	CenterX
+	CenterX,
+	Center
 }

@@ -7,9 +7,21 @@ public enum ButtonStyle
 	MenuLeft,
 	MenuMiddle,
 	MenuRight,
+	ProfileLeft,
+	ProfileMiddle,
+	ProfileRight,
+	RoundedRect,
+	Dropdown,
+	HorizontalTab,
+	VerticalTab,
 	LadderTop,
 	LadderMiddle,
-	LadderBottom
+	LadderBottom,
+	Icon,
+	IconTabTop,
+	IconTabLeft,
+	IconTabBottom,
+	IconTabRight
 }
 
 public enum ButtonID
@@ -21,5 +33,9 @@ public enum ButtonID
 	EnglishLadder,
 	NineLivesButton,
 	SupportLeaderButton,
-	AidClanButton
+	AidClanButton,
+	ForestBiomeButton,
+	MountainBiomeButton,
+	PlainsBiomeButton,
+	BeachBiomeButton
 }

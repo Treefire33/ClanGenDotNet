@@ -14,44 +14,67 @@ public static class Resources
 	public unsafe static readonly Font NotoSansRegular = LoadFont(".\\Resources\\Font\\NotoSans-Regular.ttf");
 	public unsafe static readonly Font NotoSansMedium = LoadFont(".\\Resources\\Font\\NotoSans-Medium.ttf");
 
+	//General
+	public static readonly Texture2D Frame = LoadTexture(".\\Resources\\Images\\frame.png");
+	public static readonly NPatchInfo FrameNPatch = new()
+	{
+		source = new Rectangle(0, 0, Resources.Frame.width, Resources.Frame.height),
+		top = 10,
+		bottom = 10,
+		left = 10,
+		right = 10
+	};
+
 	//Main Menu
 	public static readonly Texture2D MenuImage = LoadTexture(".\\Resources\\Images\\menu.png");
 
 	//Clan Creation
-	public static readonly Texture2D ClanFrameImage = LoadTexture(".\\Resources\\PickClanScreen\\clan_name_frame.png");
-	public static readonly Texture2D NameClanImage = LoadTexture(".\\Resources\\PickClanScreen\\name_clan_light.png");
 	public static readonly Texture2D GameModeTextBox = LoadTexture(".\\Resources\\Images\\game_mode_text_box.png");
 
 	//Image Buttons
 	public static readonly List<Texture2D> ToggleFullscreenButtonImages =
-		GenImageButtonsFromName("toggle_fullscreen");
-	public static readonly List<Texture2D> TwitterButtonImages = GenImageButtonsFromName("twitter");
-	public static readonly List<Texture2D> TumblrButtonImages = GenImageButtonsFromName("tumblr");
-	public static readonly List<Texture2D> DiscordButtonImages = GenImageButtonsFromName("discord");
-	public static readonly List<Texture2D> EnglishLadderImages = GenImageButtonsFromName("english");
+		GenButtonsFromName("toggle_fullscreen");
+	public static readonly List<Texture2D> TwitterButtonImages = GenButtonsFromName("twitter");
+	public static readonly List<Texture2D> TumblrButtonImages = GenButtonsFromName("tumblr");
+	public static readonly List<Texture2D> DiscordButtonImages = GenButtonsFromName("discord");
+	public static readonly List<Texture2D> EnglishLadderImages = GenButtonsFromName("english");
 
-	public static readonly List<Texture2D> GrantLivesButton = GenImageButtonsFromName("grant_lives");
-	public static readonly List<Texture2D> SupportLeaderButton = GenImageButtonsFromName("support_leader");
-	public static readonly List<Texture2D> AidClanButton = GenImageButtonsFromName("aid_clan");
+	public static readonly List<Texture2D> GrantLivesButton = GenButtonsFromName("grant_lives");
+	public static readonly List<Texture2D> SupportLeaderButton = GenButtonsFromName("support_leader");
+	public static readonly List<Texture2D> AidClanButton = GenButtonsFromName("aid_clan");
+
+	public static readonly List<Texture2D> ForestBiomeButton = GenButtonsFromName("forest");
+	public static readonly List<Texture2D> PlainsBiomeButton = GenButtonsFromName("plains");
+	public static readonly List<Texture2D> BeachBiomeButton = GenButtonsFromName("beach");
+	public static readonly List<Texture2D> MountainBiomeButton = GenButtonsFromName("mountain");
 
 	public static readonly List<List<Texture2D>> CheckboxImages = [
-		GenImageButtonsFromName("checkmark_off"),
-		GenImageButtonsFromName("checkmark_on"),
+		GenButtonsFromName("checkmark_off"),
+		GenButtonsFromName("checkmark_on"),
 	];
 
 	//Buttons
 	public static readonly List<Texture2D> MainMenuButtonImages = GenButtonsFromName("mainmenu");
 	public static readonly List<Texture2D> SquircleButtonImages = GenButtonsFromName("general");
+	public static readonly List<Texture2D> DropdownButtonImages = GenButtonsFromName("dropdown");
+	public static readonly List<Texture2D> RoundedRectButtonImages = GenButtonsFromName("rounded_rect");
+	public static readonly List<Texture2D> IconButtonImages = GenButtonsFromName("icon");
 	public static readonly List<List<Texture2D>> MenuButtonImages = [
 		GenButtonsFromName("menu_left"),
 		GenButtonsFromName("menu_middle"),
 		GenButtonsFromName("menu_right"),
+	];
+	public static readonly List<List<Texture2D>> ProfileButtonImages = [
+		GenButtonsFromName("profile_left"),
+		GenButtonsFromName("profile_middle"),
+		GenButtonsFromName("profile_right"),
 	];
 	public static readonly List<List<Texture2D>> Ladders = [
 		GenButtonsFromName("ladder_top"),
 		GenButtonsFromName("ladder_middle"),
 		GenButtonsFromName("ladder_bottom")
 	];
+	public static readonly List<List<Texture2D>> IconTabs = GenIconTabs();
 
 	public static NPatchInfo GenerateNPatchInfoFromButton(Texture2D button)
 	{
@@ -83,10 +106,20 @@ public static class Resources
 			ButtonStyle.MenuLeft => MenuButtonImages[0],
 			ButtonStyle.MenuMiddle => MenuButtonImages[1],
 			ButtonStyle.MenuRight => MenuButtonImages[2],
+			ButtonStyle.ProfileLeft => ProfileButtonImages[0],
+			ButtonStyle.ProfileMiddle => ProfileButtonImages[1],
+			ButtonStyle.ProfileRight => ProfileButtonImages[2],
+			ButtonStyle.Dropdown => DropdownButtonImages,
+			ButtonStyle.RoundedRect => RoundedRectButtonImages,
 			ButtonStyle.LadderTop => Ladders[0],
 			ButtonStyle.LadderMiddle => Ladders[1],
 			ButtonStyle.LadderBottom => Ladders[2],
-			_ => MainMenuButtonImages,
+			ButtonStyle.Icon => IconButtonImages,
+			ButtonStyle.IconTabTop => IconTabs[0],
+			ButtonStyle.IconTabLeft => IconTabs[1],
+			ButtonStyle.IconTabBottom => IconTabs[2],
+			ButtonStyle.IconTabRight => IconTabs[3],
+			_ => SquircleButtonImages,
 		};
 	}
 
@@ -102,28 +135,61 @@ public static class Resources
 			ButtonID.NineLivesButton => GrantLivesButton,
 			ButtonID.SupportLeaderButton => SupportLeaderButton,
 			ButtonID.AidClanButton => AidClanButton,
+			ButtonID.PlainsBiomeButton => PlainsBiomeButton,
+			ButtonID.ForestBiomeButton => ForestBiomeButton,
+			ButtonID.BeachBiomeButton => BeachBiomeButton,
+			ButtonID.MountainBiomeButton => MountainBiomeButton,
 			_ => SquircleButtonImages,
 		};
 	}
 
-	public static List<Texture2D> GenImageButtonsFromName(string name)
+	public static List<Texture2D> GenButtonsFromName(string name)
 	{
+		Texture2D loadedNormal = LoadTexture($".\\Resources\\Buttons\\{name}.png");
+		Texture2D loadedHover = LoadTexture($".\\Resources\\Buttons\\{name}_hovered.png");
+		Texture2D loadedDisabled = LoadTexture($".\\Resources\\Buttons\\{name}_disabled.png");
 		return [
-			LoadTexture($".\\Resources\\Buttons\\{name}.png"),
-			LoadTexture($".\\Resources\\Buttons\\{name}_hovered.png"),
-			LoadTexture($".\\Resources\\Buttons\\{name}_hovered.png"),
-			LoadTexture($".\\Resources\\Buttons\\{name}_disabled.png")
+			loadedNormal,
+			loadedHover,
+			loadedHover,
+			loadedDisabled
 		];
 	}
 
-	public static List<Texture2D> GenButtonsFromName(string name)
+	private static List<List<Texture2D>> GenIconTabs()
 	{
-		return [
-			LoadTexture($".\\Resources\\Buttons\\{name}_normal.png"),
-			LoadTexture($".\\Resources\\Buttons\\{name}_hovered.png"),
-			LoadTexture($".\\Resources\\Buttons\\{name}_hovered.png"),
-			LoadTexture($".\\Resources\\Buttons\\{name}_disabled.png")
-		];
+		Image allTabs = LoadImage(".\\Resources\\Buttons\\icon_tab.png");
+
+		Dictionary<string, List<Image>> nTabs = [];
+
+		int tabSize = allTabs.width / 3;
+		string[] tabs = ["icon_tab_top", "icon_tab_left", "icon_tab_bottom", "icon_tab_right"];
+		string[] states = ["normal", "hovered", "disabled"];
+		for (int y = 0; y < tabs.Length; y++)
+		{
+			nTabs.Add(tabs[y], []);
+			for (int x = 0; x < states.Length; x++)
+			{
+				Image tabOfState = ImageFromImage(allTabs, new Rectangle(x*tabSize, y*tabSize, tabSize, tabSize));
+				nTabs[tabs[y]].Add(tabOfState);
+			}
+		}
+
+		List<List<Texture2D>> finalTabs = [];
+
+		foreach (var tibby in nTabs)
+		{
+			List<Texture2D> textures = [];
+			foreach (var t in tibby.Value)
+			{
+				textures.Add(LoadTextureFromImage(t));
+				UnloadImage(t);
+			}
+			textures.Add(textures.Last());
+			finalTabs.Add(textures);
+		}
+
+		return finalTabs;
 	}
 
 	private static unsafe void SetFontFilters()
@@ -156,8 +222,6 @@ public static class Resources
 	public static void UnloadTextures()
 	{
 		UnloadTexture(MenuImage);
-		UnloadTexture(ClanFrameImage);
-		UnloadTexture(NameClanImage);
 		UnloadTexture(GameModeTextBox);
 	}
 }

@@ -32,14 +32,6 @@ public class ClanGenMain
 		SetTargetFPS((int)game.Switches["fps"]!);
 		game.AllScreens[game.CurrentScreen].ScreenSwitches();
 
-		NPatchInfo frameNPatch = new();
-		Texture2D frame = LoadTexture(".\\Resources\\Images\\frame.png");
-		frameNPatch.source = new Rectangle(0, 0, frame.width, frame.height);
-		frameNPatch.top = 10;
-		frameNPatch.bottom = 10;
-		frameNPatch.left = 10;
-		frameNPatch.right = 10;
-
 		Texture2D menuLogoless = LoadTexture(".\\Resources\\Images\\menu_logoless.png");
 
 		DiscordRPC? discordRPC = null;
@@ -97,13 +89,13 @@ public class ClanGenMain
 				WHITE
 			);
 			DrawTextureNPatch(
-				frame,
-				frameNPatch,
+				Resources.Frame,
+				Resources.FrameNPatch,
 				new Rectangle(
-					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (frame.width / 2),
-					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (frame.height / 2),
-					(ScreenSettings.GameScreenSize.X + frame.width) * ScreenSettings.ScreenScale,
-					(ScreenSettings.GameScreenSize.Y + frame.height) * ScreenSettings.ScreenScale
+					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (Resources.Frame.width / 2),
+					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (Resources.Frame.height / 2),
+					(ScreenSettings.GameScreenSize.X + Resources.Frame.width) * ScreenSettings.ScreenScale,
+					(ScreenSettings.GameScreenSize.Y + Resources.Frame.height) * ScreenSettings.ScreenScale
 				),
 				Vector2.Zero,
 				0,
