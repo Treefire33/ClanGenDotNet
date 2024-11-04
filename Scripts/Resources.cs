@@ -48,6 +48,25 @@ public static class Resources
 	public static readonly List<Texture2D> BeachBiomeButton = GenButtonsFromName("beach");
 	public static readonly List<Texture2D> MountainBiomeButton = GenButtonsFromName("mountain");
 
+	//why...?
+	public static readonly List<Texture2D> ClassicTabButton = GenButtonsFromName("classic_camp");
+	public static readonly List<Texture2D> GullyTabButton = GenButtonsFromName("gully_camp");
+	public static readonly List<Texture2D> GrottoTabButton = GenButtonsFromName("grotto_camp");
+	public static readonly List<Texture2D> LakesideTabButton = GenButtonsFromName("lakeside_camp");
+
+	public static readonly List<Texture2D> CliffTabButton = GenButtonsFromName("cliff_camp");
+	public static readonly List<Texture2D> CaveTabButton = GenButtonsFromName("cave_camp");
+	public static readonly List<Texture2D> CrystalTabButton = GenButtonsFromName("crystal_camp");
+	public static readonly List<Texture2D> RuinsTabButton = GenButtonsFromName("ruins_camp");
+
+	public static readonly List<Texture2D> GrasslandsTabButton = GenButtonsFromName("grasslands_camp");
+	public static readonly List<Texture2D> TunnelTabButton = GenButtonsFromName("tunnel_camp");
+	public static readonly List<Texture2D> WastelandsTabButton = GenButtonsFromName("wastelands_camp");
+	
+	public static readonly List<Texture2D> TidepoolTabButton = GenButtonsFromName("tidepool_camp");
+	public static readonly List<Texture2D> TidalCaveTabButton = GenButtonsFromName("tidal_cave_camp");
+	public static readonly List<Texture2D> ShipwreckTabButton = GenButtonsFromName("shipwreck_camp");
+
 	public static readonly List<List<Texture2D>> CheckboxImages = [
 		GenButtonsFromName("checkmark_off"),
 		GenButtonsFromName("checkmark_on"),
@@ -139,6 +158,20 @@ public static class Resources
 			ButtonID.ForestBiomeButton => ForestBiomeButton,
 			ButtonID.BeachBiomeButton => BeachBiomeButton,
 			ButtonID.MountainBiomeButton => MountainBiomeButton,
+			ButtonID.ClassicTab => ClassicTabButton,
+			ButtonID.GullyTab => GullyTabButton,
+			ButtonID.GrottoTab => GrottoTabButton,
+			ButtonID.LakesideTab => LakesideTabButton,
+			ButtonID.CliffTab => CliffTabButton,
+			ButtonID.CaveTab => CaveTabButton,
+			ButtonID.CrystalTab => CrystalTabButton,
+			ButtonID.RuinsTab => RuinsTabButton,
+			ButtonID.GrasslandsTab => GrasslandsTabButton,
+			ButtonID.TunnelTab => TunnelTabButton,
+			ButtonID.WastelandsTab => WastelandsTabButton,
+			ButtonID.TidepoolTab => TidepoolTabButton,
+			ButtonID.TidalCaveTab => TidalCaveTabButton,
+			ButtonID.ShipwreckTab => ShipwreckTabButton,
 			_ => SquircleButtonImages,
 		};
 	}

@@ -37,5 +37,19 @@ public enum ButtonID
 	ForestBiomeButton,
 	MountainBiomeButton,
 	PlainsBiomeButton,
-	BeachBiomeButton
+	BeachBiomeButton,
+	ClassicTab,
+	GullyTab,
+	GrottoTab,
+	LakesideTab,
+	CliffTab,
+	CaveTab,
+	CrystalTab,
+	RuinsTab,
+	GrasslandsTab,
+	TunnelTab,
+	WastelandsTab,
+	TidepoolTab,
+	TidalCaveTab,
+	ShipwreckTab
 }

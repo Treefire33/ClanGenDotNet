@@ -40,7 +40,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 	private string _subScreen = "gamemode";
 	private Dictionary<string, UIElement> _elements = [];
-	private Dictionary<string, UIButton> _tabs = [];
+	private Dictionary<string, UIElement> _tabs = [];
 	private Dictionary<string, UIButton> _symbolButtons = [];
 
 	private int _currentPage = 1;
@@ -70,10 +70,18 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 	public override void ScreenSwitches()
 	{
 		base.ScreenSwitches();
-		_currentPage = 1;
-		_subScreen = "gamemode";
+
 		_gameMode = "classic";
 		_clanName = "";
+		_selectedCampTag = 1;
+		_biomeSelected = null;
+		_selectedSeason = "Newleaf";
+		_symbolSelected = null;
+		_leader = null;
+		_deputy = null;
+		_medicineCat = null;
+		_members.Clear();
+
 		_menuWarning = new(
 			UIScale(new ClanGenRect(25, 25, 600, -1)),
 			"Note: going back to main menu resets the generated cats.",
@@ -602,10 +610,10 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			game.Manager
 		));
 
-		_tabs.Add("tab1", null);
-		_tabs.Add("tab2", null);
-		_tabs.Add("tab3", null);
-		_tabs.Add("tab4", null);
+		_tabs.Add("tab1", new UIElement(new ClanGenRect(), game.Manager));
+		_tabs.Add("tab2", new UIElement(new ClanGenRect(), game.Manager));
+		_tabs.Add("tab3", new UIElement(new ClanGenRect(), game.Manager));
+		_tabs.Add("tab4", new UIElement(new ClanGenRect(), game.Manager));
 
 		_elements.Add("newleaf_tab", new UIButton(
 			UIScale(new ClanGenRect(625, 275, 39, 34)),
@@ -658,6 +666,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		{
 			frame.Kill();
 		}
+		_elements.Remove("art_frame");
 		_elements.Add("art_frame", new UIImage(
 			UIScale(new ClanGenRect(0, 20, 466, 416)).AnchorTo(AnchorPosition.Center),
 			Frame,
@@ -722,6 +731,9 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				break;
 			case "choose members":
 				HandleChooseMembersEvent(evnt);
+				break;
+			case "choose camp":
+				HandleChooseBackgroundEvent(evnt);
 				break;
 		}
 	}
@@ -1087,6 +1099,85 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		}
 	}
 
+	private void HandleChooseBackgroundEvent(Event evnt)
+	{
+		if (evnt.EventType == EventType.LeftMouseClick)
+		{
+			if (evnt.Element == _elements["previous_step"])
+			{
+				OpenChooseMembers();
+			}
+			else if (evnt.Element == _elements["forest_biome"])
+			{
+				_biomeSelected = "Forest";
+				_selectedCampTag = 1;
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["mountain_biome"])
+			{
+				_biomeSelected = "Mountainous";
+				_selectedCampTag = 1;
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["plains_biome"])
+			{
+				_biomeSelected = "Plains";
+				_selectedCampTag = 1;
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["beach_biome"])
+			{
+				_biomeSelected = "Beach";
+				_selectedCampTag = 1;
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _tabs["tab1"])
+			{
+				_selectedCampTag = 1;
+				RefreshSelectedCamp();
+			}
+			else if (evnt.Element == _tabs["tab2"])
+			{
+				_selectedCampTag = 2;
+				RefreshSelectedCamp();
+			}
+			else if (evnt.Element == _tabs["tab3"])
+			{
+				_selectedCampTag = 3;
+				RefreshSelectedCamp();
+			}
+			else if (_tabs.TryGetValue("tab4", out UIElement? tab4) && evnt.Element == tab4)
+			{
+				_selectedCampTag = 4;
+				RefreshSelectedCamp();
+			}
+			else if (evnt.Element == _elements["newleaf_tab"])
+			{
+				_selectedSeason = "Newleaf";
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["greenleaf_tab"])
+			{
+				_selectedSeason = "Greenleaf";
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["leaffall_tab"])
+			{
+				_selectedSeason = "Leaf-fall";
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["leafbare_tab"])
+			{
+				_selectedSeason = "Leaf-bare";
+				RefreshTextAndButtons();
+			}
+			else if (evnt.Element == _elements["random_background"])
+			{
+				Console.WriteLine("sorry, not implemented yet!");
+			}
+		}
+	}
+
 	private void RefreshTextAndButtons()
 	{
 		if (_subScreen == "gamemode")
@@ -1147,10 +1238,10 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		else if (_subScreen == "choose leader" || _subScreen == "choose deputy" || _subScreen == "choose med cat")
 		{
 			if (
-				_selectedCat != null 
+				_selectedCat != null
 				&& (
-					_selectedCat.Age == Age.Newborn 
-					|| _selectedCat.Age == Age.Kitten 
+					_selectedCat.Age == Age.Newborn
+					|| _selectedCat.Age == Age.Kitten
 					|| _selectedCat.Age == Age.Adolescent)
 				)
 			{
@@ -1163,7 +1254,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["error_message"].Hide();
 			}
 		}
-		else if ( _subScreen == "choose members")
+		else if (_subScreen == "choose members")
 		{
 			if (_members.Count >= 4 && _members.Count <= 6)
 			{
@@ -1181,6 +1272,56 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			}
 
 			_elements["select_cat"].Visible = (_selectedCat != null);
+		}
+		else if (_subScreen == "choose camp")
+		{
+			_elements["forest_biome"].Enable();
+			_elements["mountain_biome"].Enable();
+			_elements["plains_biome"].Enable();
+			_elements["beach_biome"].Enable();
+			switch (_biomeSelected)
+			{
+				case "Forest":
+					_elements["forest_biome"].Disable();
+					break;
+				case "Mountainous":
+					_elements["mountain_biome"].Disable();
+					break;
+				case "Plains":
+					_elements["plains_biome"].Disable();
+					break;
+				case "Beach":
+					_elements["beach_biome"].Disable();
+					break;
+			}
+
+			_elements["newleaf_tab"].Enable();
+			_elements["greenleaf_tab"].Enable();
+			_elements["leaffall_tab"].Enable();
+			_elements["leafbare_tab"].Enable();
+
+			switch (_selectedSeason)
+			{
+				case "Newleaf":
+					_elements["newleaf_tab"].Disable();
+					break;
+				case "Greenleaf":
+					_elements["greenleaf_tab"].Disable();
+					break;
+				case "Leaf-fall":
+					_elements["leaffall_tab"].Disable();
+					break;
+				case "Leaf-bare":
+					_elements["leafbare_tab"].Disable();
+					break;
+			}
+
+			if (_biomeSelected != null && _selectedCampTag > -1)
+			{
+				_elements["next_step"].Enable();
+			}
+
+			RefreshSelectedCamp();
 		}
 	}
 
@@ -1327,6 +1468,140 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				);
 			}
 		}
+	}
+
+	public void RefreshSelectedCamp()
+	{
+		foreach (var tab in _tabs)
+		{
+			tab.Value.Kill();
+		}
+		_tabs.Clear();
+
+		switch (_biomeSelected)
+		{
+			case "Forest":
+				_tabs.Add("tab1", new UIButton(
+					UIScale(new ClanGenRect(95, 180, 154, 30)),
+					ButtonID.ClassicTab,
+					game.Manager
+				));
+				_tabs.Add("tab2", new UIButton(
+					UIScale(new ClanGenRect(108, 215, 154, 30)),
+					ButtonID.GullyTab,
+					game.Manager
+				));
+				_tabs.Add("tab3", new UIButton(
+					UIScale(new ClanGenRect(95, 250, 154, 30)),
+					ButtonID.GrottoTab,
+					game.Manager
+				));
+				_tabs.Add("tab4", new UIButton(
+					UIScale(new ClanGenRect(85, 285, 154, 30)),
+					ButtonID.LakesideTab,
+					game.Manager
+				));
+				break;
+			case "Mountainous":
+				_tabs.Add("tab1", new UIButton(
+					UIScale(new ClanGenRect(111, 180, 154, 30)),
+					ButtonID.CliffTab,
+					game.Manager
+				));
+				_tabs.Add("tab2", new UIButton(
+					UIScale(new ClanGenRect(90, 215, 154, 30)),
+					ButtonID.CaveTab,
+					game.Manager
+				));
+				_tabs.Add("tab3", new UIButton(
+					UIScale(new ClanGenRect(42, 250, 179, 30)),
+					ButtonID.CrystalTab,
+					game.Manager
+				));
+				_tabs.Add("tab4", new UIButton(
+					UIScale(new ClanGenRect(107, 285, 154, 30)),
+					ButtonID.RuinsTab,
+					game.Manager
+				));
+				break;
+			case "Plains":
+				_tabs.Add("tab1", new UIButton(
+					UIScale(new ClanGenRect(64, 180, 154, 30)),
+					ButtonID.GrasslandsTab,
+					game.Manager
+				));
+				_tabs.Add("tab2", new UIButton(
+					UIScale(new ClanGenRect(89, 215, 154, 30)),
+					ButtonID.TunnelTab,
+					game.Manager
+				));
+				_tabs.Add("tab3", new UIButton(
+					UIScale(new ClanGenRect(64, 250, 154, 30)),
+					ButtonID.WastelandsTab,
+					game.Manager
+				));
+				break;
+			case "Beach":
+				_tabs.Add("tab1", new UIButton(
+					UIScale(new ClanGenRect(76, 180, 154, 30)),
+					ButtonID.TidepoolTab,
+					game.Manager
+				));
+				_tabs.Add("tab2", new UIButton(
+					UIScale(new ClanGenRect(65, 215, 154, 30)),
+					ButtonID.TidalCaveTab,
+					game.Manager
+				));
+				_tabs.Add("tab3", new UIButton(
+					UIScale(new ClanGenRect(70, 250, 154, 30)),
+					ButtonID.ShipwreckTab,
+					game.Manager
+				));
+				break;
+		}
+
+		for (int i = 0; i < _tabs.Count; i++)
+		{
+			if (i == _selectedCampTag)
+			{
+				_tabs[$"tab{_selectedCampTag}"].Disable();
+			}
+			_tabs[$"tab{_selectedCampTag}"].Enable();
+		}
+
+		if (_elements.TryGetValue("camp_art", out UIElement? campArt))
+		{
+			UnloadTexture(((UIImage)campArt).Image);
+			campArt.Kill();
+		}
+		_elements.Remove("camp_art");
+
+		if (_biomeSelected != null)
+		{
+			Texture2D campBackground = LoadTexture(GetCampArtPath(_selectedCampTag));
+
+			_elements.Add("camp_art", new UIImage(
+				UIScale(new ClanGenRect(175, 170, 450, 400))
+					.AnchorTo(AnchorPosition.Center),
+				campBackground,
+				game.Manager
+			));
+		}
+
+		DrawArtFrame();
+	}
+
+	private string GetCampArtPath(int selectedCampTag)
+	{
+		var leaf = _selectedSeason!.Replace("-", "");
+
+		string campBgBaseDir = ".\\Resources\\Images\\CampBackgrounds";
+		string startLeaf = leaf.ToLower();
+		string lightDark = (bool)game.Settings["dark mode"]! ? "dark" : "light";
+
+		string biome = _biomeSelected!.ToLower();
+
+		return $"{campBgBaseDir}\\{biome}\\{startLeaf}_camp{selectedCampTag}_{lightDark}.png";
 	}
 
 	public void SaveClan()
