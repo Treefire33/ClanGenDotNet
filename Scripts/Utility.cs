@@ -882,6 +882,14 @@ public class Utility
 	}
 }
 
+public static class ColourExtensions
+{
+	public static bool Equals(this Color a, Color b)
+	{
+		return (a.r == b.r) && (a.g == b.g) && (a.b == b.b); //don't compare alpha.
+	}
+}
+
 public static class StringExtensions
 {
 	public static string Captialize(this string input) =>

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Immutable;
 
 namespace ClanGenDotNet.Scripts.Cats;
 
@@ -421,6 +422,38 @@ public static class Sprites
 
 			yPos++;
 		}
+
+		DarkModeSymbol();
+	}
+
+	private unsafe static void DarkModeSymbol()
+	{
+		Dictionary<string, Texture> darkSymbols = [];
+		foreach (var symbolSprite in SymbolSprites)
+		{
+			Image darkSymbol = LoadImageFromTexture(symbolSprite.Value);
+			Color* pixels = LoadImageColors(darkSymbol);
+			Color original = new(87, 76, 45, 255);
+			Color replacement = new(87, 76, 45, 255);
+			for (int i = 0; i < darkSymbol.width; i++)
+			{
+				for (int j = 0; j < darkSymbol.height; j++)
+				{
+					if (pixels[i * darkSymbol.width + j].Equals(original))
+					{
+						pixels[i * darkSymbol.width + j] = replacement;
+					}
+				}
+			}
+			darkSymbols.Add(symbolSprite.Key + "#dark", LoadTextureFromImage(darkSymbol));
+			UnloadImageColors(pixels);
+			UnloadImage(darkSymbol);
+		}
+		foreach (var darkSprite in darkSymbols)
+		{
+			SymbolSprites.Add(darkSprite.Key, darkSprite.Value);
+		}
+		darkSymbols.Clear();
 	}
 
 	public static void EnumerateAndMakeGroup(string[][] data, string name, string groupName)

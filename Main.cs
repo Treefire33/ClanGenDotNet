@@ -40,7 +40,7 @@ public class ClanGenMain
 			try
 			{
 				discordRPC = new();
-				discordRPC.UpdateActivity("start screen");
+				discordRPC.UpdateActivity();
 			}
 			catch { Console.WriteLine("DiscordRPC unable to start."); }
 		}
@@ -70,6 +70,7 @@ public class ClanGenMain
 				game.AllScreens[game.LastScreenForUpdate].ExitScreen();
 				game.AllScreens[game.CurrentScreen].ScreenSwitches();
 				game.SwitchScreens = false;
+				discordRPC?.UpdateActivity();
 			}
 
 			game.Manager.ResetEvents();

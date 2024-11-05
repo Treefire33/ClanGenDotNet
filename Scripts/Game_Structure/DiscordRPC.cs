@@ -43,11 +43,11 @@ public class DiscordRPC
 		};	
 	}
 
-	public void UpdateActivity(string screen)
+	public void UpdateActivity()
 	{
 		_clanGenActivity.Details = $"Managing a clan in ClanGen.Net.";
 		_clanGenActivity.Assets.SmallText = "Currently testing ClanGen.Net.";
-		_clanGenActivity.State = $"{screen}";
+		_clanGenActivity.State = $"{game.CurrentScreen}";
 		_activityManager.UpdateActivity(
 			_clanGenActivity,
 			(result) => { /*Console.WriteLine(result.ToString());*/ }
