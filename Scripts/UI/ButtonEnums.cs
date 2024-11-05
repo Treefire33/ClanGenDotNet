@@ -51,5 +51,7 @@ public enum ButtonID
 	WastelandsTab,
 	TidepoolTab,
 	TidalCaveTab,
-	ShipwreckTab
+	ShipwreckTab,
+	FiltersTab,
+	SymbolsSelect
 }

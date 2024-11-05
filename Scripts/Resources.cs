@@ -18,7 +18,16 @@ public static class Resources
 	public static readonly Texture2D Frame = LoadTexture(".\\Resources\\Images\\frame.png");
 	public static readonly NPatchInfo FrameNPatch = new()
 	{
-		source = new Rectangle(0, 0, Resources.Frame.width, Resources.Frame.height),
+		source = new Rectangle(0, 0, Frame.width, Frame.height),
+		top = 10,
+		bottom = 10,
+		left = 10,
+		right = 10
+	};
+	public static readonly Texture2D RoundedFrame = LoadTexture(".\\Resources\\Images\\rounded_frame.png");
+	public static readonly NPatchInfo RoundedFrameNPatch = new()
+	{
+		source = new Rectangle(0, 0, Frame.width, Frame.height),
 		top = 10,
 		bottom = 10,
 		left = 10,
@@ -66,6 +75,9 @@ public static class Resources
 	public static readonly List<Texture2D> TidepoolTabButton = GenButtonsFromName("tidepool_camp");
 	public static readonly List<Texture2D> TidalCaveTabButton = GenButtonsFromName("tidal_cave_camp");
 	public static readonly List<Texture2D> ShipwreckTabButton = GenButtonsFromName("shipwreck_camp");
+
+	public static readonly List<Texture2D> FiltersTabButton = GenButtonsFromName("filters_tab");
+	public static readonly List<Texture2D> SymbolSelectButton = GenButtonsFromName("symbol_select");
 
 	public static readonly List<List<Texture2D>> CheckboxImages = [
 		GenButtonsFromName("checkmark_off"),
@@ -172,6 +184,8 @@ public static class Resources
 			ButtonID.TidepoolTab => TidepoolTabButton,
 			ButtonID.TidalCaveTab => TidalCaveTabButton,
 			ButtonID.ShipwreckTab => ShipwreckTabButton,
+			ButtonID.FiltersTab => FiltersTabButton,
+			ButtonID.SymbolsSelect => SymbolSelectButton,
 			_ => SquircleButtonImages,
 		};
 	}

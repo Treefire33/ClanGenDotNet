@@ -24,17 +24,7 @@ public class UIContainer(ClanGenRect posScale, UIManager manager)
 
 	public void AddElement(UIElement element, bool modPosition)
 	{
-		element.Layer += Layer;
-		ContainedElements.Add(element);
-		if (!Active)
-		{
-			element.SetActive(false);
-		}
-		if (!Visible)
-		{
-			element.Visible = false;
-		}
-		element.IsContained = true;
+		AddElement(element);
 		if (modPosition) { element.RelativeRect.Position += RelativeRect.Position; }
 	}
 

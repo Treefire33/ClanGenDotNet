@@ -4,12 +4,20 @@ namespace ClanGenDotNet.Scripts.Cats;
 
 public static class Sprites
 {
-	public static Tint CatTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\tint.json"))!;
-	public static Tint WhitePatchesTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\white_patches_tint.json"))!;
+	public static Tint CatTints = JsonConvert
+		.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\tint.json"))!;
+	public static Tint WhitePatchesTints = JsonConvert
+		.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\white_patches_tint.json"))!;
+	public static Dictionary<string, Dictionary<string, object>> SymbolDict = JsonConvert
+		.DeserializeObject<Dictionary<string, Dictionary<string, object>>>
+		(File.ReadAllText(".\\Resources\\Dicts\\clan_symbols.json"))!;
+
 
 	private static int _size = 50;
 	private static readonly Dictionary<string, Image> _spritesheets = [];
 	public static readonly Dictionary<string, Image> CatSprites = [];
+	public static readonly Dictionary<string, Texture2D> SymbolSprites = [];
+	public static readonly List<string> ClanSymbols = [];
 
 	public static void MakeSpritesheet(string imageFile, string name)
 	{
@@ -53,6 +61,49 @@ public static class Sprites
 				);
 
 				CatSprites[fullName] = newSprite;
+				i++;
+			}
+		}
+	}
+
+	public static void MakeGroupSymbol(
+		string spritesheet,
+		Vector2 position,
+		string name,
+		int spritesX = 3,
+		int spritesY = 7,
+		bool noIndex = false
+	)
+	{
+		int groupXOffsets = (int)position.X * spritesX * _size;
+		int groupYOffsets = (int)position.Y * spritesY * _size;
+
+		string fullName;
+		int i = 0;
+		for (int y = 0; y < spritesY; y++)
+		{
+			for (int x = 0; x < spritesX; x++)
+			{
+				if (noIndex)
+				{
+					fullName = $"{name}";
+				}
+				else
+				{
+					fullName = $"{name}{i}";
+				}
+
+				Image newSprite = ImageFromImage(
+					_spritesheets[spritesheet],
+					new Rectangle(
+						groupXOffsets + x * _size,
+						groupYOffsets + y * _size,
+						_size, _size
+					)
+				);
+
+				SymbolSprites[fullName] = LoadTextureFromImage(newSprite);
+				UnloadImage(newSprite);
 				i++;
 			}
 		}
@@ -223,6 +274,7 @@ public static class Sprites
 		}
 
 		LoadScars();
+		LoadSymbols();
 
 		//Prevent spritesheet from taking up like 200 MB of memory holy god
 		//I'm not even kidding, before this 5 line statement, it took roughly 500 MB, now it's at
@@ -325,6 +377,50 @@ public static class Sprites
 		EnumerateAndMakeGroup(bellCollarsData, "bellcollars", "collars");
 		EnumerateAndMakeGroup(bowCollarsData, "bowcollars", "collars");
 		EnumerateAndMakeGroup(nylonCollarsData, "nyloncollars", "collars");
+	}
+
+	public static void LoadSymbols()
+	{
+		char[] letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+				   'V', 'W', 'Y', 'Z'];
+
+		int yPos = 1;
+		foreach (char letter in letters)
+		{
+			int xMod = 0;
+
+			int i = 0;
+			foreach (var symbolKV in SymbolDict
+				.Where(symbol => symbol.Key.Contains(letter) && SymbolDict[symbol.Key]["variants"] != null)
+			)
+			{
+				string symbol = symbolKV.Key;
+				if (Convert.ToInt32(SymbolDict[symbol]["variants"]) > 1 && xMod > 0)
+				{
+					xMod++;
+				}
+				foreach (int varIndex in Enumerable.Range(0, Convert.ToInt32(SymbolDict[symbol]["variants"])))
+				{
+					int xPos = i + xMod;
+
+					if (Convert.ToInt32(SymbolDict[symbol]["variants"]) > 1)
+					{
+						xPos++;
+					}
+					else if (xPos > 0)
+					{
+						xPos--;
+					}
+
+					ClanSymbols.Add($"symbol{symbol.ToUpper()}{varIndex}");
+					MakeGroupSymbol("symbols", new Vector2(xPos, yPos), ClanSymbols.Last(), 1, 1, true);
+				}
+
+				i++;
+			}
+
+			yPos++;
+		}
 	}
 
 	public static void EnumerateAndMakeGroup(string[][] data, string name, string groupName)

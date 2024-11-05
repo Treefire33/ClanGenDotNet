@@ -79,7 +79,7 @@ public class Clan
 	public Cat? Instructor = null;
 	public string GameMode = "classic";
 
-	public List<string> FadedIds;
+	public List<string> FadedIds = [];
 	private static readonly string[] _instructorChoices = [
 		"apprentice",
 		"mediator apprentice",

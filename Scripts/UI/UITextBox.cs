@@ -117,7 +117,7 @@ public class UITextBox(
 				positionOffset += textSize.Y;
 			}
 		}
-		else if (RelativeRect.Height > 0)
+		else if (RelativeRect.Height > 0 && RelativeRect.Width > 0)
 		{
 			DrawTextBoxed(
 				NotoSansMedium,
