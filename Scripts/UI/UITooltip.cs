@@ -1,7 +1,5 @@
-﻿using ClanGenDotNet.Scripts.UI.Interfaces;
-using System.Text;
+﻿using System.Text;
 using static ClanGenDotNet.Scripts.Resources;
-using static ClanGenDotNet.Scripts.Utility;
 
 namespace ClanGenDotNet.Scripts.UI;
 public class UITooltip : UIElement, IUIElement

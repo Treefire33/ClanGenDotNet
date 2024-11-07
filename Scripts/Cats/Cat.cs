@@ -134,6 +134,8 @@ public class Cat
 	public Pelt Pelt;
 	public bool LoadingCat;
 
+	public bool InCamp = false;
+
 	public Name Name;
 
 	public bool NoKits;
@@ -345,7 +347,7 @@ public class Cat
 		//if (!loadingCat) {do the thing}
 
 		//in camp status
-
+		InCamp = true;
 		string? biome = null;
 		if (keywordArgs != null && keywordArgs.TryGetValue("biome", out object? value))
 		{

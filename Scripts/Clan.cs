@@ -1,4 +1,6 @@
 ﻿using ClanGenDotNet.Scripts.Cats;
+using Newtonsoft.Json;
+using System.Collections.Immutable;
 
 namespace ClanGenDotNet.Scripts;
 
@@ -55,6 +57,16 @@ public class Clan
 		{ "high_social", ["gracious", "mellow", "logical"] },
 	};
 
+	public static readonly ImmutableDictionary<
+		string,
+		Dictionary<string, dynamic>
+	> Layouts = JsonConvert.DeserializeObject<
+		ImmutableDictionary<
+			string,
+			Dictionary<string, dynamic>
+		>
+	>(File.ReadAllText(".\\Resources\\placements.json"))!;
+
 	public int Age = 0;
 	public string CurrentSeason = "Newleaf";
 	public List<Clan> AllClans = [];
@@ -70,11 +82,12 @@ public class Clan
 	public List<Cat> MedCatList = [];
 	public int MedCatPredecessors = 0;
 	public int MedCatNumber = 0;
+	public List<Cat> StartingMembers = [];
 
 	public BiomeType Biome = BiomeType.Forest;
-	public object? CampBackground = null;
+	public string? CampBackground = null;
 	public string StartingSeason = "";
-	public Texture2D? ChosenSymbol = null;
+	public string? ChosenSymbol = null;
 
 	public Cat? Instructor = null;
 	public string GameMode = "classic";
@@ -92,14 +105,15 @@ public class Clan
 		"elder"
 	];
 
+
 	public Clan(
 		string name = "",
 		Cat? leader = null,
 		Cat? deputy = null,
 		Cat? medicineCat = null,
 		BiomeType biome = BiomeType.Forest,
-		object? campBackground = null,
-		Texture2D? symbol = null,
+		string? campBackground = null,
+		string? symbol = null,
 		string gameMode = "classic",
 		List<Cat>? startingMembers = null,
 		string startingSeason = "Newleaf",
@@ -123,20 +137,61 @@ public class Clan
 		ChosenSymbol = symbol;
 		GameMode = gameMode;
 
+		//clan settings here
+
+		StartingMembers = startingMembers!;
 	}
 
 	public void CreateClan()
 	{
-		Instructor = new Cat(
-			status: _instructorChoices.PickRandom()	
-		);
-		Instructor.Dead = true;
-		Instructor.DeadFor = Rand.Next(20, 200);
+		Instructor = new(
+			status: _instructorChoices.PickRandom()
+		)
+		{
+			Dead = true,
+			DeadFor = Rand.Next(20, 200)
+		};
 		AddCat(Instructor);
 		//AddToStarClan(Instructor);
 		AllClans = [];
 
+		foreach (var id in Cat.AllCats.Keys)
+		{
+			bool notFound = true;
+			var kitty = Cat.AllCats[id];
 
+			foreach (var x in StartingMembers)
+			{
+				if (kitty == x)
+				{
+					AddCat(kitty);
+					notFound = false;
+				}
+			}
+
+			if (
+				kitty != Leader
+				&& kitty != MedicineCat
+				&& kitty != Deputy
+				&& kitty != Instructor
+				&& notFound
+			)
+			{
+				Cat.AllCats[id].Example = true;
+				RemoveCat(Cat.AllCats[id].ID);
+			}
+		}
+
+		foreach (string id in Cat.AllCats.Keys)
+		{
+			//Cat.AllCats[id].InitAllRelationships();
+			Cat.AllCats[id].Backstory = "clan_founder";
+			if (Cat.AllCats[id].Status == "apprentice")
+			{
+				//Cat.AllCats[id].StatusChange("apprentice");
+			}
+			//Cat.AllCats[id].Thoughts();
+		}
 	}
 
 	public void AddCat(Cat meowmeow)
@@ -145,5 +200,22 @@ public class Clan
 		{
 			ClanCats.Add(meowmeow.ID);
 		}
+	}
+
+	public void RemoveCat(string id)
+	{
+		
+	}
+
+	public static BiomeType StringToBiome(string biome)
+	{
+		return biome.ToLower() switch
+		{
+			"forest" => BiomeType.Forest,
+			"mountainous" => BiomeType.Mountainous,
+			"plains" => BiomeType.Plains,
+			"beach" => BiomeType.Beach,
+			_ => BiomeType.Forest
+		};
 	}
 }

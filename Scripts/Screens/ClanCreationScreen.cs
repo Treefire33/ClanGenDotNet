@@ -2038,14 +2038,23 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		//game.CatToFade.Clear();
 		Cat.OutsideCats.Clear();
 		//Patrol.UsedPatrols.Clear();
-		//dictionary<int, string> convertCamp = new dictionary<int, string>() {{1, "camp1"}...}
+		Dictionary<int, string> convertCamp = new Dictionary<int, string>() {
+			{ 1, "camp1" },
+			{ 2, "camp2" },
+			{ 3, "camp3" },
+			{ 4, "camp4" }
+		};
 		game.Clan = new Clan(
 			_clanName,
 			_leader,
 			_deputy,
 			_medicineCat,
+			biome: Clan.StringToBiome(_biomeSelected!),
+			campBackground: convertCamp[_selectedCampTag],
+			symbol: _symbolSelected,
 			startingMembers: _members,
-			gameMode: _gameMode
+			gameMode: _gameMode,
+			startingSeason: _selectedSeason!
 		);
 		game.Clan.CreateClan();
 		//game.CurrentEventsList.Clear()
