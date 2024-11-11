@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ClanGenDotNet.Scripts.Game_Structure;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace ClanGenDotNet.Scripts.UI.Theming;
@@ -6,7 +7,7 @@ namespace ClanGenDotNet.Scripts.UI.Theming;
 public class UITheme
 {
 	private Dictionary<string, UIElementTheme> _elementThemes = [];
-	public Dictionary<string, UIElementAppearance> ElementThemes = [];
+	public Dictionary<ObjectID, UIElementAppearance> ElementThemes = [];
 
 	public static UITheme LoadThemeFromFile(string filePath)
 	{
@@ -17,50 +18,45 @@ public class UITheme
 				Dictionary<string, UIElementTheme>
 			>(File.ReadAllText(filePath))!
 		};
-		newTheme.LoadPrototypes();
-		newTheme.LoadThemes();
+		foreach (var theme in newTheme._elementThemes)
+		{
+			/*//@ = class or default element theme
+			if (theme.Key.Contains('@') || theme.Key.Contains('#'))
+			{
+				newTheme._elementThemes[theme.Key] = newTheme.LoadPrototype(theme.Value);
+			}*/
+			newTheme._elementThemes[theme.Key] = newTheme.LoadPrototype(theme.Value);
+		}
 		return newTheme;
 	}
 
-	public void LoadThemes()
-	{
-		foreach (var theme in _elementThemes)
-		{
-			UIElementAppearance newElementAppearance = new()
-			{
-				Font = GetElementFontEntry(theme.Key),
-				Colours = GetElementColours(theme.Key),
-				Miscellaneous = GetElementMiscEntries(theme.Key),
-			};
-			ElementThemes.Add(
-				theme.Key,
-				newElementAppearance
-			);
-		}
-	}
-
-	public (Font, int) GetElementFontEntry(string element)
+	public (Font, int) GetElementFontEntry(UIElementTheme element, string _class)
 	{
 		return (
-			GetFontFromName(_elementThemes[element].Font!["name"]), 
-			int.Parse(_elementThemes[element].Font!["size"])
+			GetFontFromName(element.Font!["name"]),
+			int.Parse(element.Font!["size"])
 		);
 	}
 
-	public Dictionary<string, Color> GetElementColours(string element)
+	public Dictionary<string, Color> GetElementColours(UIElementTheme element, string _class)
 	{
 		Dictionary<string, Color> elementColours = [];
-		foreach (var entry in _elementThemes[element].Colour!)
+		foreach (var entry in element.Colour!)
 		{
+			if (_elementThemes[_class].Colour!.TryGetValue(entry.Key, out string? value))
+			{
+				elementColours.Add(entry.Key, GetColourFromHex(value));
+				continue;
+			}
 			elementColours.Add(entry.Key, GetColourFromHex(entry.Value));
 		}
 		return elementColours;
 	}
 
-	public Dictionary<string, string> GetElementMiscEntries(string element)
+	public Dictionary<string, string> GetElementMiscEntries(UIElementTheme element, string _class)
 	{
 		Dictionary<string, string> entries = [];
-		foreach (var entry in _elementThemes[element].Misc!)
+		foreach (var entry in element.Misc!)
 		{
 			entries.Add(entry.Key, entry.Value);
 		}
@@ -92,65 +88,58 @@ public class UITheme
 		);
 	}
 
-	public void LoadPrototypes()
+	public UIElementTheme LoadPrototype(UIElementTheme theme)
 	{
-		//we should have a default theme, if not, then add one!
-		UIElementTheme defaultTheme = _elementThemes["default"];
-		foreach (KeyValuePair<string, UIElementTheme> theme in _elementThemes)
+		UIElementTheme prototypeTheme = theme.Prototype != null 
+			? _elementThemes[theme.Prototype] 
+			: _elementThemes["default"];
+		theme.Colour ??= [];
+		theme.Font ??= [];
+		theme.Misc ??= [];
+		foreach (KeyValuePair<string, string> colourEntry in prototypeTheme.Colour!)
 		{
-			string themeName = theme.Key;
-			UIElementTheme elementTheme = theme.Value;
-			elementTheme.Colour ??= [];
-			elementTheme.Font ??= [];
-			elementTheme.Misc ??= [];
-			if (theme.Value.Prototype != null && _elementThemes.TryGetValue(theme.Value.Prototype, out UIElementTheme? prototypeTheme))
+			if (!theme.Colour.ContainsKey(colourEntry.Key))
 			{
-				foreach (KeyValuePair<string, string> colourEntry in prototypeTheme.Colour!)
-				{
-					if (!elementTheme.Colour.ContainsKey(colourEntry.Key))
-					{
-						elementTheme.Colour[colourEntry.Key] = colourEntry.Value;
-					}
-				}
-				foreach (KeyValuePair<string, string> fontEntry in prototypeTheme.Font!)
-				{
-					if (!elementTheme.Font.ContainsKey(fontEntry.Key))
-					{
-						elementTheme.Font[fontEntry.Key] = fontEntry.Value;
-					}
-				}
-				foreach (KeyValuePair<string, string> miscEntry in prototypeTheme.Misc!)
-				{
-					if (!elementTheme.Misc.ContainsKey(miscEntry.Key))
-					{
-						elementTheme.Misc[miscEntry.Key] = miscEntry.Value;
-					}
-				}
+				theme.Colour[colourEntry.Key] = colourEntry.Value;
 			}
-			else
+		}
+		foreach (KeyValuePair<string, string> fontEntry in prototypeTheme.Font!)
+		{
+			if (!theme.Font.ContainsKey(fontEntry.Key))
 			{
-				foreach (KeyValuePair<string, string> colourEntry in defaultTheme.Colour!)
-				{
-					if (!elementTheme.Colour.ContainsKey(colourEntry.Key))
-					{
-						elementTheme.Colour[colourEntry.Key] = colourEntry.Value;
-					}
-				}
-				foreach (KeyValuePair<string, string> fontEntry in defaultTheme.Font!)
-				{
-					if (!elementTheme.Font.ContainsKey(fontEntry.Key))
-					{
-						elementTheme.Font[fontEntry.Key] = fontEntry.Value;
-					}
-				}
-				foreach (KeyValuePair<string, string> miscEntry in defaultTheme.Misc!)
-				{
-					if (!elementTheme.Misc.ContainsKey(miscEntry.Key))
-					{
-						elementTheme.Misc[miscEntry.Key] = miscEntry.Value;
-					}
-				}
+				theme.Font[fontEntry.Key] = fontEntry.Value;
 			}
+		}
+		foreach (KeyValuePair<string, string> miscEntry in prototypeTheme.Misc!)
+		{
+			if (!theme.Misc.ContainsKey(miscEntry.Key))
+			{
+				theme.Misc[miscEntry.Key] = miscEntry.Value;
+			}
+		}
+		return theme;
+	}
+
+	public UIElementAppearance GetFromObjectID(ObjectID objectID)
+	{
+		if (ElementThemes.TryGetValue(objectID, out UIElementAppearance? value))
+		{
+			return value;
+		}
+		else
+		{
+			var theme = _elementThemes[objectID.ID];
+
+			UIElementAppearance newElementAppearance = new()
+			{
+				Font = GetElementFontEntry(theme, objectID.Class),
+				Colours = GetElementColours(theme, objectID.Class),
+				Miscellaneous = GetElementMiscEntries(theme, objectID.Class),
+			};
+
+			ElementThemes.Add(objectID, newElementAppearance);
+
+			return newElementAppearance;
 		}
 	}
 
@@ -164,9 +153,34 @@ public class UITheme
 		}
 		return representation.ToString();
 	}
+}
 
-	public UIElementAppearance GetThemeFromID(string objectID)
+public struct ObjectID(string id = "default", string _class = "")
+{
+	public string ID = id;
+	public string Class = _class;
+
+	public static bool operator ==(ObjectID a, ObjectID b)
 	{
-		return ElementThemes[objectID];
+		return a.Equals(b);
 	}
+
+	public static bool operator !=(ObjectID a, ObjectID b)
+	{
+		return !a.Equals(b);
+	}
+
+	public override readonly bool Equals(object? obj)
+	{
+		if (obj != null && obj is ObjectID b)
+		{
+			return (ID == b.ID) && (Class == b.Class);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public override readonly int GetHashCode() => base.GetHashCode();
 }

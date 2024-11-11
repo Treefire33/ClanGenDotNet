@@ -15,17 +15,18 @@ public class UIElement : IUIElement
 	public bool Visible = true;
 	public bool Active = true;
 
-	public UIElement(ClanGenRect posScale, UIManager manager, string objectID = "default")
+	public UIElement(ClanGenRect posScale, UIManager manager, ObjectID objectID = default)
 	{
 		Manager = manager;
 		RelativeRect = posScale;
 		Manager.Elements.Add(this);
 		Manager.Elements = [.. Manager.Elements.OrderBy(element => element.Layer)];
-		if (objectID == null || objectID == "")
+		if (objectID == default)
 		{
-			objectID = "default";
+			objectID.ID = "default";
+			objectID.Class = "";
 		}
-		Theme = Manager.Theme.GetThemeFromID(objectID);
+		Theme = Manager.Theme.GetFromObjectID(objectID);
 	}
 
 	public virtual void Update()

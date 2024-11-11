@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ClanGenDotNet.Scripts.UI.Theming;
 
-public class UIElementTheme
+public struct UIElementTheme
 {
 	[JsonProperty("prototype", Required = Required.Default)]
 	public string? Prototype;
@@ -20,7 +20,7 @@ public class UIElementTheme
 	public override string ToString()
 	{
 		StringBuilder representation = new();
-		if (Prototype != null) { representation.Append($"Protoype: {Prototype}\n\t"); }
+		if (Prototype != null) { representation.Append($"Prototype: {Prototype}\n\t"); }
 		if (Colour != null) 
 		{
 			foreach (var item in Colour)

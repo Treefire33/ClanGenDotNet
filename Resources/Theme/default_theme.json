@@ -17,7 +17,30 @@
 			"shadow_width": "0"
 		}
 	},
-	"text_box": {
+	"#dark": {
+		"colour": {
+			"normal_background": "#655934",
+			"hovered_background": "#1E1809",
+			"disabled_background": "#5C5850",
+			"selected_background": "#655934",
+			"active_background": "#655934",
+			"text": "#EFE5CE",
+			"hovered_text": "#EFE5CE",
+			"selected_text": "#EFE5CE",
+			"disabled_text": "#EFE5CE",
+			"link_text": "#2E8B57",
+			"link_hover": "#556B2F",
+			"link_selected": "#556B2F",
+			"text_shadow": "#777777",
+			"normal_border": "#776045",
+			"hovered_border": "#291B0F",
+			"disabled_border": "#706B64",
+			"selected_border": "#776045",
+			"active_border": "#776045",
+			"dark_background": "#00000000"
+		}
+	},
+	"@text_box": {
 		"colour": {
 			"dark_background": "#FFFF0000",
 			"selected_background": "#776045",
@@ -33,7 +56,7 @@
 		}
 	},
 	"text_box_14": {
-		"prototype": "text_box",
+		"prototype": "@text_box",
 		"font": {
 			"size": "7",
 			"name": "notosans"
@@ -48,7 +71,7 @@
 		}
 	},
 	"text_box_22": {
-		"prototype": "text_box",
+		"prototype": "@text_box",
 		"font": {
 			"size": "11",
 			"name": "notosans"
@@ -98,7 +121,7 @@
 		}
 	},
 	"text_box_26": {
-		"prototype": "text_box",
+		"prototype": "@text_box",
 		"font": {
 			"size": "13",
 			"name": "notosans"
@@ -132,14 +155,14 @@
 		}
 	},
 	"text_box_30": {
-		"prototype": "text_box",
+		"prototype": "@text_box",
 		"font": {
 			"size": "15",
 			"name": "notosans"
 		}
 	},
 	"text_box.current_version": {
-		"prototype": "text_box",
+		"prototype": "@text_box",
 		"colour": { "text": "#222222" }
 	},
 	"update_popup_title": { "prototype": "text_box_30" },
@@ -218,7 +241,7 @@
 		"misc": { "padding": "20,20" }
 	},
 	"text_box_34": {
-		"prototype": "text_box",
+		"prototype": "@text_box",
 		"font": {
 			"size": "17",
 			"name": "notosans"
@@ -240,7 +263,7 @@
 		"misc": { "text_horiz_alignment": "left" }
 	},
 	"text_box_40": {
-		"prototype": "text_box",
+		"prototype": "@text_box",
 		"font": {
 			"size": "20",
 			"name": "notosans"

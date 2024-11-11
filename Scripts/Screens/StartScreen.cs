@@ -1,5 +1,6 @@
 ﻿using ClanGenDotNet.Scripts.Events;
 using ClanGenDotNet.Scripts.UI;
+using ClanGenDotNet.Scripts.UI.Theming;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ClanGenDotNet.Scripts.Game_Structure.Game;
@@ -62,7 +63,7 @@ public class StartScreen(string name = "start screen") : Screens(name)
 		_warning = new(
 			UIScale(new ClanGenRect(0, 600, 800, 40)),
 			"Warning: This game contains mild depictions of gore, canon-typical violence and animal abuse.",
-			"text_box_30_horizcenter",
+			new ObjectID("text_box_30_horizcenter", "#dark"),
 			game.Manager
 		);
 

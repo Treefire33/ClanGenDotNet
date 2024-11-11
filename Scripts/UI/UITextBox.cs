@@ -39,6 +39,19 @@ public class UITextBox : UIElement, IUIElement
 		string object_id,
 		UIManager manager,
 		bool isMultiline = false
+	) : base(posScale, manager, GetTextBoxTheme(object_id))
+	{
+		_text = text;
+		_isMultiline = isMultiline;
+		ThemeElement();
+	}
+
+	public UITextBox(
+		ClanGenRect posScale,
+		string text,
+		ObjectID object_id,
+		UIManager manager,
+		bool isMultiline = false
 	) : base(posScale, manager, object_id)
 	{
 		_text = text;
