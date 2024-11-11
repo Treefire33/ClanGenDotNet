@@ -10,7 +10,7 @@ public static class Resources
 	public static Color DarkModeColour;
 
 	//Fonts
-	public unsafe static readonly Font Clangen = LoadFont(".\\Resources\\Font\\clangen.ttf");
+	public unsafe static Font Clangen = LoadFont(".\\Resources\\Font\\clangen.ttf");
 	public unsafe static readonly Font NotoSansRegular = LoadFont(".\\Resources\\Font\\NotoSans-Regular.ttf");
 	public unsafe static readonly Font NotoSansMedium = LoadFont(".\\Resources\\Font\\NotoSans-Medium.ttf");
 
@@ -249,8 +249,27 @@ public static class Resources
 		SetTextureFilter(NotoSansMedium.texture, TEXTURE_FILTER_BILINEAR);
 	}
 
-	public static void LoadResources()
+	public unsafe static void LoadResources()
 	{
+		int[] codepointsInt = Enumerable.Range(0x0020, 0x00A0)
+			.Concat([
+				0x2026, 0x2190, 0x2192, 0x2302,
+				0x23E9, 0x23EA, 0x250F, 0x2600,
+				0x2684, 0x26EA, 0x2744, 0x2B05, 
+				0x2B95, 0x2513,
+				0x1F33F, 0x1F342, 0x1F3DA, 0x1F3F0,
+				0x1F401, 0x1F431, 0x1F43E, 0x1F485,
+				0x1F4A7, 0x1F507, 0x1F50A, 0x1F50D,
+				0x1F5C9, 0x1F89C, 0x1F89E, 0x1FAB4
+			])
+			.ToArray();
+		UnloadFont(Clangen);
+		fixed (int* codepoints = codepointsInt)
+		{
+			//we don't have 256 characters, but alas, it would load with any number lower.
+			Clangen = LoadFontEx(".\\Resources\\Font\\clangen.ttf", 32, codepoints, 256); 
+			//Sadly, I can't do anything about... whatever is happening with unicode characters.
+		}
 		SetFontFilters();
 		LightModeColour = new(
 			game.Config.Theme.LightModeBackground[0],

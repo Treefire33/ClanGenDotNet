@@ -98,8 +98,8 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_mainMenuButton = new(
 			UIScale(new ClanGenRect(25, 50, 153, 30)),
 			ButtonStyle.Squoval,
-			"Main Menu",
-			25,
+			GetArrow(3) + " Main Menu",
+			21,
 			game.Manager
 		);
 

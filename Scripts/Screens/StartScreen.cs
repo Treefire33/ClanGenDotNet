@@ -1,4 +1,5 @@
 ﻿using ClanGenDotNet.Scripts.Events;
+using System.Runtime.InteropServices;
 using static ClanGenDotNet.Scripts.Resources;
 
 namespace ClanGenDotNet.Scripts.Screens;
@@ -23,35 +24,35 @@ public class StartScreen(string name = "start screen") : Screens(name)
 			UIScale(new ClanGenRect(70, 310, 200, 30)),
 			ButtonStyle.MainMenu,
 			"continue",
-			20,
+			25,
 			game.Manager
 		);
 		_switchClan = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _continue.RelativeRect),
 			ButtonStyle.MainMenu,
 			"switch clan",
-			20,
+			25,
 			game.Manager
 		);
 		_newClan = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _switchClan.RelativeRect),
 			ButtonStyle.MainMenu,
 			"new clan",
-			20,
+			25,
 			game.Manager
 		);
 		_settings = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _newClan.RelativeRect),
 			ButtonStyle.MainMenu,
 			"settings and info",
-			20,
+			25,
 			game.Manager
 		);
 		_quit = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _settings.RelativeRect),
 			ButtonStyle.MainMenu,
 			"quit",
-			20,
+			25,
 			game.Manager
 		);
 		_warning = new(

@@ -90,7 +90,7 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 	public unsafe void SetText(string text)
 	{
 		_text = text;
-		_textSize = MeasureTextEx(Clangen, _text, _fontSize, 2);
+		_textSize = MeasureTextEx(Clangen, _text, _fontSize, 0);
 		_textPosition = new Vector2(
 			RelativeRect.Position.X
 			+ (RelativeRect.Size.X / 2)
@@ -128,7 +128,7 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 			_text,
 			_textPosition,
 			_fontSize,
-			2,
+			0,
 			WHITE
 		);
 	}

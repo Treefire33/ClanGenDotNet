@@ -1,5 +1,6 @@
 ﻿using ClanGenDotNet.Scripts.Cats;
 using Newtonsoft.Json.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ClanGenDotNet.Scripts;
@@ -687,6 +688,58 @@ public class Utility
 		Cat.AllCats[cat.ID] = cat;
 	}
 
+	public static string GetArrow(float length, bool left = true)
+	{
+		if (length == 1)
+		{
+			return !left ? "\u2192" : "\u2190";
+		}
+
+		string arrowBody = "\U0001F89C";
+		string arrowBodyHalf = "\U0001F89E";
+
+		string arrowTail = !left ? "\u250F" : "\u2513";
+		string arrowHead = !left ? "\u2B95" : "\u2B05";
+
+		if (length <= 2)
+		{
+			// if !left then return "->" else return "<-"
+			return !left ? arrowTail + arrowHead : arrowHead + arrowTail;
+		}
+
+		length -= 2;
+		string middle = "";
+		if (length % 1 != 0)
+		{
+			middle += arrowBodyHalf;
+			length = MathF.Floor(length);
+		}
+
+		StringBuilder arrow = new();
+		if (!left)
+		{
+			arrow.Append(arrowTail);
+			for (int i = 0; i < length; i++)
+			{
+				arrow.Append(arrowBody);
+			}
+			arrow.Append(middle);
+			arrow.Append(arrowHead);
+			return arrow.ToString();
+		}
+		else
+		{
+			arrow.Append(arrowHead);
+			for (int i = 0; i < length; i++)
+			{
+				arrow.Append(arrowBody);
+			}
+			arrow.Append(middle);
+			arrow.Append(arrowTail);
+			return arrow.ToString();
+		}
+	}
+
 	// stolen from: raylib-cs example: rectangle bounds
 	public static void DrawTextBoxed(
 		Font font, 
@@ -735,8 +788,7 @@ public class Utility
 		for (int i = 0, k = 0; i < length; i++, k++)
 		{
 			// Get next codepoint from byte string and glyph index in font
-			int codepointByteCount = 0;
-			int codepoint = GetCodepoint(text[i], out codepointByteCount);
+			int codepoint = GetCodepoint(text[i], out int codepointByteCount);
 			int index = GetGlyphIndex(font, codepoint);
 
 			// NOTE: Normally we exit the decoding sequence as soon as a bad byte is found (and return 0x3f)
