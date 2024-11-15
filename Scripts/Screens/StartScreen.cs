@@ -148,7 +148,7 @@ public class StartScreen(string name = "start screen") : Screens(name)
 				}
 			}
 
-			if (evnt.KeyCode >= KEY_ESCAPE)
+			if (evnt.KeyCode == KEY_ESCAPE)
 			{
 				Environment.Exit(0);
 			}

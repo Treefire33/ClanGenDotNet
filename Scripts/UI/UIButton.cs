@@ -40,6 +40,12 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		_selected = images[2];
 		_disabled = images[3];
 		_currentTexture = _normal;
+		if (objectID == default)
+		{
+			objectID.ID = "@buttonstyles_prototype";
+			objectID.Class = "";
+			Theme = Manager.Theme.GetFromObjectID(objectID);
+		}
 		ThemeElement();
 		SetText(text);
 	}
