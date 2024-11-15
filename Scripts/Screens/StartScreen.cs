@@ -58,9 +58,7 @@ public class StartScreen(string name = "start screen") : Screens(name)
 		_warning = new(
 			UIScale(new ClanGenRect(0, 600, 800, 40)),
 			"Warning: This game contains mild depictions of gore, canon-typical violence and animal abuse.",
-			20,
-			TextAlignment.Center,
-			WHITE,
+			new ObjectID("text_box_30_horizcenter", "#dark"),
 			game.Manager
 		);
 

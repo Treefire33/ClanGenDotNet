@@ -1,4 +1,5 @@
 ﻿using ClanGenDotNet.Scripts.Cats;
+using ClanGenDotNet.Scripts.UI.Theming;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,13 @@ public class Utility
 		return (bool)game.Settings["dark mode"]! == true
 			? Resources.DarkModeColour
 			: Resources.LightModeColour;
+	}
+
+	public static ObjectID GetTextBoxTheme(string textBoxTheme)
+	{
+		return (bool)game.Settings["dark mode"]! == true
+			? new ObjectID(textBoxTheme, "#dark")
+			: new ObjectID(textBoxTheme);
 	}
 
 	public static Rectangle AddRectangles(Rectangle rect1, Rectangle rect2)

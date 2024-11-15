@@ -20,16 +20,17 @@ public class ClanGenMain
 
 		SetExitKey(KEY_NULL); //So that way we can use KEY_ESCAPE
 
+		Resources.LoadResources();
+		Sprites.LoadAll();
 		DataDirectory.SetUpDataDirectory();
+		game.Manager.LoadTheme(
+			".\\Resources\\Theme\\default_theme.json"
+		);
+
 		game.SetSettingsFromLoaded();
 		game.LoadSettings();
 		ScreenSettings.ToggleFullscreen(showConfirmDialog: false, ingameSwitch: false);
-
-		Resources.LoadResources();
-		Sprites.LoadAll();
-
 		AllScreens.InstanceScreens();
-		SetTargetFPS((int)game.Switches["fps"]!);
 		game.AllScreens[game.CurrentScreen].ScreenSwitches();
 
 		Texture2D menuLogoless = LoadTexture(".\\Resources\\Images\\menu_logoless.png");
@@ -44,6 +45,8 @@ public class ClanGenMain
 			}
 			catch { Console.WriteLine("DiscordRPC unable to start."); }
 		}
+
+		//Console.WriteLine(game.Manager.Theme.ToString());
 
 		while (!WindowShouldClose())
 		{

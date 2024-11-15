@@ -1,10 +1,12 @@
 ﻿using ClanGenDotNet.Scripts.UI.Interfaces;
+using ClanGenDotNet.Scripts.UI.Theming;
 
 namespace ClanGenDotNet.Scripts.UI;
 
 public class UIElement : IUIElement
 {
 	protected readonly UIManager Manager;
+	protected UIElementAppearance Theme;
 	public ClanGenRect RelativeRect;
 	public int Layer = 0;
 	public bool IsContained = false;
@@ -13,18 +15,26 @@ public class UIElement : IUIElement
 	public bool Active = true;
 	public bool Hovered = false;
 
-	public UIElement(ClanGenRect posScale, UIManager manager)
+	public UIElement(ClanGenRect posScale, UIManager manager, ObjectID objectID = default)
 	{
 		Manager = manager;
 		RelativeRect = posScale;
 		Manager.Elements.Add(this);
-		Manager.Elements = [.. Manager.Elements.OrderBy((element) => element.Layer)];
+		Manager.Elements = [.. Manager.Elements.OrderBy(element => element.Layer)];
+		if (objectID == default)
+		{
+			objectID.ID = "default";
+			objectID.Class = "";
+		}
+		Theme = Manager.Theme.GetFromObjectID(objectID);
 	}
 
 	public virtual void Update()
 	{
 		Hovered = CheckCollisionPointRec(GetVirutalMousePosition(), RelativeRect);
 	}
+
+	public virtual void ThemeElement() { }
 
 	public void Revive()
 	{
