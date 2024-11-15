@@ -15,7 +15,7 @@ public struct UIElementTheme
 	public Dictionary<string, string>? Font;
 
 	[JsonProperty("misc", Required = Required.Default)]
-	public Dictionary<string, string>? Misc;
+	public Dictionary<string, dynamic>? Misc;
 
 	public override string ToString()
 	{

@@ -1,8 +1,8 @@
 ﻿using ClanGenDotNet.Scripts.UI.Interfaces;
 
 namespace ClanGenDotNet.Scripts.UI;
-public class UIScrollingContainer(ClanGenRect posScale, UIManager manager) 
-	: UIContainer(posScale, manager), 
+public class UIScrollingContainer(ClanGenRect posScale) 
+	: UIContainer(posScale), 
 	IUIElement, 
 	IUIContainer
 {

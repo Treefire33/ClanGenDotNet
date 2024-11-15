@@ -1,7 +1,7 @@
 ﻿namespace ClanGenDotNet.Scripts.UI;
 
-public class UIContainer(ClanGenRect posScale, UIManager manager)
-	: UIElement(posScale, manager),
+public class UIContainer(ClanGenRect posScale)
+	: UIElement(posScale),
 	IUIContainer,
 	IUIElement
 {

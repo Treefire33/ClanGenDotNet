@@ -52,49 +52,40 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			UIScale(new ClanGenRect(100, 100, 150, 30)),
 			ButtonStyle.MenuLeft,
 			"general settings",
-			18,
-			game.Manager
+			objectID: "buttonstyles_menu_left"
 		);
 		_audioSettingsButton = new UIButton(
 			UIScale(new ClanGenRect(0, 100, 150, 30)).AnchorTo(AnchorPosition.LeftTarget, _generalSettingsButton.RelativeRect),
 			ButtonStyle.MenuMiddle,
 			"audio settings",
-			18,
-			game.Manager
+			objectID: "buttonstyles_menu_middle"
 		);
 		_infoButton = new UIButton(
 			UIScale(new ClanGenRect(0, 100, 150, 30)).AnchorTo(AnchorPosition.LeftTarget, _audioSettingsButton.RelativeRect),
 			ButtonStyle.MenuMiddle,
 			"info",
-			18,
-			game.Manager
+			objectID: "buttonstyles_menu_middle"
 		);
 		_languageButton = new UIButton(
 			UIScale(new ClanGenRect(0, 100, 150, 30)).AnchorTo(AnchorPosition.LeftTarget, _infoButton.RelativeRect),
 			ButtonStyle.MenuRight,
 			"language",
-			18,
-			game.Manager
+			objectID: "buttonstyles_menu_right"
 		);
 
 		_saveSettingsButton = new UIButton(
 			UIScale(new ClanGenRect(0, 550, 150, 30)).AnchorTo(AnchorPosition.CenterX),
 			ButtonStyle.Squoval,
-			"Save Settings",
-			20,
-			game.Manager
+			"Save Settings"
 		);
 		_fullscreenToggle = new UIButton(
 			UIScale(new ClanGenRect(617, 25, 158, 36)),
-			ButtonID.ToggleFullscreen,
-			game.Manager
+			ButtonID.ToggleFullscreen
 		);
 		_openDataDirectory = new UIButton(
 			UIScale(new ClanGenRect(25, 645, 178, 30)),
 			ButtonStyle.Squoval,
-			"Open Data Directory",
-			18,
-			game.Manager
+			"Open Data Directory"
 		);
 		if (Version.GetVersionInfo().IsSandboxed)
 		{
@@ -104,9 +95,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 		_mainMenuButton = new UIButton(
 			UIScale(new ClanGenRect(25, 25, 153, 30)),
 			ButtonStyle.Squoval,
-			"Main Menu",
-			25,
-			game.Manager
+			GetArrow(3) + "Main Menu"
 		);
 
 		OpenGeneralSettings();
@@ -123,15 +112,13 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 		_saveSettingsButton!.Show();
 
 		_generalScrollView = new UIScrollingContainer(
-			UIScale(new ClanGenRect(0, 220, 700, 300)),
-			game.Manager
+			UIScale(new ClanGenRect(0, 220, 700, 300))
 		);
 		_instructions = new UITextBox(
 			UIScale(new ClanGenRect(100, 160, 600, 100)),
 			"Change the general settings of your game here.\n" +
 			"More settings are available in the settings page of your Clan.",
 			"text_box_30_horizcenter",
-			game.Manager,
 			true
 		);
 		RefreshCheckboxes();
@@ -197,8 +184,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 		_languageInstructions = new UITextBox(
 			UIScale(new ClanGenRect(100, 160, 600, 50)),
 			"Change the language of the game here. This has not been implemented yet.",
-			"text_box_30_horizcenter",
-			game.Manager
+			"text_box_30_horizcenter"
 		);
 
 		RefreshCheckboxes();
@@ -307,8 +293,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 		{
 			_checkboxes.Add("english", new UIButton(
 				UIScale(new ClanGenRect(310, 200, 180, 51)),
-				ButtonID.EnglishLadder,
-				game.Manager
+				ButtonID.EnglishLadder
 			));
 			_checkboxes.Add("spanish", new UIButton(
 				UIScale(new ClanGenRect(310, 0, 180, 37)).AnchorTo(
@@ -316,9 +301,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 					_checkboxes.Last().Value.RelativeRect
 				),
 				ButtonStyle.LadderMiddle,
-				"Spanish",
-				20,
-				game.Manager
+				"Spanish"
 			));
 			_checkboxes.Add("german", new UIButton(
 				UIScale(new ClanGenRect(310, 0, 180, 37)).AnchorTo(
@@ -326,9 +309,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 					_checkboxes.Last().Value.RelativeRect
 				),
 				ButtonStyle.LadderBottom,
-				"German",
-				20,
-				game.Manager
+				"German"
 			));
 		}
 		else if (_subMenu == "general")
@@ -342,7 +323,6 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 						? _checkboxes.Values.ToArray()[i - 1].RelativeRect
 						: UIScale(new ClanGenRect(170, i < 0 ? 34 : 0, 34, 34))),
 					(string)game.GameSettings.General[setting][0],
-					game.Manager,
 					(string)game.GameSettings.General[setting][1]
 				));
 				if (_checkboxes[setting] is UICheckbox box) { box.Checked = (bool)game.Settings[setting]!; }

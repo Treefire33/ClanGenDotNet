@@ -53,9 +53,9 @@ public class UITheme
 		return elementColours;
 	}
 
-	public Dictionary<string, string> GetElementMiscEntries(UIElementTheme element, string _class)
+	public Dictionary<string, dynamic> GetElementMiscEntries(UIElementTheme element, string _class)
 	{
-		Dictionary<string, string> entries = [];
+		Dictionary<string, dynamic> entries = [];
 		foreach (var entry in element.Misc!)
 		{
 			entries.Add(entry.Key, entry.Value);
@@ -96,9 +96,9 @@ public class UITheme
 		theme.Colour ??= [];
 		theme.Font ??= [];
 		theme.Misc ??= [];
-		if (prototypeTheme.Colour == null || prototypeTheme.Font == null || prototypeTheme.Misc == null)
+		if (prototypeTheme.Prototype != null && theme.Prototype != null)
 		{
-			_elementThemes[theme.Prototype!] = LoadPrototype(prototypeTheme);
+			_elementThemes[theme.Prototype] = LoadPrototype(_elementThemes[theme.Prototype]);
 		}
 		foreach (KeyValuePair<string, string> colourEntry in prototypeTheme.Colour!)
 		{
@@ -114,7 +114,7 @@ public class UITheme
 				theme.Font[fontEntry.Key] = fontEntry.Value;
 			}
 		}
-		foreach (KeyValuePair<string, string> miscEntry in prototypeTheme.Misc!)
+		foreach (KeyValuePair<string, dynamic> miscEntry in prototypeTheme.Misc!)
 		{
 			if (!theme.Misc.ContainsKey(miscEntry.Key))
 			{
@@ -133,6 +133,8 @@ public class UITheme
 		else
 		{
 			var theme = _elementThemes[objectID.ID];
+
+			LoadPrototype(theme);
 
 			UIElementAppearance newElementAppearance = new()
 			{
@@ -187,4 +189,9 @@ public struct ObjectID(string id = "default", string _class = "")
 	}
 
 	public override readonly int GetHashCode() => base.GetHashCode();
+
+	public static implicit operator ObjectID(string id)
+	{
+		return new ObjectID(id);
+	}
 }

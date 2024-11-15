@@ -1,5 +1,6 @@
 ﻿using ClanGenDotNet.Scripts.Cats;
 using ClanGenDotNet.Scripts.Events;
+using ClanGenDotNet.Scripts.UI.Theming;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
@@ -90,15 +91,12 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_menuWarning = new(
 			UIScale(new ClanGenRect(25, 25, 600, -1)),
 			"Note: going back to main menu resets the generated cats.",
-			"text_box_22_horizleft",
-			game.Manager
+			"text_box_22_horizleft"
 		);
 		_mainMenuButton = new(
 			UIScale(new ClanGenRect(25, 50, 153, 30)),
 			ButtonStyle.Squoval,
-			GetArrow(3) + " Main Menu",
-			21,
-			game.Manager
+			GetArrow(3) + " Main Menu"
 		);
 
 		Cat.CreateExampleCats();
@@ -119,73 +117,58 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("gamemode_background", new UIImage(
 			UIScale(new ClanGenRect(325, 130, 399, 461)),
-			GameModeTextBox,
-			game.Manager
+			GameModeTextBox
 		));
 		_elements.Add("permi_warning", new UITextBox(
 			UIScale(new ClanGenRect(100, 581, 600, 40)),
 			"Your Clan's game mode is permanent and cannot be changed after Clan creation.",
-			"text_box_30_horizcenter",
-			game.Manager
+			"text_box_30_horizcenter"
 		));
 
 		//buttons
 		_elements.Add("classic_mode_button", new UIButton(
 			UIScale(new ClanGenRect(109, 240, 132, 30)),
 			ButtonStyle.Squoval,
-			"classic",
-			20,
-			game.Manager
+			"classic"
 		));
 		_elements.Add("expanded_mode_button", new UIButton(
 			UIScale(new ClanGenRect(94, 320, 162, 34)),
 			ButtonStyle.Squoval,
-			"expanded",
-			20,
-			game.Manager
+			"expanded"
 		));
 		_elements.Add("cruel_mode_button", new UIButton(
 			UIScale(new ClanGenRect(100, 400, 150, 30)),
 			ButtonStyle.Squoval,
-			"cruel",
-			20,
-			game.Manager
+			"cruel"
 		));
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 620, 147, 30)),
 			ButtonStyle.MenuLeft,
-			"previous",
-			20,
-			game.Manager
+			"previous"
 		));
 		_elements["previous_step"].SetActive(false);
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(400, 620, 147, 30)),
 			ButtonStyle.MenuRight,
-			"next",
-			20,
-			game.Manager
+			"next"
 		));
 
 		_elements.Add("random_clan_checkbox", new UICheckbox(
 			UIScale(new ClanGenRect(560, -32, 34, 34)).AnchorTo(AnchorPosition.TopLeft, _elements["previous_step"].RelativeRect),
-			"Quick Start",
-			game.Manager
+			"Quick Start"
 		));
 
 		_elements.Add("mode_details", new UITextBox(
 			UIScale(new ClanGenRect(325, 160, 405, 461)),
 			"",
-			"text_box_30_horizleft_pad_40_40",
-			game.Manager
+			"text_box_30_horizleft_pad_40_40"
 		));
 		if (_elements["mode_details"] is UITextBox textBox) { textBox.SetPadding(new(40, 40)); }
 		_elements.Add("mode_name", new UITextBox(
 			UIScale(new ClanGenRect(425, 135, 200, 27)),
 			"classic",
-			"text_box_30_horizcenter_light",
-			game.Manager
+			"text_box_30_horizcenter_light"
 		));
 	}
 
@@ -196,61 +179,48 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("under_background", new UIImage(
 			UIScale(new ClanGenRect(0, 0, game.ScreenX, game.ScreenY)),
-			_creationBackgrounds[1],
-			game.Manager
+			_creationBackgrounds[1]
 		));
 
 		_elements.Add("random", new UIButton(
 			UIScale(new ClanGenRect(224, 595, 34, 34)),
-			ButtonStyle.Squoval,
+			ButtonStyle.Icon,
 			"\u2192",
-			20,
-			game.Manager
+			objectID: "buttonstyles_icon"
 		));
 
 		_elements.Add("error", new UITextBox(
 			UIScale(new ClanGenRect(0, 570, 800, -1)),
 			"",
-			20,
-			TextAlignment.Center,
-			RED,
-			game.Manager
+			"text_box_30_horizcenter_red"
 		));
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 635, 147, 30)),
 			ButtonStyle.MenuLeft,
-			"previous",
-			20,
-			game.Manager
+			"previous"
 		));
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(400, 635, 147, 30)),
 			ButtonStyle.MenuRight,
-			"next",
-			20,
-			game.Manager
+			"next"
 		));
 		_elements["next_step"].SetActive(false);
 
 		_elements.Add("name_entry", new UITextInput(
 			UIScale(new ClanGenRect(265, 597, 140, 29)),
 			"",
-			11,
-			game.Manager
+			11
 		));
 		_elements.Add("clan", new UITextBox(
 			UIScale(new ClanGenRect(375, 600, 100, 25)),
 			"-Clan",
-			"text_box_30_horizcenter_light",
-			game.Manager
+			"text_box_30_horizcenter_light"
 		));
 		_elements.Add("reset_name", new UIButton(
 			UIScale(new ClanGenRect(455, 595, 134, 30)),
 			ButtonStyle.Squoval,
-			"Reset Name",
-			20,
-			game.Manager
+			"Reset Name"
 		));
 	}
 
@@ -258,14 +228,12 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 	{
 		_elements.Add("name_backdrop", new UIImage(
 			UIScale(new ClanGenRect(292, 100, 216, 50)),
-			_creationBackgrounds[0],
-			game.Manager
+			_creationBackgrounds[0]
 		));
 		_elements.Add("clan_name", new UITextBox(
 			UIScale(new ClanGenRect(292, 100, 216, 50)),
 			_clanName + "Clan",
-			"text_box_30_horizcenter_vertcenter",
-			game.Manager
+			new ObjectID("text_box_30_horizcenter_vertcenter", "dark")
 		));
 	}
 
@@ -276,8 +244,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("background", new UIImage(
 			UIScale(new ClanGenRect(0, 414, 800, 286)),
-			_creationBackgrounds[2],
-			game.Manager
+			_creationBackgrounds[2]
 		));
 
 		ClanNameHeader();
@@ -289,24 +256,21 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			UIScale(new ClanGenRect(xPos, yPos, new(34))),
 			ButtonStyle.Squoval,
 			"\u2684",
-			20,
-			game.Manager
+			objectID: "buttonstyles_icon"
 		));
 		yPos += 40;
 		_elements.Add("roll2", new UIButton(
 			UIScale(new ClanGenRect(xPos, yPos, new(34))),
 			ButtonStyle.Squoval,
 			"\u2684",
-			20,
-			game.Manager
+			objectID: "buttonstyles_icon"
 		));
 		yPos += 40;
 		_elements.Add("roll3", new UIButton(
 			UIScale(new ClanGenRect(xPos, yPos, new(34))),
 			ButtonStyle.Squoval,
 			"\u2684",
-			20,
-			game.Manager
+			objectID: "buttonstyles_icon"
 		));
 
 		int temp = 80;
@@ -318,14 +282,12 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			UIScale(new ClanGenRect(temp, 435, 34, 34)),
 			ButtonStyle.Squoval,
 			"\u2684",
-			20,
-			game.Manager
+			objectID: "buttonstyles_icon"
 		));
 		_elements.Add("reroll_count", new UITextBox(
 			UIScale(new ClanGenRect(100, 440, 50, 25)),
 			_rerollsLeft.ToString(),
-			"text_box_14",
-			game.Manager
+			"@text_box"
 		));
 
 		if (game.Config.ClanCreation.Rerolls == 3)
@@ -364,32 +326,26 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("select_cat", new UIButton(
 			UIScale(new ClanGenRect(234, 348, 332, 52)),
-			ButtonID.NineLivesButton,
-			game.Manager
+			ButtonID.NineLivesButton
 		));
 		_elements.Last().Value.Hide();
 
 		_elements.Add("error_message", new UITextBox(
 			UIScale(new ClanGenRect(150, 353, 500, 55)),
 			"Too young to become leader",
-			"text_box_30_horizcenter_red",
-			game.Manager
+			"text_box_30_horizcenter_red"
 		));
 		_elements.Last().Value.Visible = false;
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 400, 147, 30)),
 			ButtonStyle.MenuLeft,
-			"previous",
-			20,
-			game.Manager
+			"previous"
 		));
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(0, 400, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.MenuRight,
-			"next",
-			20,
-			game.Manager
+			"next"
 		));
 		_elements["next_step"].SetActive(false);
 
@@ -403,8 +359,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("background", new UIImage(
 			UIScale(new ClanGenRect(0, 414, 800, 286)),
-			_creationBackgrounds[3],
-			game.Manager
+			_creationBackgrounds[3]
 		));
 
 		ClanNameHeader();
@@ -412,34 +367,26 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("select_cat", new UIButton(
 			UIScale(new ClanGenRect(209, 348, 384, 52)),
-			ButtonID.SupportLeaderButton,
-			game.Manager
+			ButtonID.SupportLeaderButton
 		));
 		_elements.Last().Value.Hide();
 
 		_elements.Add("error_message", new UITextBox(
 			UIScale(new ClanGenRect(150, 353, 500, 55)),
 			"Too young to become deputy",
-			20,
-			TextAlignment.Center,
-			RED,
-			game.Manager
+			"text_box_30_horizcenter_red"
 		));
 		_elements.Last().Value.Visible = false;
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 400, 147, 30)),
 			ButtonStyle.MenuLeft,
-			"previous",
-			20,
-			game.Manager
+			"previous"
 		));
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(0, 400, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.MenuRight,
-			"next",
-			20,
-			game.Manager
+			"next"
 		));
 		_elements["next_step"].SetActive(false);
 
@@ -453,8 +400,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("background", new UIImage(
 			UIScale(new ClanGenRect(0, 414, 800, 286)),
-			_creationBackgrounds[4],
-			game.Manager
+			_creationBackgrounds[4]
 		));
 
 		ClanNameHeader();
@@ -462,34 +408,26 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("select_cat", new UIButton(
 			UIScale(new ClanGenRect(260, 342, 306, 58)),
-			ButtonID.AidClanButton,
-			game.Manager
+			ButtonID.AidClanButton
 		));
 		_elements.Last().Value.Hide();
 
 		_elements.Add("error_message", new UITextBox(
 			UIScale(new ClanGenRect(150, 353, 500, 55)),
 			"Too young to become a medicine cat",
-			20,
-			TextAlignment.Center,
-			RED,
-			game.Manager
+			"text_box_30_horizcenter_red"
 		));
 		_elements.Last().Value.Visible = false;
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 400, 147, 30)),
 			ButtonStyle.MenuLeft,
-			"previous",
-			20,
-			game.Manager
+			"previous"
 		));
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(0, 400, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.MenuRight,
-			"next",
-			20,
-			game.Manager
+			"next"
 		));
 		_elements["next_step"].SetActive(false);
 
@@ -503,8 +441,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("background", new UIImage(
 			UIScale(new ClanGenRect(0, 414, 800, 286)),
-			_memberBackgrounds[0],
-			game.Manager
+			_memberBackgrounds[0]
 		));
 
 		ClanNameHeader();
@@ -513,25 +450,19 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("select_cat", new UIButton(
 			UIScale(new ClanGenRect(353, 360, 95, 30)),
 			ButtonStyle.Squoval,
-			"Recruit",
-			20,
-			game.Manager
+			"Recruit"
 		));
 		_elements.Last().Value.Hide();
 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 400, 147, 30)),
 			ButtonStyle.MenuLeft,
-			"previous",
-			20,
-			game.Manager
+			"previous"
 		));
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(0, 400, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.MenuRight,
-			"next",
-			20,
-			game.Manager
+			"next"
 		));
 		_elements["next_step"].SetActive(false);
 
@@ -549,15 +480,13 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["name_backdrop"].RelativeRect
 			).AnchorTo(AnchorPosition.CenterX),
 			"",
-			"text_box_30_horizcenter",
-			game.Manager
+			"text_box_30_horizcenter"
 		));
 
 		_elements.Add("cat_info", new UITextBox(
 			UIScale(new ClanGenRect(440, 220, 175, 125)),
 			"",
-			"text_box_26_horizcenter",
-			game.Manager
+			"text_box_26_horizcenter"
 		));
 	}
 
@@ -569,85 +498,71 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 645, 147, 30)),
 			ButtonStyle.MenuLeft,
-			"previous",
-			20,
-			game.Manager
+			"previous"
 		));
 		_elements.Add("next_step", new UIButton(
 			UIScale(new ClanGenRect(0, 645, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.MenuRight,
-			"next",
-			20,
-			game.Manager
+			"next"
 		));
 		_elements["next_step"].SetActive(false);
 
 		_elements.Add("forest_biome", new UIButton(
 			UIScale(new ClanGenRect(196, 100, 100, 46)),
-			ButtonID.ForestBiomeButton,
-			game.Manager
+			ButtonID.ForestBiomeButton
 		));
 		_elements.Add("mountain_biome", new UIButton(
 			UIScale(new ClanGenRect(304, 100, 106, 46)),
-			ButtonID.MountainBiomeButton,
-			game.Manager
+			ButtonID.MountainBiomeButton
 		));
 		_elements.Add("plains_biome", new UIButton(
 			UIScale(new ClanGenRect(424, 100, 88, 46)),
-			ButtonID.PlainsBiomeButton,
-			game.Manager
+			ButtonID.PlainsBiomeButton
 		));
 		_elements.Add("beach_biome", new UIButton(
 			UIScale(new ClanGenRect(520, 100, 82, 46)),
-			ButtonID.BeachBiomeButton,
-			game.Manager
+			ButtonID.BeachBiomeButton
 		));
 
-		_tabs.Add("tab1", new UIElement(new ClanGenRect(), game.Manager));
-		_tabs.Add("tab2", new UIElement(new ClanGenRect(), game.Manager));
-		_tabs.Add("tab3", new UIElement(new ClanGenRect(), game.Manager));
-		_tabs.Add("tab4", new UIElement(new ClanGenRect(), game.Manager));
+		_tabs.Add("tab1", new UIElement(new ClanGenRect()));
+		_tabs.Add("tab2", new UIElement(new ClanGenRect()));
+		_tabs.Add("tab3", new UIElement(new ClanGenRect()));
+		_tabs.Add("tab4", new UIElement(new ClanGenRect()));
 
 		_elements.Add("newleaf_tab", new UIButton(
 			UIScale(new ClanGenRect(625, 275, 39, 34)),
 			ButtonStyle.IconTabLeft,
-			"nl",
-			0,
-			game.Manager
+			Icon.Newleaf.GetAsUTF8(),
+			objectID: "buttonstyles_icon"
 		));
 
 		_elements.Add("greenleaf_tab", new UIButton(
 			UIScale(new ClanGenRect(625, 25, 39, 34))
 				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
 			ButtonStyle.IconTabLeft,
-			"gl",
-			0,
-			game.Manager
+			Icon.Greenleaf.GetAsUTF8(),
+			objectID: "buttonstyles_icon"
 		));
 
 		_elements.Add("leaffall_tab", new UIButton(
 			UIScale(new ClanGenRect(625, 25, 39, 34))
 				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
 			ButtonStyle.IconTabLeft,
-			"lf",
-			0,
-			game.Manager
+			Icon.Leafbare.GetAsUTF8(),
+			objectID: "buttonstyles_icon"
 		));
 		_elements.Add("leafbare_tab", new UIButton(
 			UIScale(new ClanGenRect(625, 25, 39, 34))
 				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
 			ButtonStyle.IconTabLeft,
-			"lb",
-			0,
-			game.Manager
+			Icon.Leafbare.GetAsUTF8(),
+			objectID: "buttonstyles_icon"
 		));
 
 		_elements.Add("random_background", new UIButton(
 			UIScale(new ClanGenRect(255, 595, 290, 30)),
 			ButtonStyle.Squoval,
-			"choose a random background",
-			20,
-			game.Manager
+			"choose a random background"
 		));
 
 		DrawArtFrame();
@@ -663,7 +578,6 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("art_frame", new UIImage(
 			UIScale(new ClanGenRect(0, 20, 466, 416)).AnchorTo(AnchorPosition.Center),
 			Frame,
-			game.Manager,
 			true
 		));
 	}
@@ -676,109 +590,83 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("previous_step", new UIButton(
 			UIScale(new ClanGenRect(253, 645, 147, 30)),
 			ButtonStyle.MenuLeft,
-			"previous",
-			20,
-			game.Manager
+			"previous"
 		));
 		_elements.Add("done_button", new UIButton(
 			UIScale(new ClanGenRect(0, 645, 147, 30)).AnchorTo(AnchorPosition.LeftTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.MenuRight,
-			"Done",
-			20,
-			game.Manager
+			"Done"
 		));
 		_elements["done_button"].SetActive(false);
 
 		_elements.Add("text_container", new UIAutoResizableContainer(
-			UIScale(new ClanGenRect(85, 105, 0, 0)),
-			game.Manager
+			UIScale(new ClanGenRect(85, 105, 0, 0))
 		));
 
 		_text.Add("clan_name", new UITextBox(
 			UIScale(new ClanGenRect(0, 0, -1, -1)),
 			$"{_clanName}Clan",
-			25,
-			TextAlignment.Left,
-			WHITE,
-			game.Manager
+			GetTextBoxTheme("text_box_40")
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value, true);
 		_text.Add("biome", new UITextBox(
 			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopLeft, _text.Last().Value.RelativeRect),
 			$"{_biomeSelected}",
-			20,
-			TextAlignment.Left,
-			WHITE,
-			game.Manager
+			GetTextBoxTheme("text_box_30_horizleft")
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value);
 		_text.Add("leader", new UITextBox(
 			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopLeft, _text.Last().Value.RelativeRect),
 			$"Leader name: {_leader!.Name.Prefix}star",
-			20,
-			TextAlignment.Left,
-			WHITE,
-			game.Manager
+			GetTextBoxTheme("text_box_30_horizleft")
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value);
 		_text.Add("recommend", new UITextBox(
 			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopLeft, _text.Last().Value.RelativeRect),
 			$"Recommended Symbol: None",
-			20,
-			TextAlignment.Left,
-			WHITE,
-			game.Manager
+			GetTextBoxTheme("text_box_30_horizleft")
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value);
 		_text.Add("selected", new UITextBox(
 			UIScale(new ClanGenRect(0, 15, -1, -1)).AnchorTo(AnchorPosition.TopLeft, _text.Last().Value.RelativeRect),
 			$"Selected Symbol: None",
-			20,
-			TextAlignment.Left,
-			WHITE,
-			game.Manager
+			GetTextBoxTheme("text_box_30_horizleft")
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value);
 
 		_elements.Add("random_symbol_button", new UIButton(
 			UIScale(new ClanGenRect(496, 206, 34, 34)),
 			ButtonStyle.Icon,
-			"d",
-			10,
-			game.Manager
+			Icon.Dice.GetAsUTF8(),
+			objectID: "buttonstyles_icon"
 		));
 
 		_elements.Add("symbol_frame", new UIImage(
 			UIScale(new ClanGenRect(540, 90, 169, 166)),
 			Frame,
-			game.Manager,
 			true
 		));
 
 		_elements.Add("page_left", new UIButton(
 			UIScale(new ClanGenRect(47, 414, 34, 34)),
 			ButtonStyle.Icon,
-			"l",
-			10,
-			game.Manager
+			Icon.ArrowLeft.GetAsUTF8(),
+			objectID: "buttonstyles_icon"
 		));
 		_elements.Add("page_right", new UIButton(
 			UIScale(new ClanGenRect(719, 414, 34, 34)),
 			ButtonStyle.Icon,
-			"r",
-			10,
-			game.Manager
+			Icon.ArrowRight.GetAsUTF8(),
+			objectID: "buttonstyles_icon"
 		));
 		_elements.Add("filters_tab", new UIButton(
 			UIScale(new ClanGenRect(100, 619, 78, 30)),
-			ButtonID.FiltersTab,
-			game.Manager
+			ButtonID.FiltersTab
 		));
 
 		_elements.Add("symbol_list_frame", new UIImage(
 			UIScale(new ClanGenRect(76, 250, 650, 370)),
 			RoundedFrame,
-			game.Manager,
 			true,
 			RoundedFrameNPatch
 		));
@@ -804,8 +692,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			}
 			_elements.Add("selected_symbol", new UIImage(
 				UIScale(new ClanGenRect(573, 127, 100, 100)),
-				Sprites.SymbolSprites[_symbolSelected],
-				game.Manager
+				Sprites.SymbolSprites[_symbolSelected]
 			));
 			RefreshSymbolList();
 			while (!_symbolButtons.ContainsKey(_symbolSelected))
@@ -824,8 +711,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			}
 			_elements.Add("selected_symbol", new UIImage(
 				UIScale(new ClanGenRect(573, 127, 100, 100)),
-				Sprites.SymbolSprites["symbolADDER0"],
-				game.Manager
+				Sprites.SymbolSprites["symbolADDER0"]
 			));
 			RefreshSymbolList();
 		}
@@ -838,31 +724,24 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("selected_image", new UIImage(
 			UIScale(new ClanGenRect(350, 105, 100, 100)),
-			Sprites.SymbolSprites[_symbolSelected!+"#dark"],
-			game.Manager
+			Sprites.SymbolSprites[_symbolSelected!+"#dark"]
 		));
 
 		_elements.Add("leader_image", new UIImage(
 			UIScale(new ClanGenRect(350, 125, 100, 100)),
-			game.Clan!.Leader!.Sprite,
-			game.Manager
+			game.Clan!.Leader!.Sprite
 		));
 
 		_elements.Add("continue", new UIButton(
 			UIScale(new ClanGenRect(346, 250, 102, 30)),
 			ButtonStyle.Squoval,
-			"continue",
-			20,
-			game.Manager
+			"continue"
 		));
 
 		_elements.Add("save_confirm", new UITextBox(
 			UIScale(new ClanGenRect(100, 70, 600, 30)),
 			"Your Clan has been created and saved!",
-			20,
-			TextAlignment.Center,
-			WHITE,
-			game.Manager
+			GetTextBoxTheme("text_box_30_horizcenter")
 		));
 	}
 
@@ -1712,8 +1591,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(270, 200, 150, 150)),
 					game.ChooseCats[i].Sprite,
-					game.ChooseCats[i],
-					game.Manager
+					game.ChooseCats[i]
 				);
 			}
 			else if (
@@ -1726,8 +1604,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(650, 130 + 50 * i, 50, 50)),
 					game.ChooseCats[i].Sprite,
-					game.ChooseCats[i],
-					game.Manager
+					game.ChooseCats[i]
 				);
 				_elements["cat" + i].SetActive(false);
 			}
@@ -1736,8 +1613,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(columnPos.X, 130 + 50 * i, 50, 50)),
 					game.ChooseCats[i].Sprite,
-					game.ChooseCats[i],
-					game.Manager
+					game.ChooseCats[i]
 				);
 			}
 		}
@@ -1757,8 +1633,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(270, 200, 150, 150)),
 					game.ChooseCats[i].Sprite,
-					game.ChooseCats[i],
-					game.Manager
+					game.ChooseCats[i]
 				);
 			}
 			else if (
@@ -1771,8 +1646,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(700, 130 + 50 * (i - 6), 50, 50)),
 					game.ChooseCats[i].Sprite,
-					game.ChooseCats[i],
-					game.Manager
+					game.ChooseCats[i]
 				);
 				_elements.Last().Value.SetActive(false);
 			}
@@ -1781,8 +1655,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				_elements["cat" + i] = new UICatButton(
 					UIScale(new ClanGenRect(columnPos.Y, 130 + 50 * (i - 6), 50, 50)),
 					game.ChooseCats[i].Sprite,
-					game.ChooseCats[i],
-					game.Manager
+					game.ChooseCats[i]
 				);
 			}
 		}
@@ -1801,79 +1674,65 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			case "Forest":
 				_tabs.Add("tab1", new UIButton(
 					UIScale(new ClanGenRect(95, 180, 154, 30)),
-					ButtonID.ClassicTab,
-					game.Manager
+					ButtonID.ClassicTab
 				));
 				_tabs.Add("tab2", new UIButton(
 					UIScale(new ClanGenRect(108, 215, 154, 30)),
-					ButtonID.GullyTab,
-					game.Manager
+					ButtonID.GullyTab
 				));
 				_tabs.Add("tab3", new UIButton(
 					UIScale(new ClanGenRect(95, 250, 154, 30)),
-					ButtonID.GrottoTab,
-					game.Manager
+					ButtonID.GrottoTab
 				));
 				_tabs.Add("tab4", new UIButton(
 					UIScale(new ClanGenRect(85, 285, 154, 30)),
-					ButtonID.LakesideTab,
-					game.Manager
+					ButtonID.LakesideTab
 				));
 				break;
 			case "Mountainous":
 				_tabs.Add("tab1", new UIButton(
 					UIScale(new ClanGenRect(111, 180, 154, 30)),
-					ButtonID.CliffTab,
-					game.Manager
+					ButtonID.CliffTab
 				));
 				_tabs.Add("tab2", new UIButton(
 					UIScale(new ClanGenRect(90, 215, 154, 30)),
-					ButtonID.CaveTab,
-					game.Manager
+					ButtonID.CaveTab
 				));
 				_tabs.Add("tab3", new UIButton(
 					UIScale(new ClanGenRect(42, 250, 179, 30)),
-					ButtonID.CrystalTab,
-					game.Manager
+					ButtonID.CrystalTab
 				));
 				_tabs.Add("tab4", new UIButton(
 					UIScale(new ClanGenRect(107, 285, 154, 30)),
-					ButtonID.RuinsTab,
-					game.Manager
+					ButtonID.RuinsTab
 				));
 				break;
 			case "Plains":
 				_tabs.Add("tab1", new UIButton(
 					UIScale(new ClanGenRect(64, 180, 154, 30)),
-					ButtonID.GrasslandsTab,
-					game.Manager
+					ButtonID.GrasslandsTab
 				));
 				_tabs.Add("tab2", new UIButton(
 					UIScale(new ClanGenRect(89, 215, 154, 30)),
-					ButtonID.TunnelTab,
-					game.Manager
+					ButtonID.TunnelTab
 				));
 				_tabs.Add("tab3", new UIButton(
 					UIScale(new ClanGenRect(64, 250, 154, 30)),
-					ButtonID.WastelandsTab,
-					game.Manager
+					ButtonID.WastelandsTab
 				));
 				break;
 			case "Beach":
 				_tabs.Add("tab1", new UIButton(
 					UIScale(new ClanGenRect(76, 180, 154, 30)),
-					ButtonID.TidepoolTab,
-					game.Manager
+					ButtonID.TidepoolTab
 				));
 				_tabs.Add("tab2", new UIButton(
 					UIScale(new ClanGenRect(65, 215, 154, 30)),
-					ButtonID.TidalCaveTab,
-					game.Manager
+					ButtonID.TidalCaveTab
 				));
 				_tabs.Add("tab3", new UIButton(
 					UIScale(new ClanGenRect(70, 250, 154, 30)),
-					ButtonID.ShipwreckTab,
-					game.Manager
+					ButtonID.ShipwreckTab
 				));
 				break;
 		}
@@ -1901,8 +1760,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			_elements.Add("camp_art", new UIImage(
 				UIScale(new ClanGenRect(175, 170, 450, 400))
 					.AnchorTo(AnchorPosition.Center),
-				campBackground,
-				game.Manager
+				campBackground
 			));
 		}
 
@@ -1982,13 +1840,11 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			{
 				_symbolImages.Add($"{sym}", new UIImage(
 					UIScale(new ClanGenRect(xPos, yPos, 50, 50)),
-					Sprites.SymbolSprites[$"{sym}"],
-					game.Manager
+					Sprites.SymbolSprites[$"{sym}"]
 				));
 				_symbolButtons.Add($"{sym}", new UIButton(
 					UIScale(new ClanGenRect(xPos - 12, yPos - 12, 74, 74)),
-					ButtonID.SymbolsSelect,
-					game.Manager
+					ButtonID.SymbolsSelect
 				));
 				xPos += 70;
 				if (xPos >= 715)

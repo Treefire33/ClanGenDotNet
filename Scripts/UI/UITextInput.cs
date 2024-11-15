@@ -3,8 +3,8 @@ using System.Text.RegularExpressions;
 using static ClanGenDotNet.Scripts.Resources;
 
 namespace ClanGenDotNet.Scripts.UI;
-public partial class UITextInput(ClanGenRect posScale, string defaultText, int maxCharacters, UIManager manager)
-	: UIElement(posScale, manager),
+public partial class UITextInput(ClanGenRect posScale, string defaultText, int maxCharacters)
+	: UIElement(posScale),
 	IUIClickable,
 	IUIElement
 {

@@ -59,11 +59,11 @@ public class Clan
 
 	public static readonly ImmutableDictionary<
 		string,
-		Dictionary<string, dynamic>
+		Layout
 	> Layouts = JsonConvert.DeserializeObject<
 		ImmutableDictionary<
 			string,
-			Dictionary<string, dynamic>
+			Layout
 		>
 	>(File.ReadAllText(".\\Resources\\placements.json"))!;
 

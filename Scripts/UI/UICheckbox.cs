@@ -13,16 +13,15 @@ public class UICheckbox : UIElement, IUIClickable, IUIElement
 	private Texture2D _currentTexture;
 	private UITooltip? _tooltip = null;
 
-	public UICheckbox(ClanGenRect posScale, string label, UIManager manager, string? tooltip = null)
-		: base(posScale, manager)
+	public UICheckbox(ClanGenRect posScale, string label, string? tooltip = null)
+		: base(posScale)
 	{
 		_label = label;
 		if (tooltip != null)
 		{
 			_tooltip = new UITooltip(
 				tooltip,
-				this,
-				manager
+				this
 			);
 		}
 	}

@@ -37,9 +37,8 @@ public class UITextBox : UIElement, IUIElement
 		ClanGenRect posScale,
 		string text,
 		string object_id,
-		UIManager manager,
 		bool isMultiline = false
-	) : base(posScale, manager, GetTextBoxTheme(object_id))
+	) : base(posScale, objectID: GetTextBoxTheme(object_id))
 	{
 		_text = text;
 		_isMultiline = isMultiline;
@@ -50,9 +49,8 @@ public class UITextBox : UIElement, IUIElement
 		ClanGenRect posScale,
 		string text,
 		ObjectID object_id,
-		UIManager manager,
 		bool isMultiline = false
-	) : base(posScale, manager, object_id)
+	) : base(posScale, objectID: object_id)
 	{
 		_text = text;
 		_isMultiline = isMultiline;
@@ -87,11 +85,11 @@ public class UITextBox : UIElement, IUIElement
 		_font = Theme.Font.Item1; //Font resource
 		_fontSize = Theme.Font.Item2 + 5; //Font size
 		_textColour = Theme.Colours["text"];
-		if (Theme.Miscellaneous.TryGetValue("text_horiz_alignment", out string? horizAlignment))
+		if (Theme.Miscellaneous.TryGetValue("text_horiz_alignment", out dynamic? horizAlignment))
 		{
 			_horizontalAlignment = GetHorizontalAlignmentFromString(horizAlignment!);
 		}
-		if (Theme.Miscellaneous.TryGetValue("text_vert_alignment", out string? vertAlignment))
+		if (Theme.Miscellaneous.TryGetValue("text_vert_alignment", out dynamic? vertAlignment))
 		{
 			_verticalAlignment = GetVerticalAlignmentFromString(vertAlignment!);
 		}

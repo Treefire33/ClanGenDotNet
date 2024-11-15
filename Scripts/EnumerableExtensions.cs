@@ -43,4 +43,9 @@ public static class EnumerableExtension
 	{
 		return source.OrderBy(x => Guid.NewGuid());
 	}
+
+	public static Vector2 Vector2Ify(this IList<int> source)
+	{
+		return new Vector2(source[0], source[1]);
+	}
 }

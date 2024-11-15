@@ -1,5 +1,4 @@
 ﻿using ClanGenDotNet.Scripts.Cats;
-using Microsoft.Toolkit.HighPerformance.Buffers;
 
 namespace ClanGenDotNet.Scripts.Screens;
 
@@ -8,7 +7,7 @@ public class CampScreen (string name = "camp screen") : Screens(name)
 	private int maxSpritesDisplayed = 400;
 	private List<UICatButton> _catButtons = [];
 
-	private Dictionary<string, dynamic> _layout;
+	private Layout _layout;
 
 	public override void ScreenSwitches()
 	{
@@ -58,8 +57,7 @@ public class CampScreen (string name = "camp screen") : Screens(name)
 						UIScale(new ClanGenRect(
 							new Vector2(kitty.Placement!.Value.Item1, kitty.Placement!.Value.Item2), 50, 50)),
 						kitty.Sprite,
-						kitty,
-						game.Manager
+						kitty
 					));
 				}
 				catch
@@ -72,7 +70,7 @@ public class CampScreen (string name = "camp screen") : Screens(name)
 
 	private void ChooseCatPositions()
 	{
-		Dictionary<string, dynamic> firstChoices = _layout;
+		Dictionary<string, List<List<object>>> firstChoices = _layout.GetDict();
 
 		List<string> allDens = [
 			"nursery place",
@@ -84,10 +82,10 @@ public class CampScreen (string name = "camp screen") : Screens(name)
 			"warrior place"
 		];
 
-		foreach ( string choice in allDens )
+		/*foreach (string choice in allDens)
 		{
 			firstChoices[choice].Add(firstChoices[choice]);
-		}
+		}*/
 
 		foreach (var id in game.Clan!.ClanCats)
 		{

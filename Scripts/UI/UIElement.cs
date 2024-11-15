@@ -1,5 +1,4 @@
-﻿using ClanGenDotNet.Scripts.UI.Interfaces;
-using ClanGenDotNet.Scripts.UI.Theming;
+﻿using ClanGenDotNet.Scripts.UI.Theming;
 
 namespace ClanGenDotNet.Scripts.UI;
 
@@ -15,9 +14,9 @@ public class UIElement : IUIElement
 	public bool Active = true;
 	public bool Hovered = false;
 
-	public UIElement(ClanGenRect posScale, UIManager manager, ObjectID objectID = default)
+	public UIElement(ClanGenRect posScale, bool visible = true, ObjectID objectID = default)
 	{
-		Manager = manager;
+		Manager = game.Manager;
 		RelativeRect = posScale;
 		Manager.Elements.Add(this);
 		Manager.Elements = [.. Manager.Elements.OrderBy(element => element.Layer)];
@@ -27,6 +26,7 @@ public class UIElement : IUIElement
 			objectID.Class = "";
 		}
 		Theme = Manager.Theme.GetFromObjectID(objectID);
+		Visible = visible;
 	}
 
 	public virtual void Update()

@@ -6,6 +6,57 @@ namespace ClanGenDotNet.Scripts.Screens;
 public class Screens
 {
 	public string Name;
+	public static Dictionary<string, UIButton> MenuButtons = new Dictionary<string, UIButton>()
+	{
+		{
+			"events_screen", 
+			new UIButton(
+				UIScale(new ClanGenRect(246, 60, 82, 30)),
+				ButtonStyle.MenuLeft,
+				"Events",
+				visible: false
+			)
+		},
+		{
+			"camp_screen",
+			new UIButton(
+				UIScale(new ClanGenRect(0, 60, 58, 30))
+					.AnchorTo(AnchorPosition.LeftTarget, MenuButtons!.Last().Value.RelativeRect),
+				ButtonStyle.MenuMiddle,
+				"Camp", 
+				visible: false
+			)
+		},
+		{
+			"catlist_screen",
+			new UIButton(
+				UIScale(new ClanGenRect(0, 60, 88, 30))
+					.AnchorTo(AnchorPosition.LeftTarget, MenuButtons!.Last().Value.RelativeRect),
+				ButtonStyle.MenuMiddle,
+				"Cat List",
+				visible: false
+			)
+		},
+		{
+			"patrol_screen",
+			new UIButton(
+				UIScale(new ClanGenRect(0, 60, 80, 30))
+					.AnchorTo(AnchorPosition.LeftTarget, MenuButtons!.Last().Value.RelativeRect),
+				ButtonStyle.MenuRight,
+				"Patrol",
+				visible: false
+			)
+		},
+		{
+			"main_menu",
+			new UIButton(
+				UIScale(new ClanGenRect(25, 25, 153, 30)),
+				ButtonStyle.Squoval,
+				GetArrow(3) + "Main Menu",
+				visible: false
+			)
+		}
+	};
 
 	public Screens(string name = "")
 	{
@@ -47,10 +98,15 @@ public class Screens
 
 	public virtual void ScreenSwitches()
 	{
-
+		SetMenuButtonsVisibility();
 	}
 
 	public virtual void ExitScreen()
+	{
+
+	}
+
+	protected void SetMenuButtonsVisibility(bool visible = false)
 	{
 
 	}

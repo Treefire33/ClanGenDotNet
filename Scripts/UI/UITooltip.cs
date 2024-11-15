@@ -9,7 +9,7 @@ public class UITooltip : UIElement, IUIElement
 
 	private readonly UIElement _parentElement;
 
-	public UITooltip(string text, UIElement parentElement, UIManager manager) : base(new ClanGenRect(), manager)
+	public UITooltip(string text, UIElement parentElement) : base(new ClanGenRect())
 	{
 		if (text == null)
 		{

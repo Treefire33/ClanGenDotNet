@@ -1,7 +1,7 @@
 ﻿namespace ClanGenDotNet.Scripts.UI;
 
-public class UIImage(ClanGenRect posScale, Texture2D image, UIManager manager, bool ninePatch = false, NPatchInfo info = default)
-	: UIElement(posScale, manager),
+public class UIImage(ClanGenRect posScale, Texture2D image, bool ninePatch = false, NPatchInfo info = default)
+	: UIElement(posScale),
 	IUIElement
 {
 	public Texture2D Image = image;

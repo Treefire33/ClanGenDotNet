@@ -34,7 +34,8 @@ public class UICatButton : UIElement, IUIElement, IUIClickable
 	/// <param name="sprite">A Texture2D, the only sprite of the button.</param>
 	/// <param name="buttonCat">A Cat object that is associated with the button.</param>
 	/// <param name="manager">The UIManager, preferably game.Manager</param>
-	public unsafe UICatButton(ClanGenRect posScale, Texture2D sprite, Cat buttonCat, UIManager manager) : base(posScale, manager)
+	public unsafe UICatButton(ClanGenRect posScale, Texture2D sprite, Cat buttonCat) 
+		: base(posScale)
 	{
 		_normal = sprite;
 		_hover = sprite;

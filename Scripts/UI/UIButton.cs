@@ -1,4 +1,5 @@
 ﻿using ClanGenDotNet.Scripts.Events;
+using ClanGenDotNet.Scripts.UI.Theming;
 using System.Runtime.InteropServices;
 using System.Text;
 using static ClanGenDotNet.Scripts.Resources;
@@ -8,7 +9,8 @@ namespace ClanGenDotNet.Scripts.UI;
 public partial class UIButton : UIElement, IUIClickable, IUIElement
 {
 	[MarshalAs(UnmanagedType.LPUTF8Str)] private string _text;
-	private readonly int _fontSize = 30;
+	private int _fontSize = 30;
+	private Color _textColour = WHITE;
 
 	private Texture2D _currentTexture;
 	private NPatchInfo _currentNPatch;
@@ -23,15 +25,13 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 	private Vector2 _textSize = new(0);
 	private Vector2 _textPosition = new(0);
 
-	/// <summary>
-	/// Creates a UIButton.
-	/// </summary>
-	/// <param name="posScale">A Rectangle of position and size.</param>
-	/// <param name="style">A ButtonStyle, which corresponds to a series of four images.</param>
-	/// <param name="text">The text the button will display.</param>
-	/// <param name="manager">The UIManager, preferably game.Manager</param>
-	public unsafe UIButton(ClanGenRect posScale, ButtonStyle style, string text, int fontSize, UIManager manager) 
-		: base(posScale, manager)
+	public unsafe UIButton(
+		ClanGenRect posScale, 
+		ButtonStyle style, 
+		string text, 
+		bool visible = true, 
+		ObjectID objectID = default
+	) : base(posScale, visible, objectID)
 	{
 		_text = text;
 		List<Texture2D> images = GetButtonImagesFromStyle(style);
@@ -40,19 +40,12 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		_selected = images[2];
 		_disabled = images[3];
 		_currentTexture = _normal;
-		_fontSize = fontSize;
+		ThemeElement();
 		SetText(text);
 	}
 
-	/// <summary>
-	/// Creates a UIButton.
-	/// </summary>
-	/// <param name="posScale">A Rectangle of position and size.</param>
-	/// <param name="style">A ButtonID, which corresponds to a series of four images.</param>
-	/// <param name="text">The text the button will display.</param>
-	/// <param name="manager">The UIManager, preferably game.Manager</param>
-	public unsafe UIButton(ClanGenRect posScale, ButtonID style, UIManager manager) 
-		: base(posScale, manager)
+	public unsafe UIButton(ClanGenRect posScale, ButtonID style, bool visible = true) 
+		: base(posScale, visible)
 	{
 		_text = "";
 		List<Texture2D> images = GetButtonImagesFromID(style);
@@ -62,16 +55,34 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		_disabled = images[3];
 		_currentTexture = _normal;
 		_fontSize = 0;
+		ThemeElement();
 		SetText(_text);
 	}
 
-	/// <summary>
-	/// Creates a UIButton with only an image.
-	/// </summary>
-	/// <param name="posScale">A Rectangle of position and size.</param>
-	/// <param name="sprite">A Texture2D, the only sprite of the button.</param>
-	/// <param name="manager">The UIManager, preferably game.Manager</param>
-	public unsafe UIButton(ClanGenRect posScale, Texture2D sprite, UIManager manager) : base(posScale, manager)
+	public unsafe UIButton(ClanGenRect posScale, string buttonID, bool visible = true)
+		: base(posScale, visible)
+	{
+		_text = "";
+		List<Texture2D> images;
+		if (Enum.TryParse(buttonID, out ButtonID style))
+		{
+			images = GetButtonImagesFromID(style);
+		}
+		else
+		{
+			images = GetButtonImagesFromStyle(ButtonStyle.Squoval);
+		}
+		_normal = images[0];
+		_hover = images[1];
+		_selected = images[2];
+		_disabled = images[3];
+		_currentTexture = _normal;
+		_fontSize = 0;
+		ThemeElement();
+		SetText(_text);
+	}
+
+	public unsafe UIButton(ClanGenRect posScale, Texture2D sprite, bool visible = true) : base(posScale, visible)
 	{
 		_text = "";
 		_normal = sprite;
@@ -80,13 +91,24 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		_disabled = sprite;
 		_currentTexture = _normal;
 		_fontSize = 0;
+		ThemeElement();
 		SetText("");
 	}
 
-	/// <summary>
-	/// Sets the text of the button.
-	/// </summary>
-	/// <param name="text">The text to set the button text to.</param>
+	public override void ThemeElement()
+	{
+		base.ThemeElement();
+		_fontSize = Theme.Font.Item2 + 5;
+		/*Console.WriteLine("---------");
+		foreach (var thing in Theme.Colours)
+		{
+			Console.WriteLine("\t"+thing.Key);
+			Console.WriteLine("\t" + $"button r: {thing.Value.r}, button g: {thing.Value.g}, button b: {thing.Value.b}");
+		}
+		Console.WriteLine("---------");*/
+		_textColour = Theme.Colours["text"];
+	}
+
 	public unsafe void SetText(string text)
 	{
 		_text = text;
@@ -129,7 +151,7 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 			_textPosition,
 			_fontSize,
 			0,
-			WHITE
+			_textColour
 		);
 	}
 

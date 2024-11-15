@@ -1,4 +1,5 @@
 ﻿using ClanGenDotNet.Scripts.Events;
+using ClanGenDotNet.Scripts.UI.Theming;
 using System.Runtime.InteropServices;
 using static ClanGenDotNet.Scripts.Resources;
 
@@ -19,65 +20,56 @@ public class StartScreen(string name = "start screen") : Screens(name)
 	public override void ScreenSwitches()
 	{
 		base.ScreenSwitches();
-		_menu = new(new ClanGenRect(0, 0, game.ScreenX, game.ScreenY), MenuImage, game.Manager);
+		_menu = new(new ClanGenRect(0, 0, game.ScreenX, game.ScreenY), MenuImage);
 		_continue = new(
 			UIScale(new ClanGenRect(70, 310, 200, 30)),
 			ButtonStyle.MainMenu,
 			"continue",
-			25,
-			game.Manager
+			objectID: "buttonstyles_mainmenu"
 		);
 		_switchClan = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _continue.RelativeRect),
 			ButtonStyle.MainMenu,
 			"switch clan",
-			25,
-			game.Manager
+			objectID: "buttonstyles_mainmenu"
 		);
 		_newClan = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _switchClan.RelativeRect),
 			ButtonStyle.MainMenu,
 			"new clan",
-			25,
-			game.Manager
+			objectID: "buttonstyles_mainmenu"
 		);
 		_settings = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _newClan.RelativeRect),
 			ButtonStyle.MainMenu,
 			"settings and info",
-			25,
-			game.Manager
+			objectID: "buttonstyles_mainmenu"
 		);
 		_quit = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _settings.RelativeRect),
 			ButtonStyle.MainMenu,
 			"quit",
-			25,
-			game.Manager
+			objectID: "buttonstyles_mainmenu"
 		);
 		_warning = new(
 			UIScale(new ClanGenRect(0, 600, 800, 40)),
 			"Warning: This game contains mild depictions of gore, canon-typical violence and animal abuse.",
-			new ObjectID("text_box_30_horizcenter", "#dark"),
-			game.Manager
+			new ObjectID("text_box_30_horizcenter", "#dark")
 		);
 
 		_socialButtons.Add("twitter_button", new UIButton(
 			UIScale(new ClanGenRect(12, 647, 40, 40)),
-			ButtonID.TwitterButton,
-			game.Manager
+			ButtonID.TwitterButton
 		));
 		_socialButtons.Add("tumblr_button", new UIButton(
 			UIScale(new ClanGenRect(5, 647, 40, 40))
 				.AnchorTo(AnchorPosition.LeftTarget, _socialButtons.Last().Value.RelativeRect),
-			ButtonID.TumblrButton,
-			game.Manager
+			ButtonID.TumblrButton
 		));
 		_socialButtons.Add("discord_button", new UIButton(
 			UIScale(new ClanGenRect(7, 647, 40, 40))
 				.AnchorTo(AnchorPosition.LeftTarget, _socialButtons.Last().Value.RelativeRect),
-			ButtonID.DiscordButton,
-			game.Manager
+			ButtonID.DiscordButton
 		));
 
 		_continue.SetActive(false);

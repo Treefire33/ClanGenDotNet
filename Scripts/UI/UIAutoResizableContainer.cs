@@ -1,7 +1,7 @@
 ﻿namespace ClanGenDotNet.Scripts.UI;
 
-public class UIAutoResizableContainer(ClanGenRect posScale, UIManager manager) 
-	: UIContainer(posScale, manager),
+public class UIAutoResizableContainer(ClanGenRect posScale) 
+	: UIContainer(posScale),
 	IUIElement,
 	IUIContainer
 {
