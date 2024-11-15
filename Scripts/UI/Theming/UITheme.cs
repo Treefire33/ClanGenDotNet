@@ -43,7 +43,7 @@ public class UITheme
 		Dictionary<string, Color> elementColours = [];
 		foreach (var entry in element.Colour!)
 		{
-			if (_elementThemes[_class].Colour!.TryGetValue(entry.Key, out string? value))
+			if (_elementThemes.TryGetValue(_class, out UIElementTheme theme) && theme.Colour!.TryGetValue(entry.Key, out string? value))
 			{
 				elementColours.Add(entry.Key, GetColourFromHex(value));
 				continue;
@@ -96,6 +96,10 @@ public class UITheme
 		theme.Colour ??= [];
 		theme.Font ??= [];
 		theme.Misc ??= [];
+		if (prototypeTheme.Colour == null || prototypeTheme.Font == null || prototypeTheme.Misc == null)
+		{
+			_elementThemes[theme.Prototype!] = LoadPrototype(prototypeTheme);
+		}
 		foreach (KeyValuePair<string, string> colourEntry in prototypeTheme.Colour!)
 		{
 			if (!theme.Colour.ContainsKey(colourEntry.Key))
