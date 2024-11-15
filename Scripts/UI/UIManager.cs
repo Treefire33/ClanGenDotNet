@@ -15,9 +15,7 @@ public class UIManager
 	{
 		foreach (UIElement element in Elements)
 		{
-			if (element.IsContained
-				|| !element.Visible
-			) { continue; }
+			if (element.IsContained || !element.Visible) { continue; }
 
 			element.Update();
 			if (element is IUIClickable clickable)

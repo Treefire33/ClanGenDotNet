@@ -1,11 +1,6 @@
 ﻿using ClanGenDotNet.Scripts.Events;
-using ClanGenDotNet.Scripts.UI;
-using ClanGenDotNet.Scripts.UI.Theming;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static ClanGenDotNet.Scripts.Game_Structure.Game;
 using static ClanGenDotNet.Scripts.Resources;
-using static ClanGenDotNet.Scripts.Utility;
 
 namespace ClanGenDotNet.Scripts.Screens;
 
@@ -29,35 +24,35 @@ public class StartScreen(string name = "start screen") : Screens(name)
 			UIScale(new ClanGenRect(70, 310, 200, 30)),
 			ButtonStyle.MainMenu,
 			"continue",
-			20,
+			25,
 			game.Manager
 		);
 		_switchClan = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _continue.RelativeRect),
 			ButtonStyle.MainMenu,
 			"switch clan",
-			20,
+			25,
 			game.Manager
 		);
 		_newClan = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _switchClan.RelativeRect),
 			ButtonStyle.MainMenu,
 			"new clan",
-			20,
+			25,
 			game.Manager
 		);
 		_settings = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _newClan.RelativeRect),
 			ButtonStyle.MainMenu,
 			"settings and info",
-			20,
+			25,
 			game.Manager
 		);
 		_quit = new(
 			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _settings.RelativeRect),
 			ButtonStyle.MainMenu,
 			"quit",
-			20,
+			25,
 			game.Manager
 		);
 		_warning = new(
@@ -70,24 +65,18 @@ public class StartScreen(string name = "start screen") : Screens(name)
 		_socialButtons.Add("twitter_button", new UIButton(
 			UIScale(new ClanGenRect(12, 647, 40, 40)),
 			ButtonID.TwitterButton,
-			"",
-			0,
 			game.Manager
 		));
 		_socialButtons.Add("tumblr_button", new UIButton(
 			UIScale(new ClanGenRect(5, 647, 40, 40))
 				.AnchorTo(AnchorPosition.LeftTarget, _socialButtons.Last().Value.RelativeRect),
 			ButtonID.TumblrButton,
-			"",
-			0,
 			game.Manager
 		));
 		_socialButtons.Add("discord_button", new UIButton(
 			UIScale(new ClanGenRect(7, 647, 40, 40))
 				.AnchorTo(AnchorPosition.LeftTarget, _socialButtons.Last().Value.RelativeRect),
 			ButtonID.DiscordButton,
-			"",
-			0,
 			game.Manager
 		));
 
@@ -150,6 +139,7 @@ public class StartScreen(string name = "start screen") : Screens(name)
 			{
 				ChangeScreen("camp screen");
 			}
+
 			if (evnt.KeyCode >= KEY_TWO && evnt.KeyCode <= KEY_FIVE)
 			{
 				switch (evnt.KeyCode)
@@ -164,6 +154,11 @@ public class StartScreen(string name = "start screen") : Screens(name)
 						Environment.Exit(0);
 						break;
 				}
+			}
+
+			if (evnt.KeyCode >= KEY_ESCAPE)
+			{
+				Environment.Exit(0);
 			}
 		}
 	}

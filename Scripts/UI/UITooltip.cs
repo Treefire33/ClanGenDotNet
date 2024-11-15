@@ -1,7 +1,5 @@
-﻿using ClanGenDotNet.Scripts.UI.Interfaces;
-using System.Text;
+﻿using System.Text;
 using static ClanGenDotNet.Scripts.Resources;
-using static ClanGenDotNet.Scripts.Utility;
 
 namespace ClanGenDotNet.Scripts.UI;
 public class UITooltip : UIElement, IUIElement
@@ -35,7 +33,7 @@ public class UITooltip : UIElement, IUIElement
 
 	//Returns a string that doesn't make the tooltip bigger than the screen.
 	//Max tooltip width is 200, no cap on height
-	private string FormatTooltip(string text)
+	private static string FormatTooltip(string text)
 	{
 		StringBuilder currentString = new();
 		int line = 0;

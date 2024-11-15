@@ -1,12 +1,7 @@
 ﻿using ClanGenDotNet.Scripts.Events;
-using ClanGenDotNet.Scripts.Game_Structure;
-using ClanGenDotNet.Scripts.HouseKeeping;
-using ClanGenDotNet.Scripts.UI;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static ClanGenDotNet.Scripts.Game_Structure.Game;
-using static ClanGenDotNet.Scripts.Utility;
 using Version = ClanGenDotNet.Scripts.HouseKeeping.Version;
 
 namespace ClanGenDotNet.Scripts.Screens;
@@ -92,8 +87,6 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 		_fullscreenToggle = new UIButton(
 			UIScale(new ClanGenRect(617, 25, 158, 36)),
 			ButtonID.ToggleFullscreen,
-			"",
-			20,
 			game.Manager
 		);
 		_openDataDirectory = new UIButton(
@@ -315,8 +308,6 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			_checkboxes.Add("english", new UIButton(
 				UIScale(new ClanGenRect(310, 200, 180, 51)),
 				ButtonID.EnglishLadder,
-				"",
-				0,
 				game.Manager
 			));
 			_checkboxes.Add("spanish", new UIButton(

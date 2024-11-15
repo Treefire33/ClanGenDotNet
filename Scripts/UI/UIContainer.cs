@@ -1,7 +1,4 @@
-﻿using ClanGenDotNet.Scripts.UI.Interfaces;
-using static ClanGenDotNet.Scripts.Utility;
-
-namespace ClanGenDotNet.Scripts.UI;
+﻿namespace ClanGenDotNet.Scripts.UI;
 
 public class UIContainer(ClanGenRect posScale, UIManager manager)
 	: UIElement(posScale, manager),
@@ -27,17 +24,7 @@ public class UIContainer(ClanGenRect posScale, UIManager manager)
 
 	public void AddElement(UIElement element, bool modPosition)
 	{
-		element.Layer += Layer;
-		ContainedElements.Add(element);
-		if (!Active)
-		{
-			element.SetActive(false);
-		}
-		if (!Visible)
-		{
-			element.Visible = false;
-		}
-		element.IsContained = true;
+		AddElement(element);
 		if (modPosition) { element.RelativeRect.Position += RelativeRect.Position; }
 	}
 

@@ -1,34 +1,28 @@
 ﻿using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Collections.Immutable;
 
 namespace ClanGenDotNet.Scripts.Cats;
 
 public static class Sprites
 {
-	public static Tint CatTints = new();
-	public static Tint WhitePatchesTints = new();
+	public static Tint CatTints = JsonConvert
+		.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\tint.json"))!;
+	public static Tint WhitePatchesTints = JsonConvert
+		.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\white_patches_tint.json"))!;
+	public static Dictionary<string, Dictionary<string, object>> SymbolDict = JsonConvert
+		.DeserializeObject<Dictionary<string, Dictionary<string, object>>>
+		(File.ReadAllText(".\\Resources\\Dicts\\clan_symbols.json"))!;
 
-	public static int Size = 50;
-	public static Dictionary<string, Image> Spritesheets = [];
-	public static Dictionary<string, Image> CatSprites = [];
 
-	public static void LoadTints()
-	{
-		try
-		{
-			CatTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\tint.json"))!;
-		}
-		catch { Console.WriteLine("ERROR: Failed to load tints."); }
-		try
-		{
-			WhitePatchesTints = JsonConvert.DeserializeObject<Tint>(File.ReadAllText(".\\Sprites\\Dicts\\white_patches_tint.json"))!;
-		}
-		catch { Console.WriteLine("ERROR: Failed to load white patches tints."); }
-	}
+	private static int _size = 50;
+	private static readonly Dictionary<string, Image> _spritesheets = [];
+	public static readonly Dictionary<string, Image> CatSprites = [];
+	public static readonly Dictionary<string, Texture2D> SymbolSprites = [];
+	public static readonly List<string> ClanSymbols = [];
 
 	public static void MakeSpritesheet(string imageFile, string name)
 	{
-		Spritesheets.Add(name, LoadImage(imageFile));
+		_spritesheets.Add(name, LoadImage(imageFile));
 	}
 
 	public static void MakeGroup(
@@ -40,8 +34,8 @@ public static class Sprites
 		bool noIndex = false
 	)
 	{
-		int groupXOffsets = (int)position.X * spritesX * Size;
-		int groupYOffsets = (int)position.Y * spritesY * Size;
+		int groupXOffsets = (int)position.X * spritesX * _size;
+		int groupYOffsets = (int)position.Y * spritesY * _size;
 
 		string fullName;
 		int i = 0;
@@ -59,11 +53,11 @@ public static class Sprites
 				}
 
 				Image newSprite = ImageFromImage(
-					Spritesheets[spritesheet],
+					_spritesheets[spritesheet],
 					new Rectangle(
-						groupXOffsets + x * Size,
-						groupYOffsets + y * Size,
-						Size, Size
+						groupXOffsets + x * _size,
+						groupYOffsets + y * _size,
+						_size, _size
 					)
 				);
 
@@ -73,20 +67,61 @@ public static class Sprites
 		}
 	}
 
+	public static void MakeGroupSymbol(
+		string spritesheet,
+		Vector2 position,
+		string name,
+		int spritesX = 3,
+		int spritesY = 7,
+		bool noIndex = false
+	)
+	{
+		int groupXOffsets = (int)position.X * spritesX * _size;
+		int groupYOffsets = (int)position.Y * spritesY * _size;
+
+		string fullName;
+		int i = 0;
+		for (int y = 0; y < spritesY; y++)
+		{
+			for (int x = 0; x < spritesX; x++)
+			{
+				if (noIndex)
+				{
+					fullName = $"{name}";
+				}
+				else
+				{
+					fullName = $"{name}{i}";
+				}
+
+				Image newSprite = ImageFromImage(
+					_spritesheets[spritesheet],
+					new Rectangle(
+						groupXOffsets + x * _size,
+						groupYOffsets + y * _size,
+						_size, _size
+					)
+				);
+
+				SymbolSprites[fullName] = LoadTextureFromImage(newSprite);
+				UnloadImage(newSprite);
+				i++;
+			}
+		}
+	}
+
 	public static void LoadAll()
 	{
-		LoadTints();
-
 		Image lineart = LoadImage(".\\Sprites\\lineart.png");
 		int width = lineart.width; int height = lineart.height;
 
 		if (width / 3 == height / 7)
 		{
-			Size = width / 3;
+			_size = width / 3;
 		}
 		else
 		{
-			Size = 50;
+			_size = 50;
 		}
 
 		string[] spritesheets = [
@@ -103,7 +138,7 @@ public static class Sprites
 			"fademask", "fadestarclan", "fadedarkforest",
 			"symbols"
 		];
-		foreach (string spritesheet in spritesheets )
+		foreach (string spritesheet in spritesheets)
 		{
 			if (spritesheet == "lineart" && game.Config.Fun.AprilFools)
 			{
@@ -240,6 +275,16 @@ public static class Sprites
 		}
 
 		LoadScars();
+		LoadSymbols();
+
+		//Prevent spritesheet from taking up like 200 MB of memory holy god
+		//I'm not even kidding, before this 5 line statement, it took roughly 500 MB, now it's at
+		//326 MB.
+		foreach (var image in _spritesheets)
+		{
+			UnloadImage(image.Value);
+		}
+		_spritesheets.Clear(); 
 	}
 
 	private static void LoadScars()
@@ -333,6 +378,82 @@ public static class Sprites
 		EnumerateAndMakeGroup(bellCollarsData, "bellcollars", "collars");
 		EnumerateAndMakeGroup(bowCollarsData, "bowcollars", "collars");
 		EnumerateAndMakeGroup(nylonCollarsData, "nyloncollars", "collars");
+	}
+
+	public static void LoadSymbols()
+	{
+		char[] letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+				   'V', 'W', 'Y', 'Z'];
+
+		int yPos = 1;
+		foreach (char letter in letters)
+		{
+			int xMod = 0;
+
+			int i = 0;
+			foreach (var symbolKV in SymbolDict
+				.Where(symbol => symbol.Key.Contains(letter) && SymbolDict[symbol.Key]["variants"] != null)
+			)
+			{
+				string symbol = symbolKV.Key;
+				if (Convert.ToInt32(SymbolDict[symbol]["variants"]) > 1 && xMod > 0)
+				{
+					xMod++;
+				}
+				foreach (int varIndex in Enumerable.Range(0, Convert.ToInt32(SymbolDict[symbol]["variants"])))
+				{
+					int xPos = i + xMod;
+
+					if (Convert.ToInt32(SymbolDict[symbol]["variants"]) > 1)
+					{
+						xPos++;
+					}
+					else if (xPos > 0)
+					{
+						xPos--;
+					}
+
+					ClanSymbols.Add($"symbol{symbol.ToUpper()}{varIndex}");
+					MakeGroupSymbol("symbols", new Vector2(xPos, yPos), ClanSymbols.Last(), 1, 1, true);
+				}
+
+				i++;
+			}
+
+			yPos++;
+		}
+
+		DarkModeSymbol();
+	}
+
+	private unsafe static void DarkModeSymbol()
+	{
+		Dictionary<string, Texture> darkSymbols = [];
+		foreach (var symbolSprite in SymbolSprites)
+		{
+			Image darkSymbol = LoadImageFromTexture(symbolSprite.Value);
+			Color* pixels = LoadImageColors(darkSymbol);
+			Color original = new(87, 76, 45, 255);
+			Color replacement = new(87, 76, 45, 255);
+			for (int i = 0; i < darkSymbol.width; i++)
+			{
+				for (int j = 0; j < darkSymbol.height; j++)
+				{
+					if (pixels[i * darkSymbol.width + j].Equals(original))
+					{
+						pixels[i * darkSymbol.width + j] = replacement;
+					}
+				}
+			}
+			darkSymbols.Add(symbolSprite.Key + "#dark", LoadTextureFromImage(darkSymbol));
+			UnloadImageColors(pixels);
+			UnloadImage(darkSymbol);
+		}
+		foreach (var darkSprite in darkSymbols)
+		{
+			SymbolSprites.Add(darkSprite.Key, darkSprite.Value);
+		}
+		darkSymbols.Clear();
 	}
 
 	public static void EnumerateAndMakeGroup(string[][] data, string name, string groupName)

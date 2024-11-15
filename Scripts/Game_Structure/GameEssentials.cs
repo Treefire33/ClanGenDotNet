@@ -85,7 +85,7 @@ public class Game(string currentScreen = "start screen")
 		{ "show_history_moons", false },
 		{ "fps", 30 },
 		{ "war_rel_change_type", "neutral" },
-		{ "disallowed_symbol_tags", new List<object>() },
+		{ "disallowed_symbol_tags", new List<string>() },
 		{ "audio_mute", false },
 		{ "saved_scroll_positions", new Dictionary<object, object>() },
 		{ "moon&season_open", false },

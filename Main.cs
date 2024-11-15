@@ -1,22 +1,24 @@
 ﻿using ClanGenDotNet.Scripts;
 using ClanGenDotNet.Scripts.Cats;
 using ClanGenDotNet.Scripts.Events;
-using ClanGenDotNet.Scripts.Game_Structure;
-using ClanGenDotNet.Scripts.HouseKeeping;
 using ClanGenDotNet.Scripts.Screens;
-using static ClanGenDotNet.Scripts.Game_Structure.Game;
-using static ClanGenDotNet.Scripts.Utility;
 
 namespace ClanGenDotNet;
 
 public class ClanGenMain
 {
-	public unsafe static void Main(string[] args)
+	private static Image _windowIcon = LoadImage(".\\Resources\\Images\\icon.png");
+	public static void Main(string[] args)
 	{
 		SetTraceLogLevel((int)LOG_ERROR);
 		SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 		InitWindow(game.ScreenX, game.ScreenY, "ClanGen.Net");
 		SetWindowMinSize(800, 700);
+		SetWindowIcon(_windowIcon);
+
+		UnloadImage(_windowIcon);
+
+		SetExitKey(KEY_NULL); //So that way we can use KEY_ESCAPE
 
 		Resources.LoadResources();
 		Sprites.LoadAll();
@@ -31,25 +33,18 @@ public class ClanGenMain
 		AllScreens.InstanceScreens();
 		game.AllScreens[game.CurrentScreen].ScreenSwitches();
 
-		SetTargetFPS((int)game.Switches["fps"]!);
+		Texture2D menuLogoless = LoadTexture(".\\Resources\\Images\\menu_logoless.png");
 
-		NPatchInfo frameNPatch = new();
-		Texture2D frame = LoadTexture(".\\Resources\\frame.png");
-		frameNPatch.source = new Rectangle(0, 0, frame.width, frame.height);
-		frameNPatch.top = 10;
-		frameNPatch.bottom = 10;
-		frameNPatch.left = 10;
-		frameNPatch.right = 10;
-
-		Texture2D menuLogoless = LoadTexture(".\\Resources\\menu_logoless.png");
-
-		DiscordRPC discordRPC = null;
-		try
-		{
-			discordRPC = new();
-			discordRPC.UpdateActivity("start screen");
+		DiscordRPC? discordRPC = null;
+		if ((bool)game.Settings["discord"]!)
+		{ 
+			try
+			{
+				discordRPC = new();
+				discordRPC.UpdateActivity();
+			}
+			catch { Console.WriteLine("DiscordRPC unable to start."); }
 		}
-		catch { Console.WriteLine("DiscordRPC unable to start."); }
 
 		//Console.WriteLine(game.Manager.Theme.ToString());
 
@@ -78,14 +73,14 @@ public class ClanGenMain
 				game.AllScreens[game.LastScreenForUpdate].ExitScreen();
 				game.AllScreens[game.CurrentScreen].ScreenSwitches();
 				game.SwitchScreens = false;
+				discordRPC?.UpdateActivity();
 			}
 
 			game.Manager.ResetEvents();
-
 			EndTextureMode();
 
 			BeginDrawing();
-			ClearBackground(new(0, 0, 0, 255));
+			ClearBackground(WHITE);
 			DrawTexturePro(
 				menuLogoless,
 				new Rectangle(0, 0, GetScreenWidth(), GetScreenHeight()),
@@ -93,20 +88,20 @@ public class ClanGenMain
 					0, 0,
 					GetScreenWidth(), GetScreenHeight()
 				),
-				new Vector2(0),
+				Vector2.Zero,
 				0,
 				WHITE
 			);
 			DrawTextureNPatch(
-				frame,
-				frameNPatch,
+				Resources.Frame,
+				Resources.FrameNPatch,
 				new Rectangle(
-					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (frame.width / 2),
-					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (frame.width / 2),
-					(ScreenSettings.GameScreenSize.X + frame.width) * ScreenSettings.ScreenScale,
-					(ScreenSettings.GameScreenSize.Y + frame.height) * ScreenSettings.ScreenScale
+					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (Resources.Frame.width / 2),
+					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (Resources.Frame.height / 2),
+					(ScreenSettings.GameScreenSize.X + Resources.Frame.width) * ScreenSettings.ScreenScale,
+					(ScreenSettings.GameScreenSize.Y + Resources.Frame.height) * ScreenSettings.ScreenScale
 				),
-				new Vector2(0),
+				Vector2.Zero,
 				0,
 				WHITE
 			);
@@ -119,7 +114,7 @@ public class ClanGenMain
 					ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale,
 					ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale
 				),
-				new Vector2(0),
+				Vector2.Zero,
 				0,
 				WHITE
 			);

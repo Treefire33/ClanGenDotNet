@@ -8,12 +8,12 @@ public class UIElement : IUIElement
 	protected readonly UIManager Manager;
 	protected UIElementAppearance Theme;
 	public ClanGenRect RelativeRect;
-	public bool Hovered;
-	public bool IsContained = false;
 	public int Layer = 0;
+	public bool IsContained = false;
 
 	public bool Visible = true;
 	public bool Active = true;
+	public bool Hovered = false;
 
 	public UIElement(ClanGenRect posScale, UIManager manager, ObjectID objectID = default)
 	{
@@ -31,7 +31,7 @@ public class UIElement : IUIElement
 
 	public virtual void Update()
 	{
-		Hovered = CheckCollisionPointRec(Utility.GetVirutalMousePosition(), RelativeRect.RelativeRect);
+		Hovered = CheckCollisionPointRec(GetVirutalMousePosition(), RelativeRect);
 	}
 
 	public virtual void ThemeElement() { }
@@ -43,21 +43,25 @@ public class UIElement : IUIElement
 
 	public void Kill()
 	{
-		_ = Manager.Elements.Remove(this);
+		if (!Manager.Elements.Remove(this))
+		{
+			Console.WriteLine("Element has already been killed, set to null and reinstance element.");
+		}
 	}
 
-	public void Show()
+	public void SetVisibility(bool visibilityState)
 	{
-		Visible = true;
+		Visible = visibilityState;
 	}
 
-	public void Hide()
-	{
-		Visible = false;
-	}
+	public void Show() => SetVisibility(true);
+	public void Hide() => SetVisibility(false);
 
 	public void SetActive(bool activeState)
 	{
 		Active = activeState;
 	}
+
+	public void Enable() => SetActive(true);
+	public void Disable() => SetActive(false);
 }

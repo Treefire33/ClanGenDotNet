@@ -1,5 +1,4 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace ClanGenDotNet.Scripts.Cats;
 
@@ -10,7 +9,7 @@ public class Name
 	public string? Suffix;
 	public bool SpecialSuffixHidden;
 
-	private static NameDict _namesDict = JsonConvert.DeserializeObject<NameDict>(
+	public static readonly NameDict NamesDict = JsonConvert.DeserializeObject<NameDict>(
 		File.ReadAllText(".\\Resources\\Dicts\\names\\names.json")
 	)!;
 
@@ -74,16 +73,16 @@ public class Name
 		List<List<string>> possiblePrefixCategories = [];
 		if (game.Config.CatNameControls.AllowEyeNames)
 		{
-			if (_namesDict.EyePrefixes.TryGetValue(eyes!, out List<string>? eyeCategory))
+			if (NamesDict.EyePrefixes.TryGetValue(eyes!, out List<string>? eyeCategory))
 			{
 				possiblePrefixCategories.Add(eyeCategory);
 			}
 		}
-		if (_namesDict.ColourPrefixes.TryGetValue(colour!, out List<string>? colourCategory))
+		if (NamesDict.ColourPrefixes.TryGetValue(colour!, out List<string>? colourCategory))
 		{
 			possiblePrefixCategories.Add(colourCategory);
 		}
-		if (biome != null && _namesDict.BiomePrefixes.TryGetValue(biome, out List<string>? biomeCategory))
+		if (biome != null && NamesDict.BiomePrefixes.TryGetValue(biome, out List<string>? biomeCategory))
 		{
 			possiblePrefixCategories.Add(biomeCategory);
 		}
@@ -108,7 +107,7 @@ public class Name
 		}
 		else
 		{
-			Prefix = _namesDict.NormalPrefixes.PickRandom();
+			Prefix = NamesDict.NormalPrefixes.PickRandom();
 		}
 	}
 
@@ -116,7 +115,7 @@ public class Name
 	{
 		if (pelt == null || pelt == "SingleColour")
 		{
-			Suffix = _namesDict.NormalSuffixes.PickRandom();
+			Suffix = NamesDict.NormalSuffixes.PickRandom();
 		}
 		else
 		{
@@ -125,42 +124,42 @@ public class Name
 
 			if (namedAfterPelt)
 			{
-				if ((pelt == "Tortie" || pelt == "Calico") && _namesDict.TortiePeltSuffixes.TryGetValue(tortiePattern!, out List<string>? tortieSuffixes))
+				if ((pelt == "Tortie" || pelt == "Calico") && NamesDict.TortiePeltSuffixes.TryGetValue(tortiePattern!, out List<string>? tortieSuffixes))
 				{
 					Suffix = tortieSuffixes.PickRandom();
 				}
-				else if (_namesDict.PeltSuffixes.TryGetValue(pelt, out List<string>? peltSuffixes))
+				else if (NamesDict.PeltSuffixes.TryGetValue(pelt, out List<string>? peltSuffixes))
 				{
 					Suffix = peltSuffixes.PickRandom();
 				}
 				else
 				{
-					Suffix = _namesDict.NormalSuffixes.PickRandom();
+					Suffix = NamesDict.NormalSuffixes.PickRandom();
 				}
 			}
 			else if (namedAfterBiome && biome != null)
 			{
-				if (_namesDict.BiomePrefixes.TryGetValue(biome, out List<string>? biomeSuffixes))
+				if (NamesDict.BiomePrefixes.TryGetValue(biome, out List<string>? biomeSuffixes))
 				{
 					Suffix = biomeSuffixes.PickRandom();
 				}
 				else
 				{
-					Suffix = _namesDict.NormalSuffixes.PickRandom();
+					Suffix = NamesDict.NormalSuffixes.PickRandom();
 				}
 			}
 			else
 			{
-				Suffix = _namesDict.NormalSuffixes.PickRandom();
+				Suffix = NamesDict.NormalSuffixes.PickRandom();
 			}
 		}
 	}
 
 	public override string ToString()
 	{
-		if (_namesDict.SpecialSuffixes.ContainsKey(Status) && !SpecialSuffixHidden)
+		if (NamesDict.SpecialSuffixes.ContainsKey(Status) && !SpecialSuffixHidden)
 		{
-			return Prefix + _namesDict.SpecialSuffixes[Status];
+			return Prefix + NamesDict.SpecialSuffixes[Status];
 		}
 		if (game.Config.Fun.AprilFools)
 		{

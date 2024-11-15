@@ -1,4 +1,5 @@
 ﻿using ClanGenDotNet.Scripts.Cats;
+using ClanGenDotNet.Scripts.Events;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -65,15 +66,36 @@ public class UICatButton : UIElement, IUIElement, IUIClickable
 	public void HandleElementInteraction()
 	{
 		if (!Active) { return; }
-		if (Hovered && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+
+		if (Hovered)
 		{
-			Manager.PushEvent(new(this, Events.EventType.LeftMouseDown));
-			_pressed = true;
-		}
-		else if (Hovered && _pressed && IsMouseButtonUp(MOUSE_BUTTON_LEFT))
-		{
-			Manager.PushEvent(new(this, Events.EventType.LeftMouseClick));
-			_pressed = false;
+			Event newEvent = new(this, EventType.None);
+
+			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+			{
+				newEvent.EventType = EventType.LeftMouseDown;
+				_pressed = true;
+			}
+			else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+			{
+				newEvent.EventType = _pressed ? EventType.LeftMouseClick : EventType.LeftMouseUp;
+				_pressed = false;
+			}
+			else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+			{
+				newEvent.EventType = EventType.RightMouseDown;
+				_pressed = true;
+			}
+			else if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT))
+			{
+				newEvent.EventType = _pressed ? EventType.RightMouseClick : EventType.RightMouseUp;
+				_pressed = false;
+			}
+
+			if (newEvent.EventType != EventType.None)
+			{
+				Manager.PushEvent(newEvent);
+			}
 		}
 	}
 }

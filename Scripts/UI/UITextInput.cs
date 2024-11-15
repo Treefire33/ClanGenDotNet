@@ -30,6 +30,7 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 			0,
 			BLACK
 		);
+
 		if (Hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
 			Focused = true;
@@ -38,6 +39,7 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 		{
 			Focused = false;
 		}
+
 		if (Focused)
 		{
 			SetMouseCursor(MOUSE_CURSOR_IBEAM);
@@ -55,14 +57,12 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 				key = GetCharPressed();
 			}
 
-			if (IsKeyPressed(KEY_BACKSPACE))
+			if (IsKeyDown(KEY_BACKSPACE) && _currentCharacters >= 0)
 			{
 				_currentCharacters--;
 				if (_currentCharacters < 0) { _currentCharacters = 0; }
 				_text = _text.Remove(_currentCharacters);
 			}
-
-			//_text = _inputRegex.Replace(_text, "");
 		}
 		else
 		{
@@ -83,15 +83,15 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 
 	public void ChangeTexture() { } //UITextInput shouldn't change texture.
 
-	private int framesCount = 0;
+	private int _framesCount = 0;
 	public void HandleElementInteraction()
 	{
 		if (Focused)
 		{
-			framesCount++;
+			_framesCount++;
 			if (_currentCharacters < _maxCharacters)
 			{
-				if (framesCount / 20 % 2 == 0)
+				if (_framesCount / 20 % 2 == 0)
 				{
 					DrawTextPro(
 						NotoSansMedium,

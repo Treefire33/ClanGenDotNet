@@ -96,7 +96,7 @@ public class UITextBox : UIElement, IUIElement
 			_verticalAlignment = GetVerticalAlignmentFromString(vertAlignment!);
 		}
 	}
-
+  
 	public void SetPadding(Vector2 padding)
 	{
 		_padding = padding;
@@ -153,10 +153,9 @@ public class UITextBox : UIElement, IUIElement
 				//Not implemented
 				break;
 		}
-
+    
 		return newRect;
 	}
-
 	/// <summary>
 	/// Sets the text of the button.
 	/// </summary>
@@ -198,7 +197,7 @@ public class UITextBox : UIElement, IUIElement
 				positionOffset += textSize.Y;
 			}
 		}
-		else if (RelativeRect.Height > 0)
+		else if (RelativeRect.Height > 0 && RelativeRect.Width > 0)
 		{
 			DrawTextBoxed(
 				NotoSansMedium,
@@ -233,7 +232,7 @@ public class UITextBox : UIElement, IUIElement
 				NotoSansMedium,
 				_text,
 				new Vector2(addedRectangles.x, addedRectangles.y),
-				new Vector2(0),
+				Vector2.Zero,
 				0,
 				_fontSize,
 				0,
