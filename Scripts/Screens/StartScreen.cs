@@ -1,5 +1,7 @@
-﻿using ClanGenDotNet.Scripts.Events;
+﻿using ClanGenDotNet.Scripts.Cats;
+using ClanGenDotNet.Scripts.Events;
 using ClanGenDotNet.Scripts.UI.Theming;
+using System.Linq;
 using System.Runtime.InteropServices;
 using static ClanGenDotNet.Scripts.Resources;
 
@@ -72,8 +74,19 @@ public class StartScreen(string name = "start screen") : Screens(name)
 			ButtonID.DiscordButton
 		));
 
-		_continue.SetActive(false);
-		_switchClan.SetActive(false);
+		_continue.SetActive(game.Clan != null && game.Switches["error_message"] == "");
+		_switchClan.SetActive(game.Switches["clan_list"]!.Count > 1);
+
+		if (game.Clan != null)
+		{
+			foreach (string kitty in Cat.AllCats.Keys)
+			{
+				if (!game.Clan.ClanCats.Contains(kitty))
+				{
+					game.Clan.ClanCats.Remove(kitty);
+				}
+			}
+		}
 	}
 
 	public override void HandleEvent(Event evnt)

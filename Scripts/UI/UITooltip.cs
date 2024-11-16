@@ -61,13 +61,13 @@ public class UITooltip : UIElement, IUIElement
 		{
 			RelativeRect.Position = GetVirutalMousePosition() - new Vector2(0, RelativeRect.Height + _padding.Y);
 			DrawRectangleRounded(
-				RelativeRect.AsRaylibRect(),
+				RelativeRect,
 				0.3f,
 				5,
 				LightModeColour
 			);
 			DrawRectangleRoundedLines(
-				RelativeRect.AsRaylibRect(),
+				RelativeRect,
 				0.3f,
 				5,
 				2,
@@ -77,7 +77,7 @@ public class UITooltip : UIElement, IUIElement
 				NotoSansMedium,
 				_tooltipText,
 				AddRectangles(
-					RelativeRect.AsRaylibRect(),
+					RelativeRect,
 					new Rectangle(
 						_padding.X / 2, 
 						_padding.Y / 2,

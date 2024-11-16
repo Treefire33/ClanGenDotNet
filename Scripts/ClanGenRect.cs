@@ -1,7 +1,4 @@
-﻿using ClanGenDotNet.Scripts.Game_Structure;
-using System.Reflection.Metadata.Ecma335;
-
-namespace ClanGenDotNet.Scripts;
+﻿namespace ClanGenDotNet.Scripts;
 
 /// <summary>
 /// Creates a new ClanGenRect, which is similar to pygame's Rect.
@@ -50,7 +47,7 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 	//Points in RelativeRect
 	public Vector2 TopLeft
 	{
-		get {  return new(X, Y); }
+		get { return new(X, Y); }
 	}
 	public Vector2 TopCenter
 	{
@@ -87,18 +84,19 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 		get { return Position + Size; }
 	}
 
-	//Conversion Function
+	/*//Conversion Function
 	public Rectangle AsRaylibRect()
 	{
 		return RelativeRect;
-	}
+	}*/
+	//// Replaced by implicit conversion.
 
 	public override string ToString()
 	{
 		return $"ClanGenRect: <{Position}>, <{Size}>";
 	}
 
-	public ClanGenRect AnchorTo(AnchorPosition anchor, ClanGenRect anchorRect = new())
+	public readonly ClanGenRect AnchorTo(AnchorPosition anchor, ClanGenRect anchorRect = new())
 	{
 		ClanGenRect newRect = new();
 		switch (anchor)
@@ -154,6 +152,17 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 			Height * scaleRect.Height
 		);
 	}
+
+	public static ClanGenRect FromTopRight(float x, float y, float width, float height)
+	{
+		return new ClanGenRect(x - width, y - height, width, height);
+	}
+
+	public static ClanGenRect FromTopRight(float x, float y, Vector2 size)
+	{ return FromTopRight(x - size.X, y - size.Y, size.X, size.Y); }
+
+	public static ClanGenRect FromTopRight(Vector2 pos, Vector2 size)
+	{ return FromTopRight(pos.X - size.X, pos.Y - size.Y, size.X, size.Y); }
 
 	public static implicit operator Rectangle(ClanGenRect rect)
 	{

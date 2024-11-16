@@ -233,7 +233,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("clan_name", new UITextBox(
 			UIScale(new ClanGenRect(292, 100, 216, 50)),
 			_clanName + "Clan",
-			new ObjectID("text_box_30_horizcenter_vertcenter", "dark")
+			new ObjectID("text_box_30_horizcenter_vertcenter", "#dark")
 		));
 	}
 

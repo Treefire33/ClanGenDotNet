@@ -8,6 +8,35 @@ namespace ClanGenDotNet;
 public class ClanGenMain
 {
 	private static Image _windowIcon = LoadImage(".\\Resources\\Images\\icon.png");
+	private static bool _finishedLoading = false;
+
+	private static void LoadData()
+	{
+		Sprites.LoadAll();
+		Resources.LoadResources();
+
+		var clanList = game.ReadClans();
+		try
+		{
+			if (clanList != null)
+			{
+				game.Switches["clan_list"] = clanList;
+			}
+			//LoadCats();
+		}
+		catch
+		{
+			Console.WriteLine("Failed to load");
+		}
+
+		SetUpDataDirectory();
+		game.Manager.LoadTheme(
+			".\\Resources\\Theme\\default_theme.json"
+		);
+
+		_finishedLoading = true;
+	}
+
 	public static void Main(string[] args)
 	{
 		SetTraceLogLevel((int)LOG_ERROR);
@@ -20,12 +49,7 @@ public class ClanGenMain
 
 		SetExitKey(KEY_NULL); //So that way we can use KEY_ESCAPE
 
-		Resources.LoadResources();
-		Sprites.LoadAll();
-		DataDirectory.SetUpDataDirectory();
-		game.Manager.LoadTheme(
-			".\\Resources\\Theme\\default_theme.json"
-		);
+		LoadData();
 
 		game.SetSettingsFromLoaded();
 		game.LoadSettings();

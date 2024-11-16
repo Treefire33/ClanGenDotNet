@@ -25,6 +25,8 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 	private Vector2 _textSize = new(0);
 	private Vector2 _textPosition = new(0);
 
+	private static readonly ObjectID _defaultButtonObjectID = new("@buttonstyles_prototype", "");
+
 	public unsafe UIButton(
 		ClanGenRect posScale, 
 		ButtonStyle style, 
@@ -42,8 +44,7 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		_currentTexture = _normal;
 		if (objectID == default)
 		{
-			objectID.ID = "@buttonstyles_prototype";
-			objectID.Class = "";
+			objectID = _defaultButtonObjectID;
 			Theme = Manager.Theme.GetFromObjectID(objectID);
 		}
 		ThemeElement();

@@ -2,6 +2,7 @@
 using ClanGenDotNet.Scripts.HouseKeeping;
 using ClanGenDotNet.Scripts.UI;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace ClanGenDotNet.Scripts.Game_Structure;
 
@@ -22,14 +23,14 @@ public class Game(string currentScreen = "start screen")
 	public List<Cat> ChooseCats = [];
 
 	public Dictionary<string, Screens.Screens> AllScreens = [];
-	public Dictionary<string, object?> Switches = new()
+	public Dictionary<string, dynamic?> Switches = new()
 	{
 		{ "cat", null },
 		{ "clan_name", "" },
 		{ "leader", null },
 		{ "deputy", null },
 		{ "medicine_cat", null },
-		{ "members", new List<object>() },
+		{ "members", new List<Cat>() },
 		{ "re_roll", false },
 		{ "roll_count", 0 },
 		{ "event", null },
@@ -130,14 +131,14 @@ public class Game(string currentScreen = "start screen")
 
 	public void SaveSettings()
 	{
-		if (File.Exists(DataDirectory.GetSaveDirectory() + "\\settings.txt"))
+		if (File.Exists(GetSaveDirectory() + "\\settings.txt"))
 		{
-			File.Delete(DataDirectory.GetSaveDirectory() + "\\settings.txt");
+			File.Delete(GetSaveDirectory() + "\\settings.txt");
 		}
 
 		try
 		{
-			SafeSave(DataDirectory.GetSaveDirectory() + "\\settings.json", Settings);
+			SafeSave(GetSaveDirectory() + "\\settings.json", Settings);
 		}
 		catch
 		{
@@ -212,5 +213,58 @@ public class Game(string currentScreen = "start screen")
 		}
 	}
 
+	public List<string>? ReadClans()
+	{
+		if (!Directory.Exists(GetSaveDirectory()))
+		{
+			Directory.CreateDirectory(GetSaveDirectory());
+			Console.WriteLine("Created save directory!");
+			return null;
+		}
+
+		List<string> clanList = Directory.EnumerateDirectories(GetSaveDirectory()).ToList();
+		for (int i = 0; i < clanList.Count; i++)
+		{
+			clanList[i] = Path.GetFileName(clanList[i]);
+		}
+
+		string loadedClan = "";
+		if (File.Exists(GetSaveDirectory() + "\\currentclan.txt"))
+		{
+			using var currentClan = new StreamReader(GetSaveDirectory() + "\\currentclan.txt", Encoding.UTF8);
+			loadedClan = currentClan.ReadToEnd().Trim();
+		}
+
+		if (loadedClan != "" && clanList.Contains(loadedClan))
+		{
+			clanList.Remove(loadedClan);
+			clanList.Insert(0, loadedClan);
+		}
+
+		if (clanList == null)
+		{
+			Console.WriteLine("No clans found");
+			return null;
+		}
+
+		return clanList;
+	}
+
+	public void SaveClans(string? loadedClan)
+	{
+		if (loadedClan != null)
+		{
+			SafeSave(GetSaveDirectory() + "\\currentclan.txt", loadedClan);
+		}
+		else
+		{
+			if (File.Exists(GetSaveDirectory() + "\\currentclan.txt"))
+			{
+				File.Delete(GetSaveDirectory() + "\\currentclan.txt");
+			}
+		}
+	}
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "None")]
 	public static readonly Game game = new();
 }
