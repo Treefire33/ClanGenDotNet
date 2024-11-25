@@ -22,6 +22,7 @@ public class StartScreen(string name = "start screen") : Screens(name)
 	public override void ScreenSwitches()
 	{
 		base.ScreenSwitches();
+		SetMenuButtonsVisibility(false);
 		_menu = new(new ClanGenRect(0, 0, game.ScreenX, game.ScreenY), MenuImage);
 		_continue = new(
 			UIScale(new ClanGenRect(70, 310, 200, 30)),

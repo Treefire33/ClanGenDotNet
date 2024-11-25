@@ -12,8 +12,8 @@ public class ClanGenMain
 
 	private static void LoadData()
 	{
-		Sprites.LoadAll();
-		Resources.LoadResources();
+		//Sprites.LoadAll();
+		//LoadResources();
 
 		var clanList = game.ReadClans();
 		if (clanList != null)
@@ -30,6 +30,8 @@ public class ClanGenMain
 				Console.WriteLine(e);
 			}
 		}
+
+		Thread.Sleep(1000);
 
 		_finishedLoading = true;
 	}
@@ -114,17 +116,18 @@ public class ClanGenMain
 			".\\Resources\\Theme\\default_theme.json"
 		);
 
-		/*Thread loadingThread = new(new ThreadStart(LoadData));
-		loadingThread.Start();
-
-		LoadingAnimation();
-		loadingThread.Join();*/ //Re-enable at some point
-
-		LoadData();
-
 		game.SetSettingsFromLoaded();
 		game.LoadSettings();
 		ScreenSettings.ToggleFullscreen(showConfirmDialog: false, ingameSwitch: false);
+
+		Sprites.LoadAll();
+		LoadResources();
+
+		Thread loadingThread = new(new ThreadStart(LoadData));
+		loadingThread.Start();
+		LoadingAnimation();
+		loadingThread.Join();
+
 		AllScreens.InstanceScreens();
 		game.AllScreens[game.CurrentScreen].ScreenSwitches();
 

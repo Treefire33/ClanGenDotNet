@@ -116,7 +116,13 @@ public class Screens
 
 	public virtual void HandleEvent(Event evnt)
 	{
-
+		if (evnt.EventType == EventType.LeftMouseClick)
+		{
+			if (evnt.Element == MenuButtons!["main_menu"])
+			{
+				ChangeScreen("start screen");
+			}
+		}
 	}
 
 	public virtual void ScreenSwitches()
