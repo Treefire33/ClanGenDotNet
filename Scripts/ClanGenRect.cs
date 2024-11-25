@@ -74,6 +74,11 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 	public Vector2 BottomLeft
 	{
 		get { return new(X, Y + Height); }
+		set
+		{
+			X = value.X;
+			Y = value.Y - Height;
+		}
 	}
 	public Vector2 BottomCenter
 	{
@@ -82,6 +87,11 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 	public Vector2 BottomRight
 	{
 		get { return Position + Size; }
+		set
+		{
+			X = value.X - Width;
+			Y = value.Y - Height;
+		}
 	}
 
 	/*//Conversion Function
@@ -98,12 +108,15 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 
 	public readonly ClanGenRect AnchorTo(AnchorPosition anchor, ClanGenRect anchorRect = new())
 	{
-		ClanGenRect newRect = new();
+		ClanGenRect newRect = this;
 		switch (anchor)
 		{
-			case AnchorPosition.TopLeft:
+			case AnchorPosition.TopTarget:
 				newRect.X = X;
 				newRect.Y = Y + anchorRect.Y + anchorRect.Height;
+				break;
+			case AnchorPosition.BottomTarget:
+				newRect.BottomLeft = anchorRect.Position;
 				break;
 			case AnchorPosition.LeftTarget:
 				newRect.X = X + anchorRect.X + anchorRect.Width;
@@ -155,14 +168,14 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 
 	public static ClanGenRect FromTopRight(float x, float y, float width, float height)
 	{
-		return new ClanGenRect(x - width, y - height, width, height);
+		return new ClanGenRect(ScreenSettings.ScreenX + x, y, width, height);
 	}
 
 	public static ClanGenRect FromTopRight(float x, float y, Vector2 size)
-	{ return FromTopRight(x - size.X, y - size.Y, size.X, size.Y); }
+	{ return FromTopRight(x - size.X, y, size.X, size.Y); }
 
 	public static ClanGenRect FromTopRight(Vector2 pos, Vector2 size)
-	{ return FromTopRight(pos.X - size.X, pos.Y - size.Y, size.X, size.Y); }
+	{ return FromTopRight(pos.X - size.X, pos.Y, size.X, size.Y); }
 
 	public static implicit operator Rectangle(ClanGenRect rect)
 	{
@@ -172,8 +185,14 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 
 public enum AnchorPosition
 {
-	TopLeft,
+	TopTarget,
+	BottomTarget,
 	LeftTarget,
+	RightTarget,
+	Top,
+	Bottom,
+	Left,
+	Right,
 	CenterX,
 	Center
 }

@@ -16,25 +16,85 @@ public class ClanGenMain
 		Resources.LoadResources();
 
 		var clanList = game.ReadClans();
-		try
+		if (clanList != null)
 		{
-			if (clanList != null)
+			game.Switches["clan_list"] = clanList;
+			try
 			{
-				game.Switches["clan_list"] = clanList;
+				LoadCat.LoadCats();
+				var versionInfo = Clan.LoadClan();
 			}
-			//LoadCats();
+			catch (Exception e)
+			{
+				Console.WriteLine("Failed to load");
+				Console.WriteLine(e);
+			}
 		}
-		catch
-		{
-			Console.WriteLine("Failed to load");
-		}
-
-		SetUpDataDirectory();
-		game.Manager.LoadTheme(
-			".\\Resources\\Theme\\default_theme.json"
-		);
 
 		_finishedLoading = true;
+	}
+
+	public static void LoadingAnimation(float scale = 1)
+	{
+		List<Texture2D> frames = [];
+		for (int index = 1; index < 11; index++)
+		{
+			frames.Add(LoadTexture($".\\Resources\\Images\\LoadingAnimation\\Startup\\{index}.png"));
+		}
+
+		int x = ScreenSettings.Screen.texture.width / 2;
+		int y = ScreenSettings.Screen.texture.height / 2;
+
+		int i = 0;
+		while (!_finishedLoading)
+		{
+			SetTargetFPS(8);
+
+			BeginTextureMode(ScreenSettings.Screen);
+			ClearBackground(GetThemeColour());
+			DrawTexturePro(
+				frames[i],
+				new Rectangle(0, 0, frames[i].width, frames[i].height),
+				new Rectangle(
+					x - frames[i].width / 2,
+					y - frames[i].height / 2,
+					frames[i].width, frames[i].height
+				),
+				Vector2.Zero,
+				0,
+				WHITE
+			);
+			EndTextureMode();
+
+			BeginDrawing();
+			ClearBackground(WHITE);
+			DrawTexturePro(
+				ScreenSettings.Screen.texture,
+				new Rectangle(0, 0, ScreenSettings.Screen.texture.width, -ScreenSettings.Screen.texture.height),
+				new Rectangle(
+					(GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f,
+					(GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f,
+					ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale,
+					ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale
+				),
+				Vector2.Zero,
+				0,
+				WHITE
+			);
+			EndDrawing();
+
+		i++;
+
+			if (i >= frames.Count)
+			{
+				i = 0;
+			}
+		}
+
+		foreach (var frame in frames)
+		{
+			UnloadTexture(frame);
+		}
 	}
 
 	public static void Main(string[] args)
@@ -48,6 +108,17 @@ public class ClanGenMain
 		UnloadImage(_windowIcon);
 
 		SetExitKey(KEY_NULL); //So that way we can use KEY_ESCAPE
+
+		SetUpDataDirectory();
+		game.Manager.LoadTheme(
+			".\\Resources\\Theme\\default_theme.json"
+		);
+
+		/*Thread loadingThread = new(new ThreadStart(LoadData));
+		loadingThread.Start();
+
+		LoadingAnimation();
+		loadingThread.Join();*/ //Re-enable at some point
 
 		LoadData();
 
@@ -70,9 +141,9 @@ public class ClanGenMain
 			catch { Console.WriteLine("DiscordRPC unable to start."); }
 		}
 
-		//Console.WriteLine(game.Manager.Theme.ToString());
+		SetTargetFPS(game.Switches["fps"]);
 
-		while (!WindowShouldClose())
+		while (!WindowShouldClose() && _finishedLoading)
 		{
 			discordRPC?.Discord.RunCallbacks();
 			BeginTextureMode(ScreenSettings.Screen);

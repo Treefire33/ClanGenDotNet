@@ -30,25 +30,25 @@ public class StartScreen(string name = "start screen") : Screens(name)
 			objectID: "buttonstyles_mainmenu"
 		);
 		_switchClan = new(
-			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _continue.RelativeRect),
+			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopTarget, _continue.RelativeRect),
 			ButtonStyle.MainMenu,
 			"switch clan",
 			objectID: "buttonstyles_mainmenu"
 		);
 		_newClan = new(
-			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _switchClan.RelativeRect),
+			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopTarget, _switchClan.RelativeRect),
 			ButtonStyle.MainMenu,
 			"new clan",
 			objectID: "buttonstyles_mainmenu"
 		);
 		_settings = new(
-			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _newClan.RelativeRect),
+			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopTarget, _newClan.RelativeRect),
 			ButtonStyle.MainMenu,
 			"settings and info",
 			objectID: "buttonstyles_mainmenu"
 		);
 		_quit = new(
-			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopLeft, _settings.RelativeRect),
+			UIScale(new ClanGenRect(70, 15, 200, 30)).AnchorTo(AnchorPosition.TopTarget, _settings.RelativeRect),
 			ButtonStyle.MainMenu,
 			"quit",
 			objectID: "buttonstyles_mainmenu"

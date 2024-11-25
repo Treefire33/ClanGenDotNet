@@ -34,6 +34,8 @@ public static class Resources
 		right = 10
 	};
 
+	public static readonly Texture2D ClanNameBackground = LoadTexture(".\\Resources\\Images\\clan_name_bg.png");
+
 	//Main Menu
 	public static readonly Texture2D MenuImage = LoadTexture(".\\Resources\\Images\\menu.png");
 
@@ -263,10 +265,9 @@ public static class Resources
 				0x1F5C9, 0x1F89C, 0x1F89E, 0x1FAB4
 			])
 			.ToArray();
-		UnloadFont(Clangen);
 		fixed (int* codepoints = codepointsInt)
 		{
-			//we don't have 256 characters, but alas, it would load with any number lower.
+			//we don't have 256 characters, but alas, it wouldn't load with any number lower.
 			Clangen = LoadFontEx(".\\Resources\\Font\\clangen.ttf", 32, codepoints, 256); 
 			//Sadly, I can't do anything about... whatever is happening with unicode characters.
 		}

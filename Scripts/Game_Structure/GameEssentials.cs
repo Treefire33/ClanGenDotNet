@@ -50,7 +50,7 @@ public class Game(string currentScreen = "start screen")
 		{ "new_leader", false },
 		{ "apprentice_switch", false },
 		{ "deputy_switch", false },
-		{ "clan_list", "" },
+		{ "clan_list", new List<string>() },
 		{ "switch_clan", false },
 		{ "read_clans", false },
 		{ "kill_cat", false },

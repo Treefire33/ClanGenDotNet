@@ -297,7 +297,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			));
 			_checkboxes.Add("spanish", new UIButton(
 				UIScale(new ClanGenRect(310, 0, 180, 37)).AnchorTo(
-					AnchorPosition.TopLeft,
+					AnchorPosition.TopTarget,
 					_checkboxes.Last().Value.RelativeRect
 				),
 				ButtonStyle.LadderMiddle,
@@ -305,7 +305,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			));
 			_checkboxes.Add("german", new UIButton(
 				UIScale(new ClanGenRect(310, 0, 180, 37)).AnchorTo(
-					AnchorPosition.TopLeft,
+					AnchorPosition.TopTarget,
 					_checkboxes.Last().Value.RelativeRect
 				),
 				ButtonStyle.LadderBottom,
@@ -319,7 +319,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 			{
 				_checkboxes.Add(setting, new UICheckbox(
 					UIScale(new ClanGenRect(170, i < 0 ? 120 : 0, 34, 34))
-						.AnchorTo(AnchorPosition.TopLeft, i > 0
+						.AnchorTo(AnchorPosition.TopTarget, i > 0
 						? _checkboxes.Values.ToArray()[i - 1].RelativeRect
 						: UIScale(new ClanGenRect(170, i < 0 ? 34 : 0, 34, 34))),
 					(string)game.GameSettings.General[setting][0],

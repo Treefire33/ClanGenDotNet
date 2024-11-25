@@ -1,4 +1,6 @@
-﻿namespace ClanGenDotNet.Scripts.Cats;
+﻿using Newtonsoft.Json;
+
+namespace ClanGenDotNet.Scripts.Cats;
 
 public struct Pronouns(
 	string subjective, 
@@ -9,11 +11,17 @@ public struct Pronouns(
 	int conjugate
 )
 {
+	[JsonProperty("subject")]
 	public string Subjective = subjective;
+	[JsonProperty("object")]
 	public string Objective = objective;
+	[JsonProperty("poss")]
 	public string Possessive = possessive;
+	[JsonProperty("inposs")]
 	public string Inpossessive = inpossessive;
+	[JsonProperty("self")]
 	public string Self = self;
+	[JsonProperty("conju")]
 	public int Conjugate = conjugate;
 
 	public static Pronouns TheyThemTheirs = new("they", "them", "their", "theirs", "themself", 1);

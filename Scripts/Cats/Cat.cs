@@ -1,4 +1,6 @@
-﻿namespace ClanGenDotNet.Scripts.Cats;
+﻿using Newtonsoft.Json;
+
+namespace ClanGenDotNet.Scripts.Cats;
 
 public enum Age
 {
@@ -164,6 +166,127 @@ public class Cat
 			UnloadTexture(_sprite);
 			_sprite = value;
 		}
+	}
+
+	[JsonConstructor]
+	public Cat(
+		string id,
+		string name_prefix,
+		string name_suffix,
+		bool specsuffix_hidden,
+		string gender,
+		string gender_align,
+		List<Pronouns> pronouns,
+		int birth_cooldown,
+		string status,
+		string backstory,
+		int moons,
+		string trait,
+		string facets,
+		string parent1,
+		string parent2,
+		List<string> adoptive_parents,
+		string mentor,
+		List<string> former_mentor,
+		int patrol_with_mentor,
+		List<string> mate,
+		List<string> previous_mates,
+		bool dead,
+		bool paralyzed,
+		bool no_kits,
+		bool no_retire,
+		bool no_mates,
+		bool exiled,
+		bool driven_out,
+		string pelt_name,
+		string pelt_color,
+		string pelt_length,
+		int sprite_kitten,
+		int sprite_adolescent,
+		int sprite_adult,
+		int sprite_senior,
+		int sprite_para_adult,
+		string eye_colour,
+		string? eye_colour2,
+		bool reverse,
+		string? white_patches,
+		string? vitiligo,
+		string? points,
+		string? white_patches_tint,
+		string? pattern,
+		string? tortie_base,
+		string? tortie_color,
+		string? torite_pattern,
+		string skin,
+		string tint,
+		List<string> scars,
+		string? accessory,
+		int experience,
+		int dead_moons,
+		List<string> current_apprentice,
+		List<string> former_apprentices,
+		bool df,
+		bool outside,
+		List<string> faded_offspring,
+		int opacity,
+		bool prevent_fading,
+		bool favourite
+	)
+	{
+		ID = id;
+		Prefix = name_prefix;
+		Suffix = name_suffix;
+		SpecialSuffixHidden = specsuffix_hidden;
+		Gender = gender;
+		GenderAlignment = gender_align;
+		Status = status;
+		Parent1 = parent1;
+		Parent2 = parent2;
+		Moons = moons;
+
+
+		Pelt = new(
+			pelt_name,
+			pelt_length,
+			pelt_color,
+			eyeColour: eye_colour,
+			eyeColour2: eye_colour2,
+			paralyzed: paralyzed,
+			kittenSprite: sprite_kitten,
+			apprenticeSprite: sprite_adolescent,
+			adultSprite: sprite_adult,
+			seniorSprite: sprite_senior,
+			paralyzedAdultSprite: sprite_para_adult,
+			reverse: reverse,
+			vitiligo: vitiligo,
+			points: points,
+			whitePatchesTint: white_patches_tint,
+			whitePatches: white_patches,
+			tortieBase: tortie_base,
+			tortieColour: tortie_color,
+			tortiePattern: torite_pattern,
+			pattern: pattern,
+			skin: skin,
+			tint: tint,
+			scars: scars,
+			accessory: accessory,
+			opacity: opacity
+		);
+
+		AdoptiveParents = adoptive_parents ?? [];
+		GenderAlignment = gender_align;
+
+		PronounsList = pronouns ?? [.. DefaultPronouns];
+
+		Backstory = backstory;
+
+		BirthCooldown = birth_cooldown;
+
+		Moons = moons;
+
+		//I'll add the rest later
+
+		AllCats.Add(ID, this);
 	}
 
 	public Cat(

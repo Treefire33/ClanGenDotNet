@@ -155,7 +155,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		));
 
 		_elements.Add("random_clan_checkbox", new UICheckbox(
-			UIScale(new ClanGenRect(560, -32, 34, 34)).AnchorTo(AnchorPosition.TopLeft, _elements["previous_step"].RelativeRect),
+			UIScale(new ClanGenRect(560, -32, 34, 34)).AnchorTo(AnchorPosition.TopTarget, _elements["previous_step"].RelativeRect),
 			"Quick Start"
 		));
 
@@ -476,7 +476,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 	{
 		_elements.Add("cat_name", new UITextBox(
 			UIScale(new ClanGenRect(0, 10, 250, 60)).AnchorTo(
-				AnchorPosition.TopLeft,
+				AnchorPosition.TopTarget,
 				_elements["name_backdrop"].RelativeRect
 			).AnchorTo(AnchorPosition.CenterX),
 			"",
@@ -538,7 +538,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("greenleaf_tab", new UIButton(
 			UIScale(new ClanGenRect(625, 25, 39, 34))
-				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
+				.AnchorTo(AnchorPosition.TopTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.IconTabLeft,
 			Icon.Greenleaf.GetAsUTF8(),
 			objectID: "buttonstyles_icon"
@@ -546,14 +546,14 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 		_elements.Add("leaffall_tab", new UIButton(
 			UIScale(new ClanGenRect(625, 25, 39, 34))
-				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
+				.AnchorTo(AnchorPosition.TopTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.IconTabLeft,
 			Icon.Leafbare.GetAsUTF8(),
 			objectID: "buttonstyles_icon"
 		));
 		_elements.Add("leafbare_tab", new UIButton(
 			UIScale(new ClanGenRect(625, 25, 39, 34))
-				.AnchorTo(AnchorPosition.TopLeft, _elements.Last().Value.RelativeRect),
+				.AnchorTo(AnchorPosition.TopTarget, _elements.Last().Value.RelativeRect),
 			ButtonStyle.IconTabLeft,
 			Icon.Leafbare.GetAsUTF8(),
 			objectID: "buttonstyles_icon"
@@ -610,25 +610,25 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value, true);
 		_text.Add("biome", new UITextBox(
-			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopLeft, _text.Last().Value.RelativeRect),
+			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopTarget, _text.Last().Value.RelativeRect),
 			$"{_biomeSelected}",
 			GetTextBoxTheme("text_box_30_horizleft")
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value);
 		_text.Add("leader", new UITextBox(
-			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopLeft, _text.Last().Value.RelativeRect),
+			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopTarget, _text.Last().Value.RelativeRect),
 			$"Leader name: {_leader!.Name.Prefix}star",
 			GetTextBoxTheme("text_box_30_horizleft")
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value);
 		_text.Add("recommend", new UITextBox(
-			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopLeft, _text.Last().Value.RelativeRect),
+			UIScale(new ClanGenRect(0, 5, -1, -1)).AnchorTo(AnchorPosition.TopTarget, _text.Last().Value.RelativeRect),
 			$"Recommended Symbol: None",
 			GetTextBoxTheme("text_box_30_horizleft")
 		));
 		((UIAutoResizableContainer)_elements.Last().Value).AddElement(_text.Last().Value);
 		_text.Add("selected", new UITextBox(
-			UIScale(new ClanGenRect(0, 15, -1, -1)).AnchorTo(AnchorPosition.TopLeft, _text.Last().Value.RelativeRect),
+			UIScale(new ClanGenRect(0, 15, -1, -1)).AnchorTo(AnchorPosition.TopTarget, _text.Last().Value.RelativeRect),
 			$"Selected Symbol: None",
 			GetTextBoxTheme("text_box_30_horizleft")
 		));

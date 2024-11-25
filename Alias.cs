@@ -54,3 +54,4 @@ global using static ClanGenDotNet.Scripts.Utility;
 global using static ClanGenDotNet.Scripts.Game_Structure.Game;
 global using static ClanGenDotNet.Scripts.EnumerableExtension;
 global using static ClanGenDotNet.Scripts.HouseKeeping.DataDirectory;
+global using static ClanGenDotNet.Scripts.Resources;

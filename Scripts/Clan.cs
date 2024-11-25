@@ -1,5 +1,6 @@
 ﻿using ClanGenDotNet.Scripts.Cats;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Collections.Immutable;
 
 namespace ClanGenDotNet.Scripts;
@@ -28,13 +29,6 @@ public enum CatType
 
 public class Clan
 {
-	public int LeaderLives = 0;
-
-	public List<string> ClanCats = [];
-	public List<string> StarClanCats = [];
-	public List<string> DarkForestCats = [];
-	public List<string> UnknownCats = [];
-
 	public readonly List<string> Seasons = [
 		"Newleaf",
 		"Newleaf",
@@ -67,32 +61,57 @@ public class Clan
 		>
 	>(File.ReadAllText(".\\Resources\\placements.json"))!;
 
-	public int Age = 0;
-	public string CurrentSeason = "Newleaf";
+	[JsonIgnore]
 	public List<Clan> AllClans = [];
-
 	public History History = new();
 
 	public string Name = "";
+	public int Age = 0;
+
+	[JsonIgnore]
+	public BiomeType Biome = BiomeType.Forest;
+
+	public string StartingSeason = "Newleaf";
+	public string CurrentSeason = "Newleaf";
+	public string? CampBackground = null;
+	public string GameMode = "classic";
+
+	public int Reputation;
+	public string Temperament;
+
+	[JsonIgnore]
+	public Cat? Instructor = null;
+
+	[JsonIgnore]
 	public Cat? Leader = null;
 	public int LeaderPredecessors = 0;
+	public int LeaderLives = 0;
+
+	[JsonIgnore]
 	public Cat? Deputy = null;
 	public int DeputyPredecessors = 0;
+
+	[JsonIgnore]
 	public Cat? MedicineCat = null;
 	public List<Cat> MedCatList = [];
 	public int MedCatPredecessors = 0;
 	public int MedCatNumber = 0;
+
+	[JsonIgnore]
 	public List<Cat> StartingMembers = [];
 
-	public BiomeType Biome = BiomeType.Forest;
-	public string? CampBackground = null;
-	public string StartingSeason = "";
 	public string? ChosenSymbol = null;
 
-	public Cat? Instructor = null;
-	public string GameMode = "classic";
-
 	public List<string> FadedIds = [];
+	public List<string> ClanCats = [];
+	public List<string> StarClanCats = [];
+	public List<string> DarkForestCats = [];
+	public List<string> UnknownCats = [];
+
+	public int VersionName;
+	public string VersionCommit;
+	public bool SourceBuild;
+
 	private static readonly string[] _instructorChoices = [
 		"apprentice",
 		"mediator apprentice",
@@ -105,6 +124,29 @@ public class Clan
 		"elder"
 	];
 
+	[JsonConstructor]
+	public Clan(
+		string clanname,
+		int clanage,
+		string biome,
+		string camp_bg,
+		string clan_symbol,
+		string gamemode,
+		int version_name,
+		string version_commit,
+		bool source_build
+	)
+	{
+		Name = clanname;
+		Age = clanage;
+		_ = Enum.TryParse(biome, out Biome);
+		CampBackground = camp_bg;
+		ChosenSymbol = clan_symbol;
+		GameMode = gamemode;
+		VersionName = version_name;
+		VersionCommit = version_commit;
+		SourceBuild = source_build;
+	}
 
 	public Clan(
 		string name = "",
@@ -217,5 +259,33 @@ public class Clan
 			"beach" => BiomeType.Beach,
 			_ => BiomeType.Forest
 		};
+	}
+
+	public static string LoadClan()
+	{
+		string versionInfo = "0.null.0";
+
+		try
+		{
+			if (File.Exists($"{GetSaveDirectory()}\\{game.Switches["clan_list"]![0]}clan.json"))
+			{
+				game.Clan = JsonConvert.DeserializeObject<Clan>(
+					File.ReadAllText($"{GetSaveDirectory()}\\{game.Switches["clan_list"]![0]}clan.json")
+				);
+			}
+			else
+			{
+				Console.WriteLine($"Error: Failed to find {game.Switches["clan_list"]![0]}clan.json");
+			}
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine($"Error: Failed to load {game.Switches["clan_list"]![0]}clan.json");
+			Console.WriteLine(e);
+		}
+
+		versionInfo = $"{game.Clan!.VersionName}.{game.Clan.VersionCommit}.{game.Clan.SourceBuild}";
+
+		return versionInfo;
 	}
 }

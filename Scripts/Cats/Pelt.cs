@@ -239,6 +239,7 @@ public partial class Pelt
 		string? whitePatches = null,
 		string eyeColour = "BLUE",
 		string? eyeColour2 = null,
+		string? tortieBase = null,
 		string? tortieColour = null,
 		string? pattern = null,
 		string? tortiePattern = null,
@@ -250,7 +251,7 @@ public partial class Pelt
 		List<string>? scars = null,
 		string? tint = null,
 		string skin = "BLACK",
-		string whitePatchesTint = "none",
+		string? whitePatchesTint = null,
 		int kittenSprite = 0,
 		int apprenticeSprite = 0,
 		int adultSprite = 0,
@@ -265,6 +266,7 @@ public partial class Pelt
 		WhitePatches = whitePatches;
 		EyeColour = eyeColour;
 		EyeColour2 = eyeColour2;
+		TortieBase = tortieBase;
 		TortieColour = tortieColour;
 		Pattern = pattern;
 		TortiePattern = tortiePattern;
@@ -276,7 +278,7 @@ public partial class Pelt
 		Scars = scars ?? ([]);
 		Tint = tint;
 		Skin = skin;
-		WhitePatchesTint = whitePatchesTint;
+		WhitePatchesTint = whitePatchesTint ?? "none";
 		CatSprites = new()
 		{
 			{ "kitten", kittenSprite },
