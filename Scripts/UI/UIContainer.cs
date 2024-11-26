@@ -37,12 +37,9 @@ public class UIContainer(ClanGenRect posScale)
 	public override void Update()
 	{
 		base.Update();
-		foreach (UIElement element in ContainedElements)
+		BeginScissorMode((int)RelativeRect.X, (int)RelativeRect.Y, (int)RelativeRect.Width, (int)RelativeRect.Height);
+		foreach (UIElement element in ContainedElements.Where(element => element.Visible))
 		{
-			if (!element.Visible) { continue; }
-
-			if (!PointInArea(element.RelativeRect.Position, RelativeRect)) { continue; }
-
 			element.Update();
 			if (element is IUIClickable clickable)
 			{
@@ -50,6 +47,7 @@ public class UIContainer(ClanGenRect posScale)
 				clickable.HandleElementInteraction();
 			}
 		}
+		EndScissorMode();
 	}
 
 	public void SetLayer(int newLayer)

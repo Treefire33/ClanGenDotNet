@@ -108,7 +108,7 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 
 	public readonly ClanGenRect AnchorTo(AnchorPosition anchor, ClanGenRect anchorRect = new())
 	{
-		ClanGenRect newRect = this;
+		ClanGenRect newRect = new();
 		switch (anchor)
 		{
 			case AnchorPosition.TopTarget:
@@ -116,6 +116,7 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 				newRect.Y = Y + anchorRect.Y + anchorRect.Height;
 				break;
 			case AnchorPosition.BottomTarget:
+				newRect = this;
 				newRect.BottomLeft = anchorRect.Position;
 				break;
 			case AnchorPosition.LeftTarget:
