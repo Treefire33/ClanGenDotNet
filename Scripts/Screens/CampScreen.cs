@@ -13,6 +13,7 @@ public class CampScreen (string name = "camp screen") : Screens(name)
 	{
 		base.ScreenSwitches();
 		SetMenuButtonsVisibility(true);
+		SetDisabledMenuButtons(["camp_screen"]);
 		game.Switches["cat"] = null;
 		if (Clan.Layouts.ContainsKey(game.Clan!.Biome.ToString() + game.Clan.CampBackground))
 		{

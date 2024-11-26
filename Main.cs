@@ -36,7 +36,7 @@ public class ClanGenMain
 		_finishedLoading = true;
 	}
 
-	public static void LoadingAnimation(float scale = 1)
+	private static void LoadingAnimation(float scale = 1)
 	{
 		List<Texture2D> frames = [];
 		for (int index = 1; index < 11; index++)

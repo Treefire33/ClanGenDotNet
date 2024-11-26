@@ -13,10 +13,8 @@ public class UIManager
 
 	public void DrawUI()
 	{
-		foreach (UIElement element in Elements)
+		foreach (UIElement element in Elements.Where(element => element is { IsContained: false, Visible: true }))
 		{
-			if (element.IsContained || !element.Visible) { continue; }
-
 			element.Update();
 			if (element is IUIClickable clickable)
 			{

@@ -73,16 +73,17 @@ public class Screens
 			scaleRect = UIScale(new(Vector2.Zero, new(190, 35)));
 			scaleRect.BottomLeft = UIScaleDimension(Vector2.Zero);
 			MenuButtons.Add("name_background", new UIImage(
-				scaleRect.AnchorTo(AnchorPosition.BottomTarget, MenuButtons["camp_screen"].RelativeRect),
+				scaleRect.AnchorTo(AnchorPosition.BottomTarget, MenuButtons["camp_screen"].RelativeRect)
+					.AnchorTo(AnchorPosition.CenterX),
 				ClanNameBackground
 			));
 			MenuButtons.Last().Value.Hide();
-			Console.WriteLine(MenuButtons.Last().Value.RelativeRect);
 
 			scaleRect = UIScale(new(Vector2.Zero, new(193, 35)));
 			scaleRect.BottomLeft = UIScaleOffset(new(0, 1));
 			MenuButtons.Add("heading", new UITextBox(
-				scaleRect.AnchorTo(AnchorPosition.BottomTarget, MenuButtons["camp_screen"].RelativeRect),
+				scaleRect.AnchorTo(AnchorPosition.BottomTarget, MenuButtons["camp_screen"].RelativeRect)
+					.AnchorTo(AnchorPosition.CenterX),
 				"",
 				new ObjectID("text_box_34_horizcenter_vertcenter", "#dark")
 			));
@@ -122,12 +123,21 @@ public class Screens
 			{
 				ChangeScreen("start screen");
 			}
+			else if (evnt.Element == MenuButtons!["camp_screen"])
+			{
+				ChangeScreen("camp screen");
+			}
+			else if (evnt.Element == MenuButtons!["catlist_screen"])
+			{
+				ChangeScreen("cat list screen");
+			}
 		}
 	}
 
 	public virtual void ScreenSwitches()
 	{
 		SetMenuButtonsVisibility(false);
+		UpdateHeadingText(game.Clan!.Name + "Clan");
 	}
 
 	public virtual void ExitScreen()
@@ -135,11 +145,31 @@ public class Screens
 
 	}
 
+	protected static void UpdateHeadingText(string text)
+	{
+		((UITextBox)MenuButtons?["heading"]!).SetText(text);
+	}
+
 	protected static void SetMenuButtonsVisibility(bool visible = false)
 	{
 		foreach (var button in MenuButtons!)
 		{
 			button.Value.SetVisibility(visible);
+		}
+	}
+	
+	public static void SetDisabledMenuButtons(List<string> buttons)
+	{
+		foreach (var button in MenuButtons!)
+		{
+			if (buttons.Contains(button.Key))
+			{
+				button.Value.SetActive(false);
+			}
+			else
+			{
+				button.Value.SetActive(true);
+			}
 		}
 	}
 }

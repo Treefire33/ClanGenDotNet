@@ -29,7 +29,7 @@ public enum CatType
 
 public class Clan
 {
-	public readonly List<string> Seasons = [
+	private static readonly List<string> _seasons = [
 		"Newleaf",
 		"Newleaf",
 		"Newleaf",
@@ -62,7 +62,7 @@ public class Clan
 	>(File.ReadAllText(".\\Resources\\placements.json"))!;
 
 	[JsonIgnore]
-	public List<Clan> AllClans = [];
+	public List<OtherClan> AllClans = [];
 	public History History = new();
 
 	public string Name = "";
@@ -85,7 +85,7 @@ public class Clan
 	[JsonIgnore]
 	public Cat? Leader = null;
 	public int LeaderPredecessors = 0;
-	public int LeaderLives = 0;
+	public int LeaderLives = 9;
 
 	[JsonIgnore]
 	public Cat? Deputy = null;
@@ -111,6 +111,9 @@ public class Clan
 	public int VersionName;
 	public string VersionCommit;
 	public bool SourceBuild;
+	
+	public List<Pronouns> CustomPronouns = [];
+	public War War;
 
 	private static readonly string[] _instructorChoices = [
 		"apprentice",
@@ -132,9 +135,30 @@ public class Clan
 		string camp_bg,
 		string clan_symbol,
 		string gamemode,
+		string last_focus_change,
+		List<string> clans_in_focus,
+		string instructor,
+		int reputation,
+		List<string> mediated,
+		string? starting_season,
+		string temperament,
 		int version_name,
 		string version_commit,
-		bool source_build
+		bool source_build,
+		List<Pronouns> custom_pronouns,
+		string leader,
+		int leader_lives,
+		int leader_predecessors,
+		string deputy,
+		int deputy_predecessors,
+		string med_cat,
+		int med_cat_number,
+		int med_cat_predecessors,
+		string clan_cats,
+		string faded_cats,
+		List<string> patrolled_cats,
+		List<OtherClan> other_clans,
+		War war
 	)
 	{
 		Name = clanname;
@@ -146,6 +170,48 @@ public class Clan
 		VersionName = version_name;
 		VersionCommit = version_commit;
 		SourceBuild = source_build;
+
+		AllClans = other_clans;
+
+		Leader ??= Cat.AllCats[leader];
+		LeaderLives = leader_lives;
+		LeaderPredecessors = leader_predecessors;
+		
+		Deputy ??= Cat.AllCats[leader];
+		DeputyPredecessors = deputy_predecessors;
+		
+		MedicineCat ??= Cat.AllCats[med_cat];
+		MedCatPredecessors = med_cat_predecessors;
+		MedCatNumber = med_cat_number;
+		
+		Reputation = reputation;
+		Age = clanage;
+		StartingSeason = starting_season ?? "Newleaf";
+		GetCurrentSeason();
+		
+		CustomPronouns = custom_pronouns;
+		
+		Instructor = Cat.AllCats[instructor];
+		AddCat(Instructor);
+		
+		ChosenSymbol = clan_symbol;
+
+		foreach (string id in clan_cats.Split(','))
+		{
+			if (Cat.AllCats.TryGetValue(id, out Cat? cat))
+			{
+				AddCat(cat);
+			}
+		}
+
+		War = war;
+
+		if (faded_cats != "")
+		{
+			FadedIds.AddRange(faded_cats.Split(','));
+		}
+		
+		//implement rest when needed
 	}
 
 	public Clan(
@@ -167,21 +233,33 @@ public class Clan
 		Name = name;
 		Leader = leader;
 		LeaderLives = 9;
+		LeaderPredecessors = 0;
 		Deputy = deputy;
+		DeputyPredecessors = 0;
 		MedicineCat = medicineCat;
+		MedCatPredecessors = 0;
 		MedCatNumber = MedCatList.Count;
+		
+		//Herbs = new();
 
-		Biome = biome;
+		Age = 0;
 		CurrentSeason = "Newleaf";
 		StartingSeason = startingSeason;
+		Instructor = null;
 
+		Biome = biome;
 		CampBackground = campBackground;
 		ChosenSymbol = symbol;
 		GameMode = gameMode;
+		
+		CustomPronouns = [];
 
 		//clan settings here
 
 		StartingMembers = startingMembers!;
+		War = new();
+
+		FadedIds = [];
 	}
 
 	public void CreateClan()
@@ -261,6 +339,28 @@ public class Clan
 		};
 	}
 
+	private void GetCurrentSeason()
+	{
+		if (game.Config.LockSeason)
+		{
+			CurrentSeason = StartingSeason;
+			return;
+		}
+		
+		Dictionary<string, int> modifiers = new Dictionary<string, int>()
+		{
+			{ "Newleaf", 0 },
+			{ "Greenleaf", 3 },
+			{ "Leaf-fall", 6 },
+			{ "Leaf-bare", 9 }
+		};
+		var index = Age % 12 + modifiers[StartingSeason];
+		
+		if (index > 11) { index -= 12; }
+		
+		CurrentSeason = _seasons[index];
+	}
+
 	public static string LoadClan()
 	{
 		string versionInfo = "0.null.0";
@@ -288,4 +388,13 @@ public class Clan
 
 		return versionInfo;
 	}
+}
+
+public class War
+{
+	[JsonProperty("at_war")] public bool AtWar;
+	
+	[JsonProperty("enemy")] public string Enemy = "";
+	
+	[JsonProperty("duration")] public int Duration;
 }

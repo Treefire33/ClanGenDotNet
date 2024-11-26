@@ -8,5 +8,6 @@ public static class AllScreens
 		_ = new ClanCreationScreen();
 		_ = new SettingsScreen();
 		_ = new CampScreen();
+		_ = new CatListScreen();
 	}
 }

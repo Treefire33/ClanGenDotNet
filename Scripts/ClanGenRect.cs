@@ -117,7 +117,7 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 				break;
 			case AnchorPosition.BottomTarget:
 				newRect = this;
-				newRect.BottomLeft = anchorRect.Position;
+				newRect.BottomRight = anchorRect.Position;
 				break;
 			case AnchorPosition.LeftTarget:
 				newRect.X = X + anchorRect.X + anchorRect.Width;
@@ -131,6 +131,14 @@ public struct ClanGenRect(Vector2 position, Vector2 scale)
 				newRect.X = (ScreenSettings.GameScreenSize.X / 2) - (Width / 2) + newRect.X;
 				newRect.Y = (ScreenSettings.GameScreenSize.Y / 2) - (Height / 2) + newRect.Y;
 				break;
+			case AnchorPosition.RightTarget:
+			case AnchorPosition.Top:
+			case AnchorPosition.Bottom:
+			case AnchorPosition.Left:
+			case AnchorPosition.Right:
+				break;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null);
 		}
 		newRect.Width = Width;
 		newRect.Height = Height;

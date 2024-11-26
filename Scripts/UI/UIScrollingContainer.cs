@@ -20,8 +20,11 @@ public class UIScrollingContainer(ClanGenRect posScale)
 	{
 		if (ContainedElements.Count > 0)
 		{
-			_maxScrollPosition = ContainedElements.Last().RelativeRect.Height + 50;
-			_minScrollPosition = ContainedElements.First().RelativeRect.Height - 50;
+			_maxScrollPosition = -(ContainedElements.Last().RelativeRect.Height);
+			_minScrollPosition = -(
+				(ContainedElements.First().RelativeRect.Height
+				 * ContainedElements.Count)
+			) + (ContainedElements.First().RelativeRect.Height * 4);
 			foreach (UIElement element in ContainedElements)
 			{
 				element.RelativeRect.Y += _currentElementYOffset;
