@@ -2,6 +2,8 @@ namespace ClanGenDotNet.Scripts.Screens;
 
 public class CatListScreen(string name = "cat list screen") : Screens(name)
 {
+	private int _currentPage = 0;
+	
 	private UIContainer? _listScreenContainer;
 	private UIContainer? _catListBar;
 	public override void ScreenSwitches()

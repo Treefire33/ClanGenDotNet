@@ -131,8 +131,6 @@ public class ClanGenMain
 		AllScreens.InstanceScreens();
 		game.AllScreens[game.CurrentScreen].ScreenSwitches();
 
-		Texture2D menuLogoless = LoadTexture(".\\Resources\\Images\\menu_logoless.png");
-
 		DiscordRPC? discordRPC = null;
 		if ((bool)game.Settings["discord"]!)
 		{ 
@@ -180,7 +178,7 @@ public class ClanGenMain
 			BeginDrawing();
 			ClearBackground(WHITE);
 			DrawTexturePro(
-				menuLogoless,
+				MenuLogolessImage,
 				new Rectangle(0, 0, GetScreenWidth(), GetScreenHeight()),
 				new Rectangle(
 					0, 0,
@@ -191,13 +189,13 @@ public class ClanGenMain
 				WHITE
 			);
 			DrawTextureNPatch(
-				Resources.Frame,
-				Resources.FrameNPatch,
+				Frame,
+				FrameNPatch,
 				new Rectangle(
-					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (Resources.Frame.width / 2),
-					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (Resources.Frame.height / 2),
-					(ScreenSettings.GameScreenSize.X + Resources.Frame.width) * ScreenSettings.ScreenScale,
-					(ScreenSettings.GameScreenSize.Y + Resources.Frame.height) * ScreenSettings.ScreenScale
+					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (Frame.width / 2),
+					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (Frame.height / 2),
+					(ScreenSettings.GameScreenSize.X + Frame.width) * ScreenSettings.ScreenScale,
+					(ScreenSettings.GameScreenSize.Y + Frame.height) * ScreenSettings.ScreenScale
 				),
 				Vector2.Zero,
 				0,

@@ -10,9 +10,9 @@ public static class Resources
 	public static Color DarkModeColour;
 
 	//Fonts
-	public unsafe static Font Clangen = LoadFont(".\\Resources\\Font\\clangen.ttf");
-	public unsafe static readonly Font NotoSansRegular = LoadFont(".\\Resources\\Font\\NotoSans-Regular.ttf");
-	public unsafe static readonly Font NotoSansMedium = LoadFont(".\\Resources\\Font\\NotoSans-Medium.ttf");
+	public static Font Clangen = LoadFont(".\\Resources\\Font\\clangen.ttf");
+	public static readonly Font NotoSansRegular = LoadFont(".\\Resources\\Font\\NotoSans-Regular.ttf");
+	public static readonly Font NotoSansMedium = LoadFont(".\\Resources\\Font\\NotoSans-Medium.ttf");
 
 	//General
 	public static readonly Texture2D Frame = LoadTexture(".\\Resources\\Images\\frame.png");
@@ -38,6 +38,7 @@ public static class Resources
 
 	//Main Menu
 	public static readonly Texture2D MenuImage = LoadTexture(".\\Resources\\Images\\menu.png");
+	public static readonly Texture2D MenuLogolessImage = LoadTexture(".\\Resources\\Images\\menu_logoless.png");
 
 	//Clan Creation
 	public static readonly Texture2D GameModeTextBox = LoadTexture(".\\Resources\\Images\\game_mode_text_box.png");
