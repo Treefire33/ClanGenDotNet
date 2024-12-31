@@ -345,5 +345,12 @@
 			"text_horiz_alignment": "center",
 			"text_vert_alignment": "center"
 		}
+	},
+	"buttonstyles_ladder": {
+		"prototype:": "@buttonstyles_prototype",
+		"misc": {
+			"text_vert_alignment": "top",
+			"text_vert_padding": 12
+		}
 	}
 }

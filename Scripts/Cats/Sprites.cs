@@ -113,7 +113,7 @@ public static class Sprites
 	public static void LoadAll()
 	{
 		Image lineart = LoadImage(".\\Sprites\\lineart.png");
-		int width = lineart.width; int height = lineart.height;
+		int width = lineart.Width; int height = lineart.Height;
 
 		if (width / 3 == height / 7)
 		{
@@ -428,20 +428,20 @@ public static class Sprites
 
 	private unsafe static void DarkModeSymbol()
 	{
-		Dictionary<string, Texture> darkSymbols = [];
+		Dictionary<string, Texture2D> darkSymbols = [];
 		foreach (var symbolSprite in SymbolSprites)
 		{
 			Image darkSymbol = LoadImageFromTexture(symbolSprite.Value);
 			Color* pixels = LoadImageColors(darkSymbol);
 			Color original = new(87, 76, 45, 255);
 			Color replacement = new(87, 76, 45, 255);
-			for (int i = 0; i < darkSymbol.width; i++)
+			for (int i = 0; i < darkSymbol.Width; i++)
 			{
-				for (int j = 0; j < darkSymbol.height; j++)
+				for (int j = 0; j < darkSymbol.Height; j++)
 				{
-					if (pixels[i * darkSymbol.width + j].Equals(original))
+					if (pixels[i * darkSymbol.Width + j].Equals(original))
 					{
-						pixels[i * darkSymbol.width + j] = replacement;
+						pixels[i * darkSymbol.Width + j] = replacement;
 					}
 				}
 			}

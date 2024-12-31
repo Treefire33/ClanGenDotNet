@@ -12,8 +12,8 @@ public class Utility
 	{
 		float posX = oldRect.X / 1600 * game.ScreenX;
 		float posY = oldRect.Y / 1400 * game.ScreenY;
-		float scaleX = oldRect.width / 1600 * game.ScreenX;
-		float scaleY = oldRect.height / 1400 * game.ScreenY;
+		float scaleX = oldRect.Width / 1600 * game.ScreenX;
+		float scaleY = oldRect.Height / 1400 * game.ScreenY;
 
 		return new(posX, posY, scaleX, scaleY);
 	}
@@ -77,8 +77,8 @@ public class Utility
 		return new Rectangle(
 			rect1.X + rect2.X,
 			rect1.Y + rect2.Y,
-			rect1.width + rect2.width,
-			rect1.height + rect2.height
+			rect1.Width + rect2.Width,
+			rect1.Height + rect2.Height
 		);
 	}
 
@@ -178,7 +178,7 @@ public class Utility
 		//Console.WriteLine(catSprite);
 
 		Image newSprite;
-		FillImage(&newSprite, BLANK);
+		FillImage(&newSprite, Blank);
 
 		try
 		{
@@ -212,9 +212,9 @@ public class Utility
 				ImageDraw(
 					&newSprite,
 					patches,
-					new Rectangle(0, 0, patches.width, patches.height),
-					new Rectangle(0, 0, newSprite.width, newSprite.height),
-					WHITE
+					new Rectangle(0, 0, patches.Width, patches.Height),
+					new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+					White
 				);
 				UnloadImage(mask);
 				UnloadImage(patches);
@@ -268,7 +268,7 @@ public class Utility
 			if (cat.Pelt.WhitePatches != null)
 			{
 				Image whitePatches = ImageCopy(Sprites.CatSprites[
-					"white" + cat.Pelt.WhitePatches + catSprite
+					"White" + cat.Pelt.WhitePatches + catSprite
 				]);
 
 				if (
@@ -298,9 +298,9 @@ public class Utility
 				ImageDraw(
 					&newSprite,
 					whitePatches,
-					new Rectangle(0, 0, whitePatches.width, whitePatches.height),
-					new Rectangle(0, 0, newSprite.width, newSprite.height),
-					WHITE
+					new Rectangle(0, 0, whitePatches.Width, whitePatches.Height),
+					new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+					White
 				);
 				UnloadImage(whitePatches);
 			}
@@ -308,7 +308,7 @@ public class Utility
 			if (cat.Pelt.Points != null)
 			{
 				Image points = Sprites.CatSprites[
-					"white" + cat.Pelt.Points + catSprite
+					"White" + cat.Pelt.Points + catSprite
 				];
 
 				if (
@@ -343,23 +343,23 @@ public class Utility
 				ImageDraw(
 					&newSprite,
 					points,
-					new Rectangle(0, 0, points.width, points.height),
-					new Rectangle(0, 0, newSprite.width, newSprite.height),
-					WHITE
+					new Rectangle(0, 0, points.Width, points.Height),
+					new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+					White
 				);
 			}
 
 			if (cat.Pelt.Vitiligo != null)
 			{
 				Image vit = Sprites.CatSprites[
-					"white" + cat.Pelt.Vitiligo + catSprite
+					"White" + cat.Pelt.Vitiligo + catSprite
 				];
 				ImageDraw(
 					&newSprite,
 					vit,
-					new Rectangle(0, 0, vit.width, vit.height),
-					new Rectangle(0, 0, newSprite.width, newSprite.height),
-					WHITE
+					new Rectangle(0, 0, vit.Width, vit.Height),
+					new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+					White
 				);
 			}
 
@@ -370,18 +370,18 @@ public class Utility
 				ImageDraw(
 					&eyes,
 					eye2,
-					new Rectangle(0, 0, eye2.width, eye2.height),
-					new Rectangle(0, 0, newSprite.width, newSprite.height),
-					WHITE
+					new Rectangle(0, 0, eye2.Width, eye2.Height),
+					new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+					White
 				);
 			}
 
 			ImageDraw(
 				&newSprite,
 				eyes,
-				new Rectangle(0, 0, eyes.width, eyes.height),
-				new Rectangle(0, 0, newSprite.width, newSprite.height),
-				WHITE
+				new Rectangle(0, 0, eyes.Width, eyes.Height),
+				new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+				White
 			);
 			UnloadImage(eyes);
 
@@ -395,9 +395,9 @@ public class Utility
 						ImageDraw(
 							&newSprite,
 							scarImg,
-							new Rectangle(0, 0, scarImg.width, scarImg.height),
-							new Rectangle(0, 0, newSprite.width, newSprite.height),
-							WHITE
+							new Rectangle(0, 0, scarImg.Width, scarImg.Height),
+							new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+							White
 						);
 					}
 				}
@@ -411,9 +411,9 @@ public class Utility
 				ImageDraw(
 					&newSprite,
 					lighting,
-					new Rectangle(0, 0, lighting.width, lighting.height),
-					new Rectangle(0, 0, newSprite.width, newSprite.height),
-					WHITE
+					new Rectangle(0, 0, lighting.Width, lighting.Height),
+					new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+					White
 				);
 			}
 
@@ -434,18 +434,18 @@ public class Utility
 			ImageDraw(
 				&newSprite,
 				lineart,
-				new Rectangle(0, 0, lineart.width, lineart.height),
-				new Rectangle(0, 0, newSprite.width, newSprite.height),
-				WHITE
+				new Rectangle(0, 0, lineart.Width, lineart.Height),
+				new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+				White
 			);
 
 			Image skin = Sprites.CatSprites["skin" + cat.Pelt.Skin + catSprite];
 			ImageDraw(
 				&newSprite,
 				skin,
-				new Rectangle(0, 0, skin.width, skin.height),
-				new Rectangle(0, 0, newSprite.width, newSprite.height),
-				WHITE
+				new Rectangle(0, 0, skin.Width, skin.Height),
+				new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+				White
 			);
 
 			if (!hideScars)
@@ -471,9 +471,9 @@ public class Utility
 					ImageDraw(
 						&newSprite,
 						accessory,
-						new Rectangle(0, 0, accessory.width, accessory.height),
-						new Rectangle(0, 0, newSprite.width, newSprite.height),
-						WHITE
+						new Rectangle(0, 0, accessory.Width, accessory.Height),
+						new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+						White
 					);
 				}
 				else if (Pelt.WildAccessories.Contains(cat.Pelt.Accessory))
@@ -482,9 +482,9 @@ public class Utility
 					ImageDraw(
 						&newSprite,
 						accessory,
-						new Rectangle(0, 0, accessory.width, accessory.height),
-						new Rectangle(0, 0, newSprite.width, newSprite.height),
-						WHITE
+						new Rectangle(0, 0, accessory.Width, accessory.Height),
+						new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+						White
 					);
 				}
 				else if (Pelt.Collars.Contains(cat.Pelt.Accessory))
@@ -493,9 +493,9 @@ public class Utility
 					ImageDraw(
 						&newSprite,
 						accessory,
-						new Rectangle(0, 0, accessory.width, accessory.height),
-						new Rectangle(0, 0, newSprite.width, newSprite.height),
-						WHITE
+						new Rectangle(0, 0, accessory.Width, accessory.Height),
+						new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+						White
 					);
 				}
 			}
@@ -523,9 +523,9 @@ public class Utility
 				ImageDraw(
 					&newSprite,
 					fadeMask,
-					new Rectangle(0, 0, fadeMask.width, fadeMask.height),
-					new Rectangle(0, 0, newSprite.width, newSprite.height),
-					WHITE
+					new Rectangle(0, 0, fadeMask.Width, fadeMask.Height),
+					new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+					White
 				);
 
 				if (cat.DarkForest)
@@ -534,9 +534,9 @@ public class Utility
 					ImageDraw(
 						&faded,
 						newSprite,
-						new Rectangle(0, 0, newSprite.width, newSprite.height),
-						new Rectangle(0, 0, faded.width, faded.height),
-						WHITE
+						new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+						new Rectangle(0, 0, faded.Width, faded.Height),
+						White
 					);
 					UnloadImage(newSprite);
 					newSprite = faded;
@@ -547,9 +547,9 @@ public class Utility
 					ImageDraw(
 						&faded,
 						newSprite,
-						new Rectangle(0, 0, newSprite.width, newSprite.height),
-						new Rectangle(0, 0, faded.width, faded.height),
-						WHITE
+						new Rectangle(0, 0, newSprite.Width, newSprite.Height),
+						new Rectangle(0, 0, faded.Width, faded.Height),
+						White
 					);
 					UnloadImage(newSprite);
 					newSprite = faded;
@@ -573,9 +573,9 @@ public class Utility
 
 	private unsafe static void FillImage(Image* src, Color pixelColour)
 	{
-		for (int y = 0; y < (*src).width; y++)
+		for (int y = 0; y < (*src).Width; y++)
 		{
-			for (int x = 0; x < (*src).height; x++)
+			for (int x = 0; x < (*src).Height; x++)
 			{
 				ImageDrawPixel(
 					src,
@@ -591,20 +591,20 @@ public class Utility
 	{
 		Color* srcPixels = LoadImageColors(src);
 		Color* blendPixels = LoadImageColors(blend);
-		for (int i = 0; i < src.width * src.height; i++)
+		for (int i = 0; i < src.Width * src.Height; i++)
 		{
 			srcPixels[i] = new Color(
-				(int)(srcPixels[i].r / 255.0f * (blendPixels[i].r / 255.0f) * 255),
-				(int)(srcPixels[i].g / 255.0f * (blendPixels[i].g / 255.0f) * 255),
-				(int)(srcPixels[i].b / 255.0f * (blendPixels[i].b / 255.0f) * 255),
-				(int)(srcPixels[i].a / 255.0f * (blendPixels[i].a / 255.0f) * 255)
+				(int)(srcPixels[i].R / 255.0f * (blendPixels[i].R / 255.0f) * 255),
+				(int)(srcPixels[i].G / 255.0f * (blendPixels[i].G / 255.0f) * 255),
+				(int)(srcPixels[i].B / 255.0f * (blendPixels[i].B / 255.0f) * 255),
+				(int)(srcPixels[i].A / 255.0f * (blendPixels[i].A / 255.0f) * 255)
 			);
 		}
-		for (int i = 0; i < src.width; i++)
+		for (int i = 0; i < src.Width; i++)
 		{
-			for (int j = 0; j < src.height; j++)
+			for (int j = 0; j < src.Height; j++)
 			{
-				int index = j * src.width + i;
+				int index = j * src.Width + i;
 				ImageDrawPixel(
 					&src,
 					i, j,
@@ -620,26 +620,26 @@ public class Utility
 	{
 		Color* srcPixels = LoadImageColors(src);
 		Color* blendPixels = LoadImageColors(blend);
-		for (int i = 0; i < src.width * src.height; i++)
+		for (int i = 0; i < src.Width * src.Height; i++)
 		{
-			int red = Math.Min(srcPixels[i].r + blendPixels[i].r, 255);
-			int green = Math.Min(srcPixels[i].g + blendPixels[i].g, 255);
-			int blue = Math.Min(srcPixels[i].b + blendPixels[i].b, 255);
+			int red = Math.Min(srcPixels[i].R + blendPixels[i].R, 255);
+			int green = Math.Min(srcPixels[i].G + blendPixels[i].G, 255);
+			int blue = Math.Min(srcPixels[i].B + blendPixels[i].B, 255);
 			srcPixels[i] = new Color(
 				red,
 				green,
 				blue,
-				(int)(srcPixels[i].a / 255.0f * (blendPixels[i].a / 255.0f) * 255)
+				(int)(srcPixels[i].A / 255.0f * (blendPixels[i].A / 255.0f) * 255)
 			);
 		}
-		for (int i = 0; i < src.width; i++)
+		for (int i = 0; i < src.Width; i++)
 		{
-			for (int j = 0; j < src.height; j++)
+			for (int j = 0; j < src.Height; j++)
 			{
 				ImageDrawPixel(
 					&src,
 					i, j,
-					srcPixels[j * src.width + i]
+					srcPixels[j * src.Width + i]
 				);
 			}
 		}
@@ -651,23 +651,23 @@ public class Utility
 	{
 		Color* srcPixels = LoadImageColors(src);
 		Color* blendPixels = LoadImageColors(blend);
-		for (int i = 0; i < src.width * src.height; i++)
+		for (int i = 0; i < src.Width * src.Height; i++)
 		{
 			srcPixels[i] = new Color(
-				Math.Min(srcPixels[i].r, blendPixels[i].r),
-				Math.Min(srcPixels[i].b, blendPixels[i].b),
-				Math.Min(srcPixels[i].g, blendPixels[i].g),
-				Math.Min(srcPixels[i].a, blendPixels[i].a)
+				Math.Min(srcPixels[i].R, blendPixels[i].R),
+				Math.Min(srcPixels[i].B, blendPixels[i].B),
+				Math.Min(srcPixels[i].G, blendPixels[i].G),
+				Math.Min(srcPixels[i].A, blendPixels[i].A)
 			);
 		}
-		for (int i = 0; i < src.width; i++)
+		for (int i = 0; i < src.Width; i++)
 		{
-			for (int j = 0; j < src.height; j++)
+			for (int j = 0; j < src.Height; j++)
 			{
 				ImageDrawPixel(
 					&src,
 					i, j,
-					srcPixels[j * src.width + i]
+					srcPixels[j * src.Width + i]
 				);
 			}
 		}
@@ -759,7 +759,7 @@ public class Utility
 		Color tint
 	)
 	{
-		DrawTextBoxedSelectable(font, text, rec, fontSize, spacing, wordWrap, tint, 0, 0, WHITE, WHITE);
+		DrawTextBoxedSelectable(font, text, rec, fontSize, spacing, wordWrap, tint, 0, 0, White, White);
 	}
 
 
@@ -777,12 +777,16 @@ public class Utility
 		Color selectTint, 
 		Color selectBackTint)
 	{
-		int length = TextLength(text);  // Total length in bytes of the text, scanned by codepoints in loop
+		int length;
+		fixed (byte* p = Encoding.ASCII.GetBytes(text))
+		{
+			length = (int)TextLength((sbyte*)p); // Total length in bytes of the text, scanned by codepoints in loop
+		}
 
 		float textOffsetY = 0;          // Offset between lines (on line break '\n')
 		float textOffsetX = 0.0f;       // Offset X to next character to draw
 
-		float scaleFactor = fontSize / (float)font.baseSize;     // Character rectangle scaling factor
+		float scaleFactor = fontSize / (float)font.BaseSize;     // Character rectangle scaling factor
 
 		// Word/character wrapping mechanism variables
 		int MEASURE_STATE = 0, DRAW_STATE = 1;
@@ -796,7 +800,8 @@ public class Utility
 		for (int i = 0, k = 0; i < length; i++, k++)
 		{
 			// Get next codepoint from byte string and glyph index in font
-			int codepoint = GetCodepoint(text[i], out int codepointByteCount);
+			int codepointByteCount = 0;
+			int codepoint = GetCodepoint(text[i].ToString(), ref codepointByteCount);
 			int index = GetGlyphIndex(font, codepoint);
 
 			// NOTE: Normally we exit the decoding sequence as soon as a bad byte is found (and return 0x3f)
@@ -807,7 +812,7 @@ public class Utility
 			float glyphWidth = 0;
 			if (codepoint != '\n')
 			{
-				glyphWidth = (font.glyphs[index].advanceX == 0) ? font.recs[index].width * scaleFactor : font.glyphs[index].advanceX * scaleFactor;
+				glyphWidth = (font.Glyphs[index].AdvanceX == 0) ? font.Recs[index].Width * scaleFactor : font.Glyphs[index].AdvanceX * scaleFactor;
 
 				if (i + 1 < length) glyphWidth = glyphWidth + spacing;
 			}
@@ -823,7 +828,7 @@ public class Utility
 				// Ref: http://jkorpela.fi/chars/spaces.html
 				if ((codepoint == ' ') || (codepoint == '\t') || (codepoint == '\n')) endLine = i;
 
-				if ((textOffsetX + glyphWidth) > rec.width)
+				if ((textOffsetX + glyphWidth) > rec.Width)
 				{
 					endLine = (endLine < 1) ? i : endLine;
 					if (i == endLine) endLine -= codepointByteCount;
@@ -856,26 +861,26 @@ public class Utility
 				{
 					if (!wordWrap)
 					{
-						textOffsetY += (font.baseSize + font.baseSize / 2) * scaleFactor;
+						textOffsetY += (font.BaseSize + font.BaseSize / 2) * scaleFactor;
 						textOffsetX = 0;
 					}
 				}
 				else
 				{
-					if (!wordWrap && ((textOffsetX + glyphWidth) > rec.width))
+					if (!wordWrap && ((textOffsetX + glyphWidth) > rec.Width))
 					{
-						textOffsetY += (font.baseSize + font.baseSize / 2) * scaleFactor;
+						textOffsetY += (font.BaseSize + font.BaseSize / 2) * scaleFactor;
 						textOffsetX = 0;
 					}
 
-					// When text overflows rectangle height limit, just stop drawing
-					if ((textOffsetY + font.baseSize * scaleFactor) > rec.height) break;
+					// When text overflows rectangle Height limit, just stop drawing
+					if ((textOffsetY + font.BaseSize * scaleFactor) > rec.Height) break;
 
 					// Draw selection background
 					bool isGlyphSelected = false;
 					if ((selectStart >= 0) && (k >= selectStart) && (k < (selectStart + selectLength)))
 					{
-						DrawRectangleRec(new Rectangle(rec.X + textOffsetX - 1, rec.Y + textOffsetY, glyphWidth, (float)font.baseSize * scaleFactor), selectBackTint);
+						DrawRectangleRec(new Rectangle(rec.X + textOffsetX - 1, rec.Y + textOffsetY, glyphWidth, (float)font.BaseSize * scaleFactor), selectBackTint);
 						isGlyphSelected = true;
 					}
 
@@ -888,7 +893,7 @@ public class Utility
 
 				if (wordWrap && (i == endLine))
 				{
-					textOffsetY += (font.baseSize + font.baseSize / 2) * scaleFactor;
+					textOffsetY += (font.BaseSize + font.BaseSize / 2) * scaleFactor;
 					textOffsetX = 0;
 					startLine = endLine;
 					endLine = -1;
@@ -946,7 +951,7 @@ public static class ColourExtensions
 {
 	public static bool Equals(this Color a, Color b)
 	{
-		return (a.r == b.r) && (a.g == b.g) && (a.b == b.b); //don't compare alpha.
+		return (a.R == b.R) && (a.G == b.G) && (a.B == b.B); //don't compare alpha.
 	}
 }
 

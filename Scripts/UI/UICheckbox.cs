@@ -31,11 +31,11 @@ public class UICheckbox : UIElement, IUIClickable, IUIElement
 		base.Update();
 		DrawTexturePro(
 			_currentTexture,
-			new Rectangle(0, 0, _currentTexture.width, _currentTexture.height),
+			new Rectangle(0, 0, _currentTexture.Width, _currentTexture.Height),
 			RelativeRect.RelativeRect,
 			Vector2.Zero,
 			0,
-			WHITE
+			White
 		);
 		DrawTextPro(
 			NotoSansMedium,
@@ -45,7 +45,7 @@ public class UICheckbox : UIElement, IUIClickable, IUIElement
 			0,
 			_fontSize,
 			0,
-			WHITE
+			White
 		);
 	}
 
@@ -75,12 +75,12 @@ public class UICheckbox : UIElement, IUIClickable, IUIElement
 	public void HandleElementInteraction()
 	{
 		if (!Active) { return; }
-		if (Hovered && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+		if (Hovered && IsMouseButtonDown(MouseButton.Left))
 		{
 			Manager.PushEvent(new(this, Events.EventType.LeftMouseDown));
 			_pressed = true;
 		}
-		else if (Hovered && _pressed && IsMouseButtonUp(MOUSE_BUTTON_LEFT))
+		else if (Hovered && _pressed && IsMouseButtonUp(MouseButton.Left))
 		{
 			_pressed = false;
 			Manager.PushEvent(new(this, Events.EventType.LeftMouseClick));

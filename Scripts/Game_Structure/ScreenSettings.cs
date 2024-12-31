@@ -54,7 +54,7 @@ public class ScreenSettings
 			DetermineScreenScale((int)displaySize.X, (int)displaySize.Y);
 
 			Screen = LoadRenderTexture(ScreenX, ScreenY);
-			SetTextureFilter(Screen.texture, TEXTURE_FILTER_BILINEAR);
+			SetTextureFilter(Screen.Texture, Bilinear);
 			SetWindowMonitor(ScreenConfig.FullscreenDisplay);
 
 			//ToggleBorderlessWindowed();
@@ -71,7 +71,7 @@ public class ScreenSettings
 			ScreenY = 700;
 			ScreenScale = 1;
 			Screen = LoadRenderTexture(ScreenX, ScreenY);
-			SetTextureFilter(Screen.texture, TEXTURE_FILTER_BILINEAR);
+			SetTextureFilter(Screen.Texture, Bilinear);
 		}
 		GameScreenSize = new Vector2(ScreenX, ScreenY);
 

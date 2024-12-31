@@ -301,7 +301,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 					_checkboxes.Last().Value.RelativeRect
 				),
 				ButtonStyle.LadderMiddle,
-				"Spanish"
+				"spanish"
 			));
 			_checkboxes.Add("german", new UIButton(
 				UIScale(new ClanGenRect(310, 0, 180, 37)).AnchorTo(
@@ -309,7 +309,7 @@ public class SettingsScreen(string name = "settings screen") : Screens(name)
 					_checkboxes.Last().Value.RelativeRect
 				),
 				ButtonStyle.LadderBottom,
-				"German"
+				"german"
 			));
 		}
 		else if (_subMenu == "general")

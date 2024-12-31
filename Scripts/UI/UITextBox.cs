@@ -93,6 +93,14 @@ public class UITextBox : UIElement, IUIElement
 		{
 			_verticalAlignment = GetVerticalAlignmentFromString(vertAlignment!);
 		}
+		/*if (Theme.Miscellaneous.TryGetValue("text_horiz_alignment_padding", out dynamic? horizPadding))
+		{
+			_horizontalAlignment = GetHorizontalAlignmentFromString(horizAlignment!);
+		}
+		if (Theme.Miscellaneous.TryGetValue("text_vert_alignment_padding", out dynamic? vertPadding))
+		{
+			_horizontalAlignment = GetHorizontalAlignmentFromString(horizAlignment!);
+		}*/
 	}
   
 	public void SetPadding(Vector2 padding)
@@ -185,7 +193,7 @@ public class UITextBox : UIElement, IUIElement
 				DrawTextPro(
 					NotoSansMedium,
 					line,
-					new Vector2(addedRectangles.x, addedRectangles.y) + new Vector2(0, positionOffset),
+					new Vector2(addedRectangles.X, addedRectangles.Y) + new Vector2(0, positionOffset),
 					Vector2.Zero,
 					0,
 					_fontSize,
@@ -229,12 +237,12 @@ public class UITextBox : UIElement, IUIElement
 			DrawTextPro(
 				NotoSansMedium,
 				_text,
-				new Vector2(addedRectangles.x, addedRectangles.y),
+				new Vector2(addedRectangles.X, addedRectangles.Y),
 				Vector2.Zero,
 				0,
 				_fontSize,
 				0,
-				WHITE
+				White
 			);
 			RelativeRect.Height = textSize.Y;
 		}

@@ -10,7 +10,7 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 {
 	[MarshalAs(UnmanagedType.LPUTF8Str)] private string _text;
 	private int _fontSize = 30;
-	private Color _textColour = WHITE;
+	private Color _textColour = White;
 
 	private Texture2D _currentTexture;
 	private NPatchInfo _currentNPatch;
@@ -150,7 +150,7 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 			RelativeRect,
 			Vector2.Zero,
 			0,
-			WHITE
+			White
 		);
 		DrawTextEx(
 			Clangen,
@@ -176,22 +176,22 @@ public partial class UIButton : UIElement, IUIClickable, IUIElement
 		{
 			Event newEvent = new(this, EventType.None);
 
-			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+			if (IsMouseButtonDown(MouseButton.Left))
 			{
 				newEvent.EventType = EventType.LeftMouseDown;
 				_pressed = true;
 			}
-			else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+			else if (IsMouseButtonReleased(MouseButton.Left))
 			{
 				newEvent.EventType = _pressed ? EventType.LeftMouseClick : EventType.LeftMouseUp;
 				_pressed = false;
 			}
-			else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+			else if (IsMouseButtonDown(MouseButton.Right))
 			{
 				newEvent.EventType = EventType.RightMouseDown;
 				_pressed = true;
 			}
-			else if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT))
+			else if (IsMouseButtonReleased(MouseButton.Right))
 			{
 				newEvent.EventType = _pressed ? EventType.RightMouseClick : EventType.RightMouseUp;
 				_pressed = false;

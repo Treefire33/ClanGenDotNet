@@ -80,12 +80,9 @@ public class StartScreen(string name = "start screen") : Screens(name)
 
 		if (game.Clan != null)
 		{
-			foreach (string kitty in Cat.AllCats.Keys)
+			foreach (string kitty in Cat.AllCats.Keys.Where(kitty => !game.Clan.ClanCats.Contains(kitty)))
 			{
-				if (!game.Clan.ClanCats.Contains(kitty))
-				{
-					game.Clan.ClanCats.Remove(kitty);
-				}
+				game.Clan.ClanCats.Remove(kitty);
 			}
 		}
 	}
@@ -94,7 +91,7 @@ public class StartScreen(string name = "start screen") : Screens(name)
 	{
 		base.HandleEvent(evnt);
 
-		if (evnt.EventType == EventType.LeftMouseClick && evnt.Element is UIButton element)
+		if (evnt is { EventType: EventType.LeftMouseClick, Element: UIButton element })
 		{
 			Dictionary<UIButton, string> screens = new()
 			{
@@ -138,31 +135,29 @@ public class StartScreen(string name = "start screen") : Screens(name)
 		}
 		else if (evnt.EventType == EventType.KeyPressed && (bool)game.Settings["keybinds"]! == true)
 		{
-			if (
-				evnt.KeyCode == (KEY_ENTER | KEY_SPACE | KEY_ONE)
-				&& _continue!.Active
-			)
+			switch (evnt.KeyCode)
 			{
-				ChangeScreen("camp screen");
+				case Enter | Space | One
+					when _continue!.Active:
+					ChangeScreen("camp screen");
+					break;
+				case >= Two and <= Five:
+					switch (evnt.KeyCode)
+					{
+						case Three:
+							ChangeScreen("clan creation screen");
+							break;
+						case Four:
+							ChangeScreen("settings screen");
+							break;
+						case Five:
+							Environment.Exit(0);
+							break;
+					}
+					break;
 			}
 
-			if (evnt.KeyCode >= KEY_TWO && evnt.KeyCode <= KEY_FIVE)
-			{
-				switch (evnt.KeyCode)
-				{
-					case KEY_THREE:
-						ChangeScreen("clan creation screen");
-						break;
-					case KEY_FOUR:
-						ChangeScreen("settings screen");
-						break;
-					case KEY_FIVE:
-						Environment.Exit(0);
-						break;
-				}
-			}
-
-			if (evnt.KeyCode == KEY_ESCAPE)
+			if (evnt.KeyCode == Escape)
 			{
 				Environment.Exit(0);
 			}

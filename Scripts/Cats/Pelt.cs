@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.HighPerformance.Buffers;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 
 namespace ClanGenDotNet.Scripts.Cats;

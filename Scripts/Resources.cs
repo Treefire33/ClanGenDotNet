@@ -18,20 +18,20 @@ public static class Resources
 	public static readonly Texture2D Frame = LoadTexture(".\\Resources\\Images\\frame.png");
 	public static readonly NPatchInfo FrameNPatch = new()
 	{
-		source = new Rectangle(0, 0, Frame.width, Frame.height),
-		top = 10,
-		bottom = 10,
-		left = 10,
-		right = 10
+		Source = new Rectangle(0, 0, Frame.Width, Frame.Height),
+		Top = 10,
+		Bottom = 10,
+		Left = 10,
+		Right = 10
 	};
 	public static readonly Texture2D RoundedFrame = LoadTexture(".\\Resources\\Images\\rounded_frame.png");
 	public static readonly NPatchInfo RoundedFrameNPatch = new()
 	{
-		source = new Rectangle(0, 0, Frame.width, Frame.height),
-		top = 10,
-		bottom = 10,
-		left = 10,
-		right = 10
+		Source = new Rectangle(0, 0, Frame.Width, Frame.Height),
+		Top = 10,
+		Bottom = 10,
+		Left = 10,
+		Right = 10
 	};
 
 	public static readonly Texture2D ClanNameBackground = LoadTexture(".\\Resources\\Images\\clan_name_bg.png");
@@ -115,19 +115,19 @@ public static class Resources
 		return MainMenuButtonImages.Contains(button)
 			? new NPatchInfo
 			{
-				source = new Rectangle(0, 0, button.width, button.height),
-				left = button.width / 2,
-				right = button.width / 2,
-				layout = (int)NPATCH_NINE_PATCH
+				Source = new Rectangle(0, 0, button.Width, button.Height),
+				Left = button.Width / 2,
+				Right = button.Width / 2,
+				Layout = NinePatch
 			}
 			: new NPatchInfo
 			{
-				source = new Rectangle(0, 0, button.width, button.height),
-				left = button.width / 3,
-				right = button.width / 3,
-				top = button.height / 3,
-				bottom = button.height / 3,
-				layout = (int)NPATCH_NINE_PATCH
+				Source = new Rectangle(0, 0, button.Width, button.Height),
+				Left = button.Width / 3,
+				Right = button.Width / 3,
+				Top = button.Height / 3,
+				Bottom = button.Height / 3,
+				Layout = NinePatch
 			};
 	}
 
@@ -212,7 +212,7 @@ public static class Resources
 
 		Dictionary<string, List<Image>> nTabs = [];
 
-		int tabSize = allTabs.width / 3;
+		int tabSize = allTabs.Width / 3;
 		string[] tabs = ["icon_tab_top", "icon_tab_left", "icon_tab_bottom", "icon_tab_right"];
 		string[] states = ["normal", "hovered", "disabled"];
 		for (int y = 0; y < tabs.Length; y++)
@@ -244,17 +244,17 @@ public static class Resources
 
 	private static unsafe void SetFontFilters()
 	{
-		fixed (Texture2D* clanGenTex = &Clangen.texture) { GenTextureMipmaps(clanGenTex); }
+		fixed (Texture2D* clanGenTex = &Clangen.Texture) { GenTextureMipmaps(clanGenTex); }
 		/*fixed (Texture2D* notoSansReg = &NotoSansRegular.texture) { GenTextureMipmaps(notoSansReg); }
 		fixed (Texture2D* notoSansMed = &NotoSansMedium.texture) { GenTextureMipmaps(notoSansMed); }*/
 		//SetTextureFilter(Clangen.texture, TEXTURE_FILTER_POINT);
-		SetTextureFilter(NotoSansRegular.texture, TEXTURE_FILTER_BILINEAR);
-		SetTextureFilter(NotoSansMedium.texture, TEXTURE_FILTER_BILINEAR);
+		SetTextureFilter(NotoSansRegular.Texture, Bilinear);
+		SetTextureFilter(NotoSansMedium.Texture, Bilinear);
 	}
 
 	public unsafe static void LoadResources()
 	{
-		int[] codepointsInt = Enumerable.Range(0x0020, 0x00A0)
+		int[] codepoints = Enumerable.Range(0x0020, 0x00A0)
 			.Concat([
 				0x2026, 0x2190, 0x2192, 0x2302,
 				0x23E9, 0x23EA, 0x250F, 0x2600,
@@ -266,12 +266,9 @@ public static class Resources
 				0x1F5C9, 0x1F89C, 0x1F89E, 0x1FAB4
 			])
 			.ToArray();
-		fixed (int* codepoints = codepointsInt)
-		{
-			//we don't have 256 characters, but alas, it wouldn't load with any number lower.
-			Clangen = LoadFontEx(".\\Resources\\Font\\clangen.ttf", 32, codepoints, 256); 
-			//Sadly, I can't do anything about... whatever is happening with unicode characters.
-		}
+		//we don't have 256 characters, but alas, it wouldn't load with any number lower.
+		Clangen = LoadFontEx(".\\Resources\\Font\\clangen.ttf", 32, codepoints, 256); 
+		//Sadly, I can't do anything about... whatever is happening with unicode characters.
 		SetFontFilters();
 		LightModeColour = new(
 			game.Config.Theme.LightModeBackground[0],

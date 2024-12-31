@@ -44,8 +44,8 @@ public class ClanGenMain
 			frames.Add(LoadTexture($".\\Resources\\Images\\LoadingAnimation\\Startup\\{index}.png"));
 		}
 
-		int x = ScreenSettings.Screen.texture.width / 2;
-		int y = ScreenSettings.Screen.texture.height / 2;
+		int x = ScreenSettings.Screen.Texture.Width / 2;
+		int y = ScreenSettings.Screen.Texture.Height / 2;
 
 		int i = 0;
 		while (!_finishedLoading)
@@ -56,23 +56,23 @@ public class ClanGenMain
 			ClearBackground(GetThemeColour());
 			DrawTexturePro(
 				frames[i],
-				new Rectangle(0, 0, frames[i].width, frames[i].height),
+				new Rectangle(0, 0, frames[i].Width, frames[i].Height),
 				new Rectangle(
-					x - frames[i].width / 2,
-					y - frames[i].height / 2,
-					frames[i].width, frames[i].height
+					x - frames[i].Width / 2,
+					y - frames[i].Height / 2,
+					frames[i].Width, frames[i].Height
 				),
 				Vector2.Zero,
 				0,
-				WHITE
+				White
 			);
 			EndTextureMode();
 
 			BeginDrawing();
-			ClearBackground(WHITE);
+			ClearBackground(White);
 			DrawTexturePro(
-				ScreenSettings.Screen.texture,
-				new Rectangle(0, 0, ScreenSettings.Screen.texture.width, -ScreenSettings.Screen.texture.height),
+				ScreenSettings.Screen.Texture,
+				new Rectangle(0, 0, ScreenSettings.Screen.Texture.Width, -ScreenSettings.Screen.Texture.Height),
 				new Rectangle(
 					(GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f,
 					(GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f,
@@ -81,7 +81,7 @@ public class ClanGenMain
 				),
 				Vector2.Zero,
 				0,
-				WHITE
+				White
 			);
 			EndDrawing();
 
@@ -101,15 +101,15 @@ public class ClanGenMain
 
 	public static void Main(string[] args)
 	{
-		SetTraceLogLevel((int)LOG_ERROR);
-		SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+		SetTraceLogLevel(Error);
+		SetConfigFlags(ResizableWindow | VSyncHint);
 		InitWindow(game.ScreenX, game.ScreenY, "ClanGen.Net");
 		SetWindowMinSize(800, 700);
 		SetWindowIcon(_windowIcon);
 
 		UnloadImage(_windowIcon);
 
-		SetExitKey(KEY_NULL); //So that way we can use KEY_ESCAPE
+		SetExitKey(Null); //So that way we can use KEY_ESCAPE
 
 		SetUpDataDirectory();
 		game.Manager.LoadTheme(
@@ -176,7 +176,7 @@ public class ClanGenMain
 			EndTextureMode();
 
 			BeginDrawing();
-			ClearBackground(WHITE);
+			ClearBackground(White);
 			DrawTexturePro(
 				MenuLogolessImage,
 				new Rectangle(0, 0, GetScreenWidth(), GetScreenHeight()),
@@ -186,24 +186,24 @@ public class ClanGenMain
 				),
 				Vector2.Zero,
 				0,
-				WHITE
+				White
 			);
 			DrawTextureNPatch(
 				Frame,
 				FrameNPatch,
 				new Rectangle(
-					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (Frame.width / 2),
-					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (Frame.height / 2),
-					(ScreenSettings.GameScreenSize.X + Frame.width) * ScreenSettings.ScreenScale,
-					(ScreenSettings.GameScreenSize.Y + Frame.height) * ScreenSettings.ScreenScale
+					((GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f) - (Frame.Width / 2),
+					((GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f) - (Frame.Height / 2),
+					(ScreenSettings.GameScreenSize.X + Frame.Width) * ScreenSettings.ScreenScale,
+					(ScreenSettings.GameScreenSize.Y + Frame.Height) * ScreenSettings.ScreenScale
 				),
 				Vector2.Zero,
 				0,
-				WHITE
+				White
 			);
 			DrawTexturePro(
-				ScreenSettings.Screen.texture,
-				new Rectangle(0, 0, ScreenSettings.Screen.texture.width, -ScreenSettings.Screen.texture.height),
+				ScreenSettings.Screen.Texture,
+				new Rectangle(0, 0, ScreenSettings.Screen.Texture.Width, -ScreenSettings.Screen.Texture.Height),
 				new Rectangle(
 					(GetScreenWidth() - (ScreenSettings.GameScreenSize.X * ScreenSettings.ScreenScale)) * 0.5f,
 					(GetScreenHeight() - (ScreenSettings.GameScreenSize.Y * ScreenSettings.ScreenScale)) * 0.5f,
@@ -212,7 +212,7 @@ public class ClanGenMain
 				),
 				Vector2.Zero,
 				0,
-				WHITE
+				White
 			);
 			EndDrawing();
 		}

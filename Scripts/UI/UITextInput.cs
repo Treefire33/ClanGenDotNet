@@ -19,7 +19,7 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 	public override void Update()
 	{
 		base.Update();
-		DrawRectangleRec(RelativeRect.RelativeRect, WHITE);
+		DrawRectangleRec(RelativeRect.RelativeRect, White);
 		DrawTextPro(
 			NotoSansMedium,
 			_text,
@@ -28,21 +28,21 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 			0,
 			25,
 			0,
-			BLACK
+			Black
 		);
 
-		if (Hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		if (Hovered && IsMouseButtonPressed(MouseButton.Left))
 		{
 			Focused = true;
 		}
-		else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		else if (IsMouseButtonPressed(MouseButton.Right))
 		{
 			Focused = false;
 		}
 
 		if (Focused)
 		{
-			SetMouseCursor(MOUSE_CURSOR_IBEAM);
+			SetMouseCursor(IBeam);
 
 			int key = GetCharPressed();
 
@@ -57,7 +57,7 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 				key = GetCharPressed();
 			}
 
-			if (IsKeyDown(KEY_BACKSPACE) && _currentCharacters >= 0)
+			if (IsKeyDown(Backspace) && _currentCharacters >= 0)
 			{
 				_currentCharacters--;
 				if (_currentCharacters < 0) { _currentCharacters = 0; }
@@ -66,7 +66,7 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 		}
 		else
 		{
-			SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+			SetMouseCursor(MouseCursor.Default);
 		}
 	}
 
@@ -101,7 +101,7 @@ public partial class UITextInput(ClanGenRect posScale, string defaultText, int m
 						0,
 						25,
 						0,
-						BLACK
+						Black
 					);
 				}
 			}

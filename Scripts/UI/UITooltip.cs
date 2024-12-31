@@ -70,7 +70,6 @@ public class UITooltip : UIElement, IUIElement
 				RelativeRect,
 				0.3f,
 				5,
-				2,
 				DarkModeColour
 			);
 			DrawTextBoxed(
@@ -88,7 +87,7 @@ public class UITooltip : UIElement, IUIElement
 				18,
 				0,
 				true,
-				BLACK
+				Black
 			);
 		}
 	}

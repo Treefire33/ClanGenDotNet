@@ -185,7 +185,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		_elements.Add("random", new UIButton(
 			UIScale(new ClanGenRect(224, 595, 34, 34)),
 			ButtonStyle.Icon,
-			"\u2192",
+			"\u2684",
 			objectID: "buttonstyles_icon"
 		));
 
@@ -810,14 +810,14 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				OpenNameClan();
 			}
 		}
-		else if (evnt.EventType == EventType.KeyPressed)
+		else if (evnt.EventType == EventType.KeyPressed && (bool)game.Settings["keybinds"]!)
 		{
 			switch (evnt.KeyCode)
 			{
-				case KEY_ESCAPE:
+				case Escape:
 					ChangeScreen("start screen");
 					break;
-				case KEY_DOWN:
+				case Down:
 					if (_gameMode == "classic")
 					{
 						_gameMode = "expanded";
@@ -828,7 +828,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 					}
 					RefreshTextAndButtons();
 					break;
-				case KEY_UP:
+				case Up:
 					if (_gameMode == "cruel season")
 					{
 						_gameMode = "expanded";
@@ -839,8 +839,8 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 					}
 					RefreshTextAndButtons();
 					break;
-				case KEY_ENTER:
-				case KEY_RIGHT:
+				case Enter:
+				case KeyboardKey.Right:
 					if (_elements["next_step"].Active)
 					{
 						game.Settings["gamemode"] = _gameMode;
@@ -901,26 +901,26 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 				OpenGameMode();
 			}
 		}
-		else if (evnt.EventType == EventType.KeyPressed)
+		else if (evnt.EventType == EventType.KeyPressed && (bool)game.Settings["keybinds"]!)
 		{
 			switch (evnt.KeyCode)
 			{
-				case KEY_ESCAPE:
+				case Escape:
 					ChangeScreen("start screen");
 					break;
-				case KEY_LEFT:
+				case KeyboardKey.Left:
 					if (!nameEntry.Focused)
 					{
 						_clanName = "";
 						OpenGameMode();
 					}
 					break;
-				case KEY_ENTER:
-				case KEY_RIGHT:
+				case Enter:
+				case KeyboardKey.Right:
 					if (!nameEntry.Focused)
 					{
 						string newName = ClanNamePattern().Replace(nameEntry.GetText(), "").Trim();
-						if (newName == null || newName == "")
+						if (newName is null or "")
 						{
 							errorText.SetText("Your Clan's name cannot be empty");
 							return;
@@ -972,10 +972,10 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			{
 				if (evnt.Element == _elements["cat" + i])
 				{
-					if (IsKeyDown(KEY_LEFT_SHIFT))
+					if (IsKeyDown(LeftShift) && (bool)game.Settings["keybinds"]!)
 					{
-						var clickedCat = ((UICatButton)evnt.Element!).GetCat();
-						if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+						Cat clickedCat = ((UICatButton)evnt.Element!).GetCat();
+						if (clickedCat.Age != Age.Newborn || clickedCat.Age !=  Age.Kitten || clickedCat.Age != Age.Adolescent)
 						{
 							_leader = clickedCat;
 							_selectedCat = null;
@@ -1014,10 +1014,10 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			{
 				if (evnt.Element == _elements["cat" + i])
 				{
-					if (IsKeyDown(KEY_LEFT_SHIFT))
+					if (IsKeyDown(LeftShift) && (bool)game.Settings["keybinds"]!)
 					{
 						var clickedCat = ((UICatButton)evnt.Element!).GetCat();
-						if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+						if (clickedCat.Age != Age.Newborn || clickedCat.Age !=  Age.Kitten || clickedCat.Age != Age.Adolescent)
 						{
 							_deputy = clickedCat;
 							_selectedCat = null;
@@ -1056,10 +1056,10 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			{
 				if (evnt.Element == _elements["cat" + i])
 				{
-					if (IsKeyDown(KEY_LEFT_SHIFT))
+					if (IsKeyDown(LeftShift) && (bool)game.Settings["keybinds"]!)
 					{
 						var clickedCat = ((UICatButton)evnt.Element!).GetCat();
-						if (clickedCat.Age != (Age.Newborn | Age.Kitten | Age.Adolescent))
+						if (clickedCat.Age != Age.Newborn || clickedCat.Age !=  Age.Kitten || clickedCat.Age != Age.Adolescent)
 						{
 							_medicineCat = clickedCat;
 							_selectedCat = null;
@@ -1098,7 +1098,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			{
 				if (evnt.Element == _elements["cat" + i])
 				{
-					if (IsKeyDown(KEY_LEFT_SHIFT) && _members.Count < 7)
+					if (IsKeyDown(LeftShift) && _members.Count < 7 && (bool)game.Settings["keybinds"]!)
 					{
 						var clickedCat = ((UICatButton)evnt.Element!).GetCat();
 						_members.Add(clickedCat!);
@@ -1232,7 +1232,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 		{
 			switch (evnt.KeyCode)
 			{
-				case KEY_RIGHT:
+				case KeyboardKey.Right:
 					_biomeSelected =
 						_biomeSelected == null
 						? "Forest"
@@ -1246,7 +1246,7 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 					_selectedCampTag = 1;
 					RefreshTextAndButtons();
 					break;
-				case KEY_LEFT:
+				case KeyboardKey.Left:
 					_biomeSelected =
 						_biomeSelected == null
 						? "Beach"
@@ -1260,21 +1260,21 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 					_selectedCampTag = 1;
 					RefreshTextAndButtons();
 					break;
-				case KEY_UP:
+				case Up:
 					if (_selectedCampTag > 1 && _biomeSelected != null)
 					{
 						_selectedCampTag--;
 					}
 					RefreshSelectedCamp();
 					break;
-				case KEY_DOWN:
+				case Down:
 					if (_selectedCampTag < 4 && _biomeSelected != null)
 					{
 						_selectedCampTag++;
 					}
 					RefreshSelectedCamp();
 					break;
-				case KEY_ENTER:
+				case Enter:
 					OpenChooseSymbol();
 					break;
 			}
@@ -1320,20 +1320,20 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 			}
 			else
 			{
-				foreach (var button in _symbolButtons)
+				foreach (
+					KeyValuePair<string, UIButton> button 
+					in _symbolButtons.Where(button => evnt.Element == button.Value)
+				)
 				{
-					if (evnt.Element == button.Value)
+					if (_symbolSelected != null)
 					{
-						if (_symbolSelected != null)
+						if (_symbolButtons.TryGetValue(_symbolSelected, out UIButton? btn))
 						{
-							if (_symbolButtons.TryGetValue(_symbolSelected, out UIButton? btn))
-							{
-								btn.Enable();
-							}
+							btn.Enable();
 						}
-						_symbolSelected = button.Key;
-						RefreshTextAndButtons();
 					}
+					_symbolSelected = button.Key;
+					RefreshTextAndButtons();
 				}
 			}
 		}
@@ -1349,165 +1349,166 @@ public partial class ClanCreationScreen(string name = "clan creation screen") : 
 
 	private void RefreshTextAndButtons()
 	{
-		if (_subScreen == "gamemode")
+		switch (_subScreen)
 		{
-			if (_elements["mode_name"] is UITextBox modeName && _elements["mode_details"] is UITextBox modeDesc)
+			case "gamemode":
 			{
-				string displayMode;
-				string displayText;
+				if (_elements["mode_name"] is UITextBox modeName && _elements["mode_details"] is UITextBox modeDesc)
+				{
+					string displayMode;
+					string displayText;
+					switch (_gameMode)
+					{
+						case "classic":
+							displayMode = "Classic Mode";
+							displayText = _classicDetails;
+							break;
+						case "expanded":
+							displayMode = "Expanded Mode";
+							displayText = _expandedDetails;
+							break;
+						case "cruel season":
+							displayMode = "Cruel Mode";
+							displayText = _cruelDetails;
+							break;
+						default:
+							displayMode = "ERROR: Not a Valid Mode!";
+							displayText = "";
+							break;
+					}
+					modeDesc.SetText(displayText);
+					modeName.SetText(displayMode);
+				}
+
 				switch (_gameMode)
 				{
 					case "classic":
-						displayMode = "Classic Mode";
-						displayText = _classicDetails;
+						_elements["classic_mode_button"].SetActive(false);
+						_elements["expanded_mode_button"].SetActive(true);
+						_elements["cruel_mode_button"].SetActive(true);
 						break;
 					case "expanded":
-						displayMode = "Expanded Mode";
-						displayText = _expandedDetails;
+						_elements["classic_mode_button"].SetActive(true);
+						_elements["expanded_mode_button"].SetActive(false);
+						_elements["cruel_mode_button"].SetActive(true);
 						break;
-					case "cruel season":
-						displayMode = "Cruel Mode";
-						displayText = _cruelDetails;
+					case "cruel":
+						_elements["classic_mode_button"].SetActive(true);
+						_elements["expanded_mode_button"].SetActive(true);
+						_elements["cruel_mode_button"].SetActive(false);
 						break;
 					default:
-						displayMode = "ERROR: Not a Valid Mode!";
-						displayText = "";
+						_elements["classic_mode_button"].SetActive(true);
+						_elements["expanded_mode_button"].SetActive(true);
+						_elements["cruel_mode_button"].SetActive(true);
 						break;
 				}
-				modeDesc.SetText(displayText);
-				modeName.SetText(displayMode);
-			}
 
-			switch (_gameMode)
-			{
-				case "classic":
-					_elements["classic_mode_button"].SetActive(false);
-					_elements["expanded_mode_button"].SetActive(true);
-					_elements["cruel_mode_button"].SetActive(true);
-					break;
-				case "expanded":
-					_elements["classic_mode_button"].SetActive(true);
-					_elements["expanded_mode_button"].SetActive(false);
-					_elements["cruel_mode_button"].SetActive(true);
-					break;
-				case "cruel":
-					_elements["classic_mode_button"].SetActive(true);
-					_elements["expanded_mode_button"].SetActive(true);
-					_elements["cruel_mode_button"].SetActive(false);
-					break;
-				default:
-					_elements["classic_mode_button"].SetActive(true);
-					_elements["expanded_mode_button"].SetActive(true);
-					_elements["cruel_mode_button"].SetActive(true);
-					break;
+				_elements["next_step"].SetActive(_gameMode != "cruel season");
+				break;
 			}
-
-			_elements["next_step"].SetActive(_gameMode != "cruel season");
-		}
-		else if (_subScreen == "choose leader" || _subScreen == "choose deputy" || _subScreen == "choose med cat")
-		{
-			if (
-				_selectedCat != null
-				&& (
-					_selectedCat.Age == Age.Newborn
-					|| _selectedCat.Age == Age.Kitten
-					|| _selectedCat.Age == Age.Adolescent)
-				)
-			{
+			case "choose leader" or "choose deputy" or "choose med cat" when _selectedCat != null
+			                                                                 && (
+				                                                                 _selectedCat.Age == Age.Newborn
+				                                                                 || _selectedCat.Age == Age.Kitten
+				                                                                 || _selectedCat.Age == Age.Adolescent):
 				_elements["select_cat"].Hide();
 				_elements["error_message"].Show();
-			}
-			else
-			{
+				break;
+			case "choose leader" or "choose deputy" or "choose med cat":
 				_elements["select_cat"].Show();
 				_elements["error_message"].Hide();
-			}
-		}
-		else if (_subScreen == "choose members")
-		{
-			if (_members.Count >= 4 && _members.Count <= 6)
+				break;
+			case "choose members":
 			{
-				((UIImage)_elements["background"]).Image = _memberBackgrounds[4];
-				_elements["next_step"].SetActive(true);
-			}
-			else if (_members.Count == 7)
-			{
-				((UIImage)_elements["background"]).Image = _memberBackgrounds[5];
-				_elements["select_cat"].SetActive(false);
-				_elements["next_step"].SetActive(true);
-			}
-			else
-			{
-				((UIImage)_elements["background"]).Image = _memberBackgrounds[_members.Count];
-			}
-
-			_elements["select_cat"].Visible = (_selectedCat != null);
-		}
-		else if (_subScreen == "choose camp")
-		{
-			_elements["forest_biome"].Enable();
-			_elements["mountain_biome"].Enable();
-			_elements["plains_biome"].Enable();
-			_elements["beach_biome"].Enable();
-			switch (_biomeSelected)
-			{
-				case "Forest":
-					_elements["forest_biome"].Disable();
-					break;
-				case "Mountainous":
-					_elements["mountain_biome"].Disable();
-					break;
-				case "Plains":
-					_elements["plains_biome"].Disable();
-					break;
-				case "Beach":
-					_elements["beach_biome"].Disable();
-					break;
-			}
-
-			_elements["newleaf_tab"].Enable();
-			_elements["greenleaf_tab"].Enable();
-			_elements["leaffall_tab"].Enable();
-			_elements["leafbare_tab"].Enable();
-
-			switch (_selectedSeason)
-			{
-				case "Newleaf":
-					_elements["newleaf_tab"].Disable();
-					break;
-				case "Greenleaf":
-					_elements["greenleaf_tab"].Disable();
-					break;
-				case "Leaf-fall":
-					_elements["leaffall_tab"].Disable();
-					break;
-				case "Leaf-bare":
-					_elements["leafbare_tab"].Disable();
-					break;
-			}
-
-			if (_biomeSelected != null && _selectedCampTag > -1)
-			{
-				_elements["next_step"].Enable();
-			}
-
-			RefreshSelectedCamp();
-		}
-		else if (_subScreen == "choose symbol")
-		{
-			if (_symbolSelected != null)
-			{
-				if (_symbolButtons.TryGetValue(_symbolSelected, out UIButton? btn))
+				switch (_members.Count)
 				{
-					btn.Disable();
+					case >= 4 and <= 6:
+						((UIImage)_elements["background"]).Image = _memberBackgrounds[4];
+						_elements["next_step"].SetActive(true);
+						break;
+					case 7:
+						((UIImage)_elements["background"]).Image = _memberBackgrounds[5];
+						_elements["select_cat"].SetActive(false);
+						_elements["next_step"].SetActive(true);
+						break;
+					default:
+						((UIImage)_elements["background"]).Image = _memberBackgrounds[_members.Count];
+						break;
 				}
 
-				((UIImage)_elements["selected_symbol"]).Image = Sprites.SymbolSprites[_symbolSelected];
+				_elements["select_cat"].Visible = (_selectedCat != null);
+				break;
+			}
+			case "choose camp":
+			{
+				_elements["forest_biome"].Enable();
+				_elements["mountain_biome"].Enable();
+				_elements["plains_biome"].Enable();
+				_elements["beach_biome"].Enable();
+				switch (_biomeSelected)
+				{
+					case "Forest":
+						_elements["forest_biome"].Disable();
+						break;
+					case "Mountainous":
+						_elements["mountain_biome"].Disable();
+						break;
+					case "Plains":
+						_elements["plains_biome"].Disable();
+						break;
+					case "Beach":
+						_elements["beach_biome"].Disable();
+						break;
+				}
 
-				var symbolName = _symbolSelected.Replace("symbol", "");
-				_text["selected"].SetText($"Selected Symbol: {symbolName}");
-				_elements["selected_symbol"].Show();
-				_elements["done_button"].Enable();
+				_elements["newleaf_tab"].Enable();
+				_elements["greenleaf_tab"].Enable();
+				_elements["leaffall_tab"].Enable();
+				_elements["leafbare_tab"].Enable();
+
+				switch (_selectedSeason)
+				{
+					case "Newleaf":
+						_elements["newleaf_tab"].Disable();
+						break;
+					case "Greenleaf":
+						_elements["greenleaf_tab"].Disable();
+						break;
+					case "Leaf-fall":
+						_elements["leaffall_tab"].Disable();
+						break;
+					case "Leaf-bare":
+						_elements["leafbare_tab"].Disable();
+						break;
+				}
+
+				if (_biomeSelected != null && _selectedCampTag > -1)
+				{
+					_elements["next_step"].Enable();
+				}
+
+				RefreshSelectedCamp();
+				break;
+			}
+			case "choose symbol":
+			{
+				if (_symbolSelected != null)
+				{
+					if (_symbolButtons.TryGetValue(_symbolSelected, out UIButton? btn))
+					{
+						btn.Disable();
+					}
+
+					((UIImage)_elements["selected_symbol"]).Image = Sprites.SymbolSprites[_symbolSelected];
+
+					var symbolName = _symbolSelected.Replace("symbol", "");
+					_text["selected"].SetText($"Selected Symbol: {symbolName}");
+					_elements["selected_symbol"].Show();
+					_elements["done_button"].Enable();
+				}
+
+				break;
 			}
 		}
 	}
